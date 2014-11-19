@@ -150,5 +150,12 @@ public final class RMB {
     System.out.println(RMB.toBigAmt(150.2101D));
     System.out.println(RMB.toBigAmt(15400089666.234D));
     System.out.println(RMB.toBigAmt(22200004444.2347D));
+    System.out.println(RMB.toBigAmt(10052345.00D));
+    System.out.println(RMB.toBigAmt(0.00D));
+    System.out.println(RMB.toBigAmt(0.60D));
+    System.out.println(RMB.toBigAmt(00.60D));
+    System.out.println(RMB.toBigAmt(150.2101D));
+    System.out.println(RMB.toBigAmt(15400089666.234D));
+    System.out.println(RMB.toBigAmt(22200004444.2347D));
   }
 } 
