@@ -365,6 +365,7 @@ public class MedicalafterAction extends ActionSupport {
 		map.put("PAYLINE", medicalafterDTO.getPayLine().toString());
 		map.put("HOSIPITALPAY", medicalafterDTO.getHospitalpay().toString());
 		map.put("SUMPAY", medicalafterDTO.getSumpay().toString());
+		
 		return SUCCESS;
 	}
 
