@@ -228,8 +228,9 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		this.pager.setPagesize(healthDTO.getPageSize());
 		setToolsmenu(this.pager.genToolsmenu());
 
-		Iterator<MemberBaseinfo> it = memberBaseinfoDAO.selectByExample(
-				example, pager.getStart(), pager.getPagesize()).iterator();
+		Iterator<MemberBaseinfo> it = memberBaseinfoDAO
+				.selectByExampleWithoutBLOBs(example, pager.getStart(),
+						pager.getPagesize()).iterator();
 
 		while (it.hasNext()) {
 			MemberBaseinfo memberBaseinfo = it.next();
@@ -297,7 +298,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		Criteria criteria = example.createCriteria();
 		criteria.andMemberIdEqualTo(checkDTO.getMemberId());
 		criteria.andDsEqualTo(checkDTO.getDs());
-		MemberBaseinfo info = memberBaseinfoDAO.selectByExample(example).get(0);
+		MemberBaseinfo info = memberBaseinfoDAO.selectByExampleWithoutBLOBs(
+				example).get(0);
 		cdto.setFamilyno(info.getFamilyno());
 		cdto.setMembername(info.getMembername());
 		cdto.setPaperid(info.getPaperid());
@@ -369,7 +371,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		values.add("10");
 		values.add("11");
 		criteria.andAssistTypeIn(values);
-		List<MemberBaseinfo> info = memberBaseinfoDAO.selectByExample(example);
+		List<MemberBaseinfo> info = memberBaseinfoDAO
+				.selectByExampleWithoutBLOBs(example);
 		for (MemberBaseinfo s : info) {
 			BaseInfoDTO e = new BaseInfoDTO();
 			e.setFamilyno(s.getFamilyno());
@@ -387,6 +390,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			e.setMasterName(s.getMasterName());
 			e.setRelmaster(s.getRelmaster());
 			e.setOnNo(s.getOnNo());
+			e.setBirthday(s.getBirthday());
 			mbdtos.add(e);
 		}
 		return mbdtos;
@@ -489,12 +493,12 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		Criteria criteria = example.createCriteria();
 		criteria.andMemberIdEqualTo(baseInfoDTO.getMemberId());
 		criteria.andDsEqualTo(baseInfoDTO.getDs());
-		MemberBaseinfo s = memberBaseinfoDAO.selectByExample(example).get(0);
+		MemberBaseinfo s = memberBaseinfoDAO.selectByExampleWithoutBLOBs(
+				example).get(0);
 		e.setFamilyno(s.getFamilyno());
 		e.setMembername(s.getMembername());
 		e.setMasterName(s.getMasterName());
 		e.setSex(s.getSex());
-		e.setAddress(s.getAddress());
 		e.setPaperid(s.getPaperid());
 		e.setSsn(s.getSsn());
 		e.setMemberType(s.getDs());
@@ -504,6 +508,10 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		e.setPersonstate(s.getPersonstate());
 		e.setRelmaster(s.getRelmaster());
 		e.setOnNo(s.getOnNo());
+		e.setBirthday(s.getBirthday());
+		e.setFamaddr(s.getAddress());
+		e.setTelephone(s.getLinkmode());
+		e.setFamcount(Short.parseShort(s.getfPersoncount()));
 		return e;
 	}
 
@@ -540,6 +548,11 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			record.setPayLine(medicalafterDTO.getPayLine());
 			record.setHospitalpay(medicalafterDTO.getHospitalpay());
 			record.setDiagnose(medicalafterDTO.getDiagnose());
+			record.setSex(medicalafterDTO.getSex());
+			record.setTelephone(medicalafterDTO.getTelephone());
+			record.setFamaddr(medicalafterDTO.getFamaddr());
+			record.setFamcount(medicalafterDTO.getFamcount());
+			record.setBirthday(medicalafterDTO.getBirthday());
 			BigDecimal id = jzMedicalafterDAO.insertSelective(record);
 			medicalafterDTO.setMaId(id);
 			JzAct jzAct = jzActDAO.selectByPrimaryKey(medicalafterDTO
@@ -661,18 +674,19 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 					+ " jma.approvecontent, jma.totalcost, jma.insurepay, jma.outpay, jma.capay, jma.businesspay, "
 					+ " jma.asisstpay, jma.createtime, jma.updatetime, jma.member_id, jma.member_type, jma.implsts,"
 					+ " jma.tiketno, jma.medicaltype, jma.insuretype, jma.persontype, jma.on_no, jma.pay_line, "
-					+ " jma.hospitalpay, jma.diagnose, "
-					+ " mb.address, mb.sex, "
+					+ " jma.hospitalpay, jma.diagnose, jma.famcount, jma.famaddr, jma.telephone, jma.sex, jma.birthday,"
 					+ " c.act_biz_inhospital_times as num, c.act_biz_money as sumpay, "
 					+ " (trunc(jma.endtime, 'dd') - trunc(jma.begintime, 'dd')) as indate "
-					+ " from jz_medicalafter jma,  member_baseinfo mb, "
+					+ " from jz_medicalafter jma, "
 					+ " jz_act c "
-					+ " where jma.member_id = mb.member_id "
-					+ " and jma.member_type = mb.ds "
+					+ " where 1=1 "
 					+ " and jma.member_id = c.member_id "
 					+ " and jma.member_type = c.member_type "
-					+ " and c.act_year = '"+year+ "' "
-					+ " and jma.ma_id = " + m.getMaId();
+					+ " and c.act_year = '"
+					+ year
+					+ "' "
+					+ " and jma.ma_id = "
+					+ m.getMaId();
 			ExecutSQL executSQL = new ExecutSQL();
 			executSQL.setExecutsql(sql);
 			HashMap map = executSQLDAO.queryAll(executSQL).get(0);
@@ -682,7 +696,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			medicalafterDTO.setPaperid((String) map.get("PAPERID"));
 			medicalafterDTO.setSsn((String) map.get("SSN"));
 			medicalafterDTO.setSex((String) map.get("SEX"));
-			medicalafterDTO.setAddress((String) map.get("ADDRESS"));
+			medicalafterDTO.setFamaddr((String) map.get("FAMADDR"));
 			medicalafterDTO.setPersontype((String) map.get("PERSONTYPE"));
 			medicalafterDTO.setMedicaltype((String) map.get("MEDICALTYPE"));
 			medicalafterDTO.setSickencontent((String) map.get("SICKENCONTENT"));
@@ -691,10 +705,12 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			medicalafterDTO.setHospital((String) map.get("HOSPITAL"));
 			medicalafterDTO.setHospitallevel((String) map.get("HOSPITALLEVEL"));
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String begintime = sdf.format((Date)map.get("BEGINTIME"));
-			String endtime = sdf.format((Date)map.get("ENDTIME"));
+			String begintime = sdf.format((Date) map.get("BEGINTIME"));
+			String endtime = sdf.format((Date) map.get("ENDTIME"));
+			String birthday = sdf.format((Date) map.get("BIRTHDAY"));
 			medicalafterDTO.setBegintimeval(begintime);
 			medicalafterDTO.setEndtimeval(endtime);
+			medicalafterDTO.setBirthdayval(birthday);
 			medicalafterDTO.setNum((BigDecimal) map.get("NUM"));
 			medicalafterDTO.setIndate((BigDecimal) map.get("INDATE"));
 			medicalafterDTO.setTotalcost((BigDecimal) map.get("TOTALCOST"));
@@ -707,6 +723,10 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			medicalafterDTO.setHospitalpay((BigDecimal) map.get("HOSPITALPAY"));
 			medicalafterDTO.setInsuretype((String) map.get("INSURETYPE"));
 			medicalafterDTO.setSumpay((BigDecimal) map.get("SUMPAY"));
+			medicalafterDTO.setTelephone((String) map.get("TELEPHONE"));
+			BigDecimal famcount = (BigDecimal) map.get("FAMCOUNT");
+			medicalafterDTO.setFamcountval(famcount.toString());
+			medicalafterDTO.setFamcount(famcount.shortValue());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

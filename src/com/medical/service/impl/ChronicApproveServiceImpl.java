@@ -485,7 +485,7 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		values.add("10");
 		example.createCriteria().andFamilynoEqualTo(familyno)
 				.andAssistTypeIn(values).andPersonstateEqualTo("Õý³£");
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExample(example);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example);
 		for (MemberBaseinfo s : rs) {
 			PersonDTO e = new PersonDTO();
 			e.setMembername(s.getMembername());
@@ -510,7 +510,7 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		pager.setUrl(url);
 		pager.setPagesize(16);
 		pager.genToolsmenu();
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExample(example,
+		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example,
 				pager.getStart(), pager.getPagesize());
 		for (MemberBaseinfo s : rs) {
 			PersonDTO e = new PersonDTO();
@@ -580,7 +580,7 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		MemberBaseinfoExample example = new MemberBaseinfoExample();
 		example.createCriteria().andMemberIdEqualTo(e.getMemberId())
 				.andDsEqualTo(e.getMemberType());
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExample(example);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example);
 		for (MemberBaseinfo s : rs) {
 			e.setName(s.getMembername());
 			e.setFamilyId(s.getFamilyno());
@@ -643,8 +643,7 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		try {
 			MemberBaseinfoExample example = new MemberBaseinfoExample();
 			example.createCriteria().andSsnEqualTo(personDTO.getSsn());
-			List<MemberBaseinfo> rs = memberBaseinfoDAO
-					.selectByExample(example);
+			List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example);
 			for (MemberBaseinfo s : rs) {
 				personDTO.setFamilyno(s.getFamilyno());
 				personDTO.setSsn(s.getSsn());
@@ -1048,8 +1047,7 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 			MemberBaseinfoExample example = new MemberBaseinfoExample();
 			example.createCriteria().andMemberIdEqualTo(memberId)
 					.andDsEqualTo(memberType);
-			List<MemberBaseinfo> rs = memberBaseinfoDAO
-					.selectByExample(example);
+			List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example);
 			for (MemberBaseinfo s : rs) {
 				aspApproveDTO.setFamilyno(s.getFamilyno());
 				aspApproveDTO.setSsn(s.getSsn());

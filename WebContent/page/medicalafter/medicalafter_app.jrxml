@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="medicalafter_app" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d3aa127c-568a-4b56-9c3f-5a5cbdb2cd74">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="394"/>
 	<field name="FAMILYNO" class="java.lang.String"/>
 	<field name="MEMBERNAME" class="java.lang.String"/>
 	<field name="HOSPITAL" class="java.lang.String"/>
@@ -28,6 +28,9 @@
 	<field name="PAYLINE" class="java.lang.String"/>
 	<field name="HOSIPITALPAY" class="java.lang.String"/>
 	<field name="SUMPAY" class="java.lang.String"/>
+	<field name="FAMCOUNT" class="java.lang.String"/>
+	<field name="BIRTHDAY" class="java.lang.String"/>
+	<field name="TELEPHONE" class="java.lang.String"/>
 	<detail>
 		<band height="792" splitType="Stretch">
 			<staticText>
@@ -208,7 +211,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="宋体" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{REPORT_PARAMETERS_MAP}.get("PERSONNUM") == null ? "" : $P{REPORT_PARAMETERS_MAP}.get("PERSONNUM"))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{REPORT_PARAMETERS_MAP}.get("FAMCOUNT") == null ? "" : $P{REPORT_PARAMETERS_MAP}.get("FAMCOUNT"))]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="432" y="146" width="123" height="44" uuid="1948c1cb-c304-4080-9b6f-931133381864"/>
@@ -222,7 +225,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="宋体" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{REPORT_PARAMETERS_MAP}.get("TEL") == null ? "" : $P{REPORT_PARAMETERS_MAP}.get("TEL"))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{REPORT_PARAMETERS_MAP}.get("TELEPHONE") == null ? "" : $P{REPORT_PARAMETERS_MAP}.get("TELEPHONE"))]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="344" y="146" width="88" height="44" uuid="9dbd451d-69cd-468f-92d3-2da15b00e07b"/>
@@ -722,36 +725,6 @@
 				<text><![CDATA[审批人签字（盖章）：]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="418" y="760" width="135" height="30" uuid="208c8894-3892-4242-bf6d-04e68c88f4e8"/>
-				<box>
-					<pen lineWidth="0.0"/>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
-					<paragraph tabStopWidth="40"/>
-				</textElement>
-				<text><![CDATA[      年   月   日]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="228" y="760" width="135" height="30" uuid="ecb76d45-d7cd-460f-9ea6-f6b123c7d930"/>
-				<box>
-					<pen lineWidth="0.0"/>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
-					<paragraph tabStopWidth="40"/>
-				</textElement>
-				<text><![CDATA[      年   月   日]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="183" y="717" width="122" height="30" uuid="0ef797e3-7b26-4cf4-833f-5de8faf54730"/>
 				<box>
 					<pen lineWidth="0.0"/>
@@ -782,7 +755,7 @@
 				<text><![CDATA[审核人签字（盖章）：]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="44" y="760" width="135" height="30" uuid="ddc07800-4a33-4a62-a2c3-a3b4e29b94e9"/>
+				<reportElement x="76" y="762" width="21" height="30" uuid="ddc07800-4a33-4a62-a2c3-a3b4e29b94e9"/>
 				<box>
 					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
@@ -794,7 +767,127 @@
 					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
 					<paragraph tabStopWidth="40"/>
 				</textElement>
-				<text><![CDATA[      年   月   日]]></text>
+				<text><![CDATA[年]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="159" y="761" width="21" height="30" uuid="4ecfde39-1626-40e3-9aec-12b7e0dba35d"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+					<paragraph tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[日]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="761" width="21" height="30" uuid="eadf0eaa-2cf8-4903-b6cf-7b1e918c8746"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+					<paragraph tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[月]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="261" y="761" width="21" height="30" uuid="fc57e842-090a-4a4c-8db4-048e94f33485"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+					<paragraph tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[年]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="761" width="21" height="30" uuid="9ab6df23-450e-4a28-aa87-ab4516c02fbd"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+					<paragraph tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[月]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="343" y="761" width="21" height="30" uuid="fc0738a0-d432-4947-898a-482eab3ab30e"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+					<paragraph tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[日]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="451" y="761" width="21" height="30" uuid="ab2f7baf-ff4b-483b-95d2-9ae6f054f39d"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+					<paragraph tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[年]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="493" y="761" width="21" height="30" uuid="15cc3051-c0a5-4f7b-b119-06dcaa7e8043"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+					<paragraph tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[月]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="533" y="761" width="21" height="30" uuid="6aeedcde-7ce5-4dba-ad42-45ed5967e8a8"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="宋体" size="11" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+					<paragraph tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[日]]></text>
 			</staticText>
 		</band>
 	</detail>

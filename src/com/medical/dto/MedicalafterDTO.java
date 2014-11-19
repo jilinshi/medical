@@ -38,8 +38,6 @@ public class MedicalafterDTO {
 	private BigDecimal hospitalpay;
 
 	private String masterName;
-	private String sex;
-	private String address;
 	private String ds;
 	private String personstate;
 	private String assistType;
@@ -51,6 +49,17 @@ public class MedicalafterDTO {
 	private BigDecimal num;//年度出院次数
 	private BigDecimal indate;//住院天数
 	private BigDecimal sumpay;//累计救助金
+
+	private short famcount; //家庭人口数
+	private String famcountval;
+    private String famaddr; //家庭住址
+    private String telephone; //电话
+    private String sex; //性别
+    private Date birthday; //出生日期
+    private String birthdayval;
+	private String fSalvationcount;
+    private String fPersoncount;
+    private String fAccounts;
 
 	public BigDecimal getSumpay() {
 		return sumpay;
@@ -292,14 +301,6 @@ public class MedicalafterDTO {
 		this.sex = sex;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
 	public String getDs() {
 		return ds;
 	}
@@ -420,6 +421,78 @@ public class MedicalafterDTO {
 
 	public void setEndtimeval(String endtimeval) {
 		this.endtimeval = endtimeval;
+	}
+
+	public short getFamcount() {
+		return famcount;
+	}
+
+	public void setFamcount(short famcount) {
+		this.famcount = famcount;
+	}
+
+	public String getFamaddr() {
+		return famaddr;
+	}
+
+	public void setFamaddr(String famaddr) {
+		this.famaddr = famaddr;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getfSalvationcount() {
+		return fSalvationcount;
+	}
+
+	public void setfSalvationcount(String fSalvationcount) {
+		this.fSalvationcount = fSalvationcount;
+	}
+
+	public String getfPersoncount() {
+		return fPersoncount;
+	}
+
+	public void setfPersoncount(String fPersoncount) {
+		this.fPersoncount = fPersoncount;
+	}
+
+	public String getfAccounts() {
+		return fAccounts;
+	}
+
+	public void setfAccounts(String fAccounts) {
+		this.fAccounts = fAccounts;
+	}
+
+	public String getBirthdayval() {
+		return birthdayval;
+	}
+
+	public void setBirthdayval(String birthdayval) {
+		this.birthdayval = birthdayval;
+	}
+
+	public String getFamcountval() {
+		return famcountval;
+	}
+
+	public void setFamcountval(String famcountval) {
+		this.famcountval = famcountval;
 	}
 	 
 	

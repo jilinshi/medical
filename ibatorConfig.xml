@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ibatorConfiguration PUBLIC "-//Apache Software Foundation//DTD Apache iBATIS Ibator Configuration 1.0//EN" "http://ibatis.apache.org/dtd/ibator-config_1_0.dtd" >
+<ibatorConfiguration>
+	<classPathEntry location="D:\wangjia\jlib\ojdbc6.jar"></classPathEntry>
+	<ibatorContext id="oracleTables" targetRuntime="Ibatis2Java5">
+		<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+			connectionURL="jdbc:oracle:thin:@10.10.10.2:1521:orcl" userId="yljzn"
+			password="yljzn" />
+		<javaModelGenerator targetPackage="com.medical.model"
+			targetProject="medical" />
+		<sqlMapGenerator targetPackage="com.medical.map"
+			targetProject="medical">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<daoGenerator targetPackage="com.medical.dao"
+			targetProject="medical" type="SPRING" />
+		<!-- <table schema="yljzn" tableName="ICD10"> <property name="ignoreQualifiersAtRuntime" 
+			value="true" /> </table> <table schema="yljzn" tableName="DM_BizDept"> <property 
+			name="ignoreQualifiersAtRuntime" value="true" /> </table> <table schema="yljzn" 
+			tableName="JZ_PAYLIST"> <property name="ignoreQualifiersAtRuntime" value="true" 
+			/> <generatedKey column="PAYLIST_ID" sqlStatement="select XPAYLIST_ID.nextval 
+			from dual" /> </table> <table schema="yljzn" tableName="JZ_BIZ"> <property 
+			name="ignoreQualifiersAtRuntime" value="true" /> <generatedKey column="BIZ_ID" 
+			sqlStatement="select XBIZ_ID.nextval from dual" /> </table> <table schema="yljzn" 
+			tableName="MEMBER_BASEINFO"> <property name="ignoreQualifiersAtRuntime" value="true" 
+			/> </table> <table schema="yljzn" tableName="SYS_T_EMPLOYEE"> <property name="ignoreQualifiersAtRuntime" 
+			value="true" /> </table> <table schema="yljzn" tableName="SYS_T_ORGANIZATION"> 
+			<property name="ignoreQualifiersAtRuntime" value="true" /> </table> <table 
+			schema="yljzn" tableName="ICD10"> <property name="ignoreQualifiersAtRuntime" 
+			value="true" /> </table> <table schema="yljzn" tableName="DM_BizDept"> <property 
+			name="ignoreQualifiersAtRuntime" value="true" /> </table> <table schema="yljzn" 
+			tableName="VB_SEARCHINFO"> <property name="ignoreQualifiersAtRuntime" value="true" 
+			/> </table><table schema="yljzn" tableName="JZ_BIZCHECK"> <property name="ignoreQualifiersAtRuntime" 
+			value="true" /> <generatedKey column="BIZCHECK_ID" sqlStatement="select XBIZCHECK_ID.nextval 
+			from dual" /> </table><table schema="yljzn" tableName="VB_SEARCHINFO"> <property 
+			name="ignoreQualifiersAtRuntime" value="true" /> </table> <table schema="yljzn" 
+			tableName="JZ_BIZ"> <property name="ignoreQualifiersAtRuntime" value="true" 
+			/> <generatedKey column="BIZ_ID" sqlStatement="select XBIZ_ID.nextval from 
+			dual" /> </table> <table schema="yljzn" tableName="JZ_ACT"> <property name="ignoreQualifiersAtRuntime" 
+			value="true" /> <generatedKey column="ACT_ID" sqlStatement="select JZ_ACT_SEQ.nextval 
+			from dual" /> </table> <table schema="yljzn" tableName="JZ_ASPAPPROVE"> <property 
+			name="ignoreQualifiersAtRuntime" value="true" /> <generatedKey column="ASPAPPROVE_ID" 
+			sqlStatement="select XASPAPPROVE_ID.nextval from dual" /> </table><table 
+			schema="yljzn" tableName="JZ_CHRONICAPPROVE"> <property name="ignoreQualifiersAtRuntime" 
+			value="true" /> <generatedKey column="CHRONICAPPROVE_ID" sqlStatement="select 
+			XCHRONICAPPROVE_ID.nextval from dual" /> </table> <table schema="yljzn" tableName="JZ_CHRONICBILL"> 
+			<property name="ignoreQualifiersAtRuntime" value="true" /> <generatedKey 
+			column="CHRONICBILL_ID" sqlStatement="select XCHRONICBILL_ID.nextval from 
+			dual" /> </table> <table schema="yljzn" tableName="JZ_CHRONICSTATUS"> <property 
+			name="ignoreQualifiersAtRuntime" value="true" /> <generatedKey column="CHRONICSTATUS_ID" 
+			sqlStatement="select XCHRONICSTATUS_ID.nextval from dual" /> </table> <table 
+			schema="yljzn" tableName="MEMBER_BASEINFO"> <property name="ignoreQualifiersAtRuntime" 
+			value="true" /> </table> -->
+<!-- 		<table schema="yljzn" tableName="JZ_CHRONICAPPROVE">
+			<property name="ignoreQualifiersAtRuntime" value="true" />
+			<generatedKey column="CHRONICAPPROVE_ID"
+				sqlStatement="select XCHRONICAPPROVE_ID.nextval from dual" /> <table schema="yljzn" tableName="TEST_SSN">
+			<property name="ignoreQualifiersAtRuntime" value="true" />
+		</table> -->
+		<!-- <table schema="yljzn" tableName="JZ_CHRONICSTATUS"> <property 
+			name="ignoreQualifiersAtRuntime" value="true" /> <generatedKey column="CHRONICSTATUS_ID" 
+			sqlStatement="select XCHRONICSTATUS_ID.nextval from dual" /> </table>
+			<table 
+			schema="yljzn" tableName="JZ_CHRONICAPPROVE"> <property name="ignoreQualifiersAtRuntime" 
+			value="true" /> <generatedKey column="CHRONICAPPROVE_ID" sqlStatement="select 
+			XCHRONICAPPROVE_ID.nextval from dual" /> </table> 
+			 <table schema="yljzn" tableName="V_CHRONIC">
+			<property name="ignoreQualifiersAtRuntime" value="true" /></table>
+			<table schema="yljzn" tableName="CURRECT_CHRONIC"> <property 
+			name="ignoreQualifiersAtRuntime" value="true" />   </table> <table schema="yljzn" tableName="JZ_MEDICALAFTER">
+			<property name="ignoreQualifiersAtRuntime" value="true" />
+			<generatedKey column="MA_ID"
+				sqlStatement="select CC.nextval from dual" />  
+			</table> -->
+<!-- 			<table schema="yljzn" tableName="JZ_MEDICALAFTER">
+			<property name="ignoreQualifiersAtRuntime" value="true" />
+			<generatedKey column="MA_ID"
+				sqlStatement="select CC.nextval from dual" />  
+			</table> -->
+			<!-- <table schema="yljzn" tableName="JZ_ACT">
+			<property name="ignoreQualifiersAtRuntime" value="true" />
+			<generatedKey column="ACT_ID"
+				sqlStatement="select JZ_ACT_SEQ.NEXTVAL from dual" />  
+			</table> -->
+			<table schema="yljzn" 
+			tableName="MEMBER_BASEINFO"> <property name="ignoreQualifiersAtRuntime" value="true" 
+			/> </table> 
+	</ibatorContext>
+</ibatorConfiguration>

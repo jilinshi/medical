@@ -96,8 +96,12 @@
 		<s:hidden name="medicalafterDTO.sex"></s:hidden>
 		<s:hidden name="medicalafterDTO.masterName"></s:hidden>
 		<s:hidden name="medicalafterDTO.relmaster"></s:hidden>
-		<s:hidden name="medicalafterDTO.address"></s:hidden>
+		<s:hidden name="medicalafterDTO.famaddr"></s:hidden>
 		<s:hidden name="medicalafterDTO.onNo"></s:hidden>
+		<s:hidden name="medicalafterDTO.birthday"></s:hidden>
+		<s:hidden name="medicalafterDTO.telephone"></s:hidden>
+		<s:hidden name="medicalafterDTO.birthday"></s:hidden>
+		<s:hidden name="medicalafterDTO.famcount"></s:hidden>
 		<s:hidden name="medicalafterDTO.persontype"
 			value="%{medicalafterDTO.assistType}%{medicalafterDTO.asort}"></s:hidden>
 			<s:hidden name="medicalafterDTO.actId" id="actid"></s:hidden>
@@ -129,7 +133,7 @@
 			<tr>
 				<td width="17%">家庭地址</td>
 				<td colspan="5" width="17%"><s:property
-						value="medicalafterDTO.address" />&nbsp;</td>
+						value="medicalafterDTO.famaddr" />&nbsp;</td>
 			</tr>
 			<tr>
 				<td width="17%">保险类型</td>

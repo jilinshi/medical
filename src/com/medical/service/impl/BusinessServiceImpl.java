@@ -270,7 +270,7 @@ public class BusinessServiceImpl implements BusinessService {
 		criteria.andFamilynoEqualTo(personDTO.getFamilyno()).andFamilynoLike(
 				personDTO.getOrganizationId() + "%");
 
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExample(exam);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(exam);
 		for (MemberBaseinfo memberBaseinfo : rs) {
 			personDTO = new PersonDTO();
 			personDTO.setAddress(memberBaseinfo.getAddress());
@@ -342,7 +342,7 @@ public class BusinessServiceImpl implements BusinessService {
 			criteria.andAssistTypeIn(ts);
 		}
 
-		List<MemberBaseinfo> list = memberBaseinfoDAO.selectByExample(exam);
+		List<MemberBaseinfo> list = memberBaseinfoDAO.selectByExampleWithoutBLOBs(exam);
 
 		if (list != null && list.size() == 1) {
 
@@ -646,7 +646,7 @@ public class BusinessServiceImpl implements BusinessService {
 		criteria.andFamilynoEqualTo(familyno).andFamilynoLike(
 				organizationId + "%");
 
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExample(exam);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(exam);
 		for (MemberBaseinfo memberBaseinfo : rs) {
 			PersonDTO personDTO = new PersonDTO();
 			personDTO.setAddress(memberBaseinfo.getAddress());
@@ -758,7 +758,7 @@ public class BusinessServiceImpl implements BusinessService {
 		criteria.andFamilynoEqualTo(familyno).andFamilynoLike(
 				organizationId + "%");
 
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExample(exam);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(exam);
 		for (MemberBaseinfo memberBaseinfo : rs) {
 			PersonDTO personDTO = new PersonDTO();
 			personDTO.setAddress(memberBaseinfo.getAddress());
@@ -809,7 +809,7 @@ public class BusinessServiceImpl implements BusinessService {
 			memberBaseinfoExample.createCriteria().andSsnEqualTo(
 					record.getSsn());
 			List<MemberBaseinfo> ms = this.memberBaseinfoDAO
-					.selectByExample(memberBaseinfoExample);
+					.selectByExampleWithoutBLOBs(memberBaseinfoExample);
 			if (null != ms && ms.size() > 0) {
 
 				MemberBaseinfo member = ms.get(0);
@@ -875,7 +875,7 @@ public class BusinessServiceImpl implements BusinessService {
 		example.createCriteria().andSsnEqualTo(businessDTO.getSsn())
 				.andFamilynoEqualTo(businessDTO.getFamilyno());
 		MemberBaseinfo memberBaseinfo = (MemberBaseinfo) memberBaseinfoDAO
-				.selectByExample(example).get(0);
+				.selectByExampleWithoutBLOBs(example).get(0);
 
 		record.setName(memberBaseinfo.getMembername());
 		record.setBirthday(memberBaseinfo.getBirthday());
@@ -1110,7 +1110,7 @@ public class BusinessServiceImpl implements BusinessService {
 		MemberBaseinfoExample example = new MemberBaseinfoExample();
 		example.createCriteria().andSsnEqualTo(businessDTO.getSsn());
 		MemberBaseinfo memberBaseinfo = (MemberBaseinfo) memberBaseinfoDAO
-				.selectByExample(example).get(0);
+				.selectByExampleWithoutBLOBs(example).get(0);
 
 		record.setName(memberBaseinfo.getMembername());
 		record.setBirthday(memberBaseinfo.getBirthday());
@@ -1303,7 +1303,7 @@ public class BusinessServiceImpl implements BusinessService {
 		example.createCriteria().andSsnEqualTo(businessDTO.getSsn())
 				.andFamilynoEqualTo(businessDTO.getFamilyno());
 		MemberBaseinfo memberBaseinfo = (MemberBaseinfo) memberBaseinfoDAO
-				.selectByExample(example).get(0);
+				.selectByExampleWithoutBLOBs(example).get(0);
 
 		record.setName(memberBaseinfo.getMembername());
 		record.setBirthday(memberBaseinfo.getBirthday());
@@ -1457,7 +1457,7 @@ public class BusinessServiceImpl implements BusinessService {
 		example.createCriteria().andSsnEqualTo(businessDTO.getSsn())
 				.andFamilynoEqualTo(businessDTO.getFamilyno());
 		MemberBaseinfo memberBaseinfo = (MemberBaseinfo) memberBaseinfoDAO
-				.selectByExample(example).get(0);
+				.selectByExampleWithoutBLOBs(example).get(0);
 
 		record.setName(memberBaseinfo.getMembername());
 		record.setBirthday(memberBaseinfo.getBirthday());
@@ -1621,7 +1621,7 @@ public class BusinessServiceImpl implements BusinessService {
 		MemberBaseinfoExample example = new MemberBaseinfoExample();
 		example.createCriteria().andSsnEqualTo(businessDTO.getSsn());
 		MemberBaseinfo memberBaseinfo = (MemberBaseinfo) memberBaseinfoDAO
-				.selectByExample(example).get(0);
+				.selectByExampleWithoutBLOBs(example).get(0);
 
 		record.setName(memberBaseinfo.getMembername());
 		record.setBirthday(memberBaseinfo.getBirthday());

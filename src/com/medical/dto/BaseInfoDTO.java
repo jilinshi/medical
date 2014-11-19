@@ -31,6 +31,10 @@ public class BaseInfoDTO {
 	private String anFilename;
 	private String onNo;
 	private BigDecimal asort;
+	private String fSalvationcount;
+    private String fPersoncount;
+    private String fAccounts;
+    
 	public String getMemberId() {
 		return memberId;
 	}
@@ -192,5 +196,23 @@ public class BaseInfoDTO {
 	}
 	public void setAsort(BigDecimal asort) {
 		this.asort = asort;
+	}
+	public String getfSalvationcount() {
+		return fSalvationcount;
+	}
+	public void setfSalvationcount(String fSalvationcount) {
+		this.fSalvationcount = fSalvationcount;
+	}
+	public String getfPersoncount() {
+		return fPersoncount;
+	}
+	public void setfPersoncount(String fPersoncount) {
+		this.fPersoncount = fPersoncount;
+	}
+	public String getfAccounts() {
+		return fAccounts;
+	}
+	public void setfAccounts(String fAccounts) {
+		this.fAccounts = fAccounts;
 	}
 }

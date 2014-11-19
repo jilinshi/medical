@@ -42,7 +42,7 @@ public class EmeCheckServiceImpl implements EmeCheckService {
 		MemberBaseinfoExample example = new MemberBaseinfoExample();
 		example.createCriteria().andMemberIdEqualTo(memberId);
 
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExample(example);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example);
 
 		if (null != rs && rs.size() > 0) {
 			MemberBaseinfo member = (MemberBaseinfo) rs.get(0);
@@ -328,7 +328,7 @@ public class EmeCheckServiceImpl implements EmeCheckService {
 		MemberBaseinfoExample example = new MemberBaseinfoExample();
 		example.createCriteria().andMemberIdEqualTo(memberId);
 
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExample(example);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example);
 
 		if (null != rs && rs.size() > 0) {
 			MemberBaseinfo member = (MemberBaseinfo) rs.get(0);
