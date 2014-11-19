@@ -3,5 +3,7 @@ package com.medical.util;
 public class Test {
 	//≤‚ ‘
 	//23
-	public void a(){}
+	public void a(){
+		//dafdfaf
+	}
 }
