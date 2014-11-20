@@ -733,6 +733,48 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		}
 		return medicalafterDTO;
 	}
+	
+	public MedicalafterDTO findMemberByKey(MedicalafterDTO m){
+		MedicalafterDTO e = new MedicalafterDTO();
+		JzMedicalafterExample example = new JzMedicalafterExample();
+		com.medical.model.JzMedicalafterExample.Criteria criteria = example
+				.createCriteria();
+		criteria.andMaIdEqualTo(m.getMaId());
+		JzMedicalafter s = jzMedicalafterDAO.selectByExample(example).get(0);
+		
+		e.setMaId(s.getMaId());
+		e.setFamilyno(s.getFamilyno());
+		e.setMembername(s.getMembername());
+		e.setPaperid(s.getPaperid());
+		e.setSsn(s.getSsn());
+		e.setHospital(s.getHospital());
+		e.setHospitallevel(s.getHospitallevel());
+		e.setSickencontent(s.getSickencontent());
+		e.setBegintime(s.getBegintime());
+		e.setEndtime(s.getEndtime());
+		e.setApproveresult(s.getApproveresult());
+		e.setApprovecontent(s.getApprovecontent());
+		e.setTotalcost(s.getTotalcost());
+		e.setInsurepay(s.getInsurepay());
+		e.setOutpay(s.getOutpay());
+		e.setCapay(s.getCapay());
+		e.setBusinesspay(s.getBusinesspay());
+		e.setAsisstpay(s.getAsisstpay());
+		e.setCreatetime(s.getCreatetime());
+		e.setUpdatetime(s.getUpdatetime());
+		e.setMemberId(s.getMemberId());
+		e.setMemberType(s.getMemberType());
+		e.setImplsts(s.getImplsts());
+		e.setTiketno(s.getTiketno());
+		e.setMedicaltype(s.getMedicaltype());
+		e.setInsuretype(s.getInsuretype());
+		e.setPersontype(s.getPersontype());
+		e.setPayLine(s.getPayLine());
+		e.setHospitalpay(s.getHospitalpay());
+		e.setOnNo(s.getOnNo());
+		e.setFamaddr(s.getFamaddr());
+		return e;
+	}
 
 	public MemberBaseinfoDAO getMemberBaseinfoDAO() {
 		return memberBaseinfoDAO;

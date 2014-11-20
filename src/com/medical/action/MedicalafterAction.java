@@ -406,6 +406,11 @@ public class MedicalafterAction extends ActionSupport {
 		map.put("BIRTHDAY", medicalafterDTO.getBirthdayval());
 		return SUCCESS;
 	}
+	
+	public String viewafter(){
+		medicalafterDTO = this.baseinfoService.findMemberByKey(medicalafterDTO);
+		return SUCCESS;
+	}
 
 	public BaseinfoService getBaseinfoService() {
 		return baseinfoService;

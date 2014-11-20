@@ -114,5 +114,10 @@
 				<param name="reportParameters">map</param>
 			</result>
 		</action>
+		<action name="viewafter" class="medicalafterAction" method="viewafter">
+			<result name="success">
+				/page/medicalafter/afterapplyview.jsp
+			</result>
+		</action>
 	</package>
 </struts>

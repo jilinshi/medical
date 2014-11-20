@@ -141,8 +141,8 @@ public class CheckAction extends ActionSupport {
 					+ " where mem.on_no like '" + oid + "%' "
 					+ jwhere 
 					+ " and mem.o_ps = 'Õý³£' and mem.ds = '1' "
-					+ " and substr(mem.assist_type,0,1)='1' "
-					+ " and ts.ssn1 is null ";
+					+ " and substr(mem.assist_type,0,1)='1' ";
+					//+ " and ts.ssn1 is null ";
 			session.put("sql", sql);
 		} else {
 			sql = (String) session.get("sql");
