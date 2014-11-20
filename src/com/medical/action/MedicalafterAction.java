@@ -1,7 +1,9 @@
 package com.medical.action;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +42,8 @@ public class MedicalafterAction extends ActionSupport {
 	private String operational;
 	private String toolsmenu;
 	private String value;
+	private String opertime1;
+	private String opertime2;
 
 	private HashMap<String, String> map;
 
@@ -135,6 +139,29 @@ public class MedicalafterAction extends ActionSupport {
 			} else if ("PAPERID".equals(term)) {
 				criteria.andPaperidLike(value + "%");
 			} else {
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date opertimefrom = new Date();
+			Date opertimeto = new Date();
+			try {
+				if(!opertime1.equals("")){
+					opertimefrom = sdf.parse( opertime1.substring(0,10));
+				}
+				if(!opertime2.equals("")){
+					opertimeto = sdf.parse( opertime2.substring(0,10));
+				}
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if ((opertime1.equals("") || null == opertime1)
+					&& (opertime2.equals("") || null == opertime2)) {
+			} else if (opertime1.equals("") || null == opertime1) {
+				criteria.andUpdatetimeGreaterThan(opertimeto);
+			} else if (opertime2.equals("") || null == opertime2) {
+				criteria.andUpdatetimeLessThan(opertimefrom);
+			} else {
+				criteria.andUpdatetimeBetween(opertimefrom, opertimeto);
 			}
 			session.put("sql", example);
 			cur_page = "1";
@@ -514,5 +541,21 @@ public class MedicalafterAction extends ActionSupport {
 
 	public void setMap(HashMap<String, String> map) {
 		this.map = map;
+	}
+
+	public String getOpertime1() {
+		return opertime1;
+	}
+
+	public void setOpertime1(String opertime1) {
+		this.opertime1 = opertime1;
+	}
+
+	public String getOpertime2() {
+		return opertime2;
+	}
+
+	public void setOpertime2(String opertime2) {
+		this.opertime2 = opertime2;
 	}
 }

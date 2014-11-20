@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="medicalafter_app" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d3aa127c-568a-4b56-9c3f-5a5cbdb2cd74">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="394"/>
+	<property name="ireport.y" value="66"/>
 	<field name="FAMILYNO" class="java.lang.String"/>
 	<field name="MEMBERNAME" class="java.lang.String"/>
 	<field name="HOSPITAL" class="java.lang.String"/>
@@ -254,7 +254,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="宋体" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("SSN")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("FAMILYNO")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="146" width="88" height="44" uuid="0f738ef7-b206-4699-beb8-7687ef05f37d"/>
