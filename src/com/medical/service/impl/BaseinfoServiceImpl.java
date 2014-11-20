@@ -741,7 +741,12 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 				.createCriteria();
 		criteria.andMaIdEqualTo(m.getMaId());
 		JzMedicalafter s = jzMedicalafterDAO.selectByExample(example).get(0);
-		
+		MemberBaseinfoExample example1 = new MemberBaseinfoExample();
+		com.medical.model.MemberBaseinfoExample.Criteria  criteria1 = example1.createCriteria();
+		criteria1.andMemberIdEqualTo(m.getMemberId());
+		criteria1.andDsEqualTo(m.getMemberType());
+		MemberBaseinfo mb = memberBaseinfoDAO.selectByExampleWithoutBLOBs(
+				example1).get(0);
 		e.setMaId(s.getMaId());
 		e.setFamilyno(s.getFamilyno());
 		e.setMembername(s.getMembername());
@@ -773,7 +778,44 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		e.setHospitalpay(s.getHospitalpay());
 		e.setOnNo(s.getOnNo());
 		e.setFamaddr(s.getFamaddr());
+		e.setSex(s.getSex());
+		e.setMasterName(mb.getMasterName());
+		e.setRelmaster(mb.getRelmaster());
 		return e;
+	}
+	
+	public int updateMedicalafter(MedicalafterDTO m){
+		int u = 0;
+		JzMedicalafter record = new JzMedicalafter(); 
+		record.setMaId(m.getMaId());
+		record.setApproveresult("-1");
+		record.setUpdatetime(new Date());
+		int jmd = jzMedicalafterDAO.updateByPrimaryKeySelective(record);
+		//处理jz_act
+		//(1)查询jz_act
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		JzActExample example = new JzActExample();
+		example.createCriteria()
+		.andMemberIdEqualTo(m.getMemberId())
+		.andMemberTypeEqualTo(m.getMemberType())
+		.andActYearEqualTo((short) year);
+		JzAct ja = jzActDAO.selectByExample(example).get(0);
+		//(2)修改jz_act
+		JzAct record1 = new JzAct();
+		if("1".equals(m.getMedicaltype())){
+			record1.setActBizMoney(ja.getActBizMoney().subtract(m.getAsisstpay()));
+			record1.setActBizInhospitalTimes((short)(ja.getActBizInhospitalTimes()-1));
+		}else if("2".equals(m.getMedicaltype())){
+			record1.setActBizMoney2(ja.getActBizMoney2().subtract(m.getAsisstpay()));
+		}
+		record1.setActBizTimes((short)(ja.getActBizTimes()-1));
+		record1.setActId(ja.getActId());
+		int jad = jzActDAO.updateByPrimaryKeySelective(record1);
+		if(jmd>0 && jad>0){
+			u=1;
+		}
+		return u;
 	}
 
 	public MemberBaseinfoDAO getMemberBaseinfoDAO() {

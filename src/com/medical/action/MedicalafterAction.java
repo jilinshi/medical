@@ -411,6 +411,14 @@ public class MedicalafterAction extends ActionSupport {
 		medicalafterDTO = this.baseinfoService.findMemberByKey(medicalafterDTO);
 		return SUCCESS;
 	}
+	
+	public String cancelafter(){
+		JSONObject json = new JSONObject();
+		int u = this.baseinfoService.updateMedicalafter(medicalafterDTO);
+		json.put("u", u);
+		result = json.toString();
+		return SUCCESS;
+	}
 
 	public BaseinfoService getBaseinfoService() {
 		return baseinfoService;

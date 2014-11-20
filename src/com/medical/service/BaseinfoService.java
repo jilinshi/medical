@@ -43,4 +43,6 @@ public interface BaseinfoService {
 	public MedicalafterDTO findMemberInfoPrint(MedicalafterDTO m);
 	
 	public MedicalafterDTO findMemberByKey(MedicalafterDTO m);
+	
+	public int updateMedicalafter(MedicalafterDTO m);
 }

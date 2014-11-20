@@ -20,13 +20,39 @@
 		$("#opertime1").datepicker({changeYear: true ,changeMonth: true});
 		$("#opertime2").datepicker({changeYear: true ,changeMonth: true});
 	});
-	function view(id){
-		var url="viewafter.action?medicalafterDTO.maId="+id;
-		var f="dialogWidth=520px;dialogHeight=330px;status=no;help=no;scroll=auto";		
+	function view(id,memberid,membertype){
+		var url="viewafter.action?medicalafterDTO.maId="+id+"&medicalafterDTO.memberId="+memberid+"&medicalafterDTO.memberType="+membertype;
+		var f="dialogWidth=950px;dialogHeight=460px;status=no;help=no;scroll=auto";		
 		window.showModalDialog(url,window,f);
 	}
-	function cancel(id){
-		
+	function cancel(id,memberid,membertype,assistpay,medicaltype){
+		 var arr = {
+			"medicalafterDTO.maId" : id,
+			"medicalafterDTO.memberId" : memberid,
+			"medicalafterDTO.memberType" : membertype,
+			"medicalafterDTO.asisstpay" : assistpay,
+			"medicalafterDTO.medicaltype" : medicaltype
+		}; 
+		$.ajax( {
+			type : "post",
+			url : "page/medicalafter/cancelafter.action",
+			data : arr,
+			timeout : 20000,
+			error : function() {
+				alert('服务器错误');
+			},
+			async : false,
+			dataType : 'json',
+			success : function(json) {
+				json = eval('(' + json + ')');
+				var u = json['u'];
+				if(u==1){
+					alert("成功！");
+				}else if(u==0){
+					alert("失败！");
+				}
+			}
+		}); 
 	}
 </script>
 </head>
@@ -97,32 +123,10 @@
 			</td>
 			<td >
 			<div align="center">
-			<a href="javascript:void(0)" onclick="view('<s:property value="maId" />')">查看</a>
+			<a href="javascript:void(0)" onclick="view('<s:property value="maId" />','<s:property value="memberId" />','<s:property value="memberType" />')">查看</a>
 			&nbsp;&nbsp;
-			<a href="javascript:void(0)" onclick="cancel('<s:property value="maId" />')">作废</a>
+			<a href="javascript:void(0)" onclick="cancel('<s:property value="maId" />','<s:property value="memberId" />','<s:property value="memberType" />','<s:property value="asisstpay"/>','<s:property value="medicaltype"/>')">作废</a>
 			&nbsp;&nbsp;
-			<s:if test="medicaltype==1">
-			<s:url action="printinhospital" id="print">
-				<s:param name="medicalafterDTO.maId">
-					<s:property value="maId" />
-				</s:param>
-			</s:url>
-			</s:if>
-			<s:elseif test="medicaltype==2">
-					<s:url action="printoutpatient" id="print">
-						<s:param name="medicalafterDTO.maId">
-							<s:property value="maId" />
-						</s:param>
-					</s:url>
-			</s:elseif>
-			<s:url action="printapp" id="printapp">
-				<s:param name="medicalafterDTO.maId">
-					<s:property value="maId" />
-				</s:param>
-			</s:url>
-			<s:a href="%{print}" cssStyle="cursor:hand" target="_blank">打印报销凭证</s:a>
-			&nbsp;&nbsp;
-			<s:a href="%{printapp}" cssStyle="cursor:hand" target="_blank">打印申请审批表</s:a>
 			</div>
 			</td>
 		</tr>

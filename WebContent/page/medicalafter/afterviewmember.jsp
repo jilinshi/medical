@@ -92,7 +92,7 @@
 			<td>
 				<s:if test="approveresult==1">同意救助</s:if>
 				<s:elseif test="approveresult==0">不同意救助</s:elseif>
-				<s:elseif test="medicaltype==-1">作废</s:elseif>
+				<s:elseif test="approveresult==-1">作废</s:elseif>
 			</td>
 		</tr>
 	</s:iterator>
