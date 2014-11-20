@@ -22,7 +22,7 @@ public class Log4jInit extends HttpServlet {
 		String prefix = getServletContext().getRealPath("/");
 		String file = getInitParameter("log4j");
 		if (file != null) {
-			PropertyConfigurator.configure(prefix + file);
+			PropertyConfigurator.configure(prefix + "\\"+file);
 		}
 
 	}

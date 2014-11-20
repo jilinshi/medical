@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.2.final using JasperReports Library version 5.6.1  -->
+<!-- 2014-11-20T13:32:01 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="medicalafter_app" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d3aa127c-568a-4b56-9c3f-5a5cbdb2cd74">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -36,7 +38,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="38" uuid="a0624c07-dd53-48ec-bc21-d4cd82c698eb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="宋体" size="28" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+					<font fontName="SansSerif" size="24" isBold="false" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
 				</textElement>
 				<text><![CDATA[吉林市城乡医疗医后救助申请审批表]]></text>
 			</staticText>
