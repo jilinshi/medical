@@ -155,6 +155,34 @@ public class DownloadExcelAction extends ActionSupport {
 			title.put("CS2", "农村人数");
 			title.put("CS", "总人数");
 		}
+		if("7".equals(type)){
+			String jwhere = (String) session.get("jwhere");
+			sql = " SELECT MA.MA_ID,MA.FAMILYNO as FAMILYNO,MA.MEMBERNAME as MEMBERNAME,MA.PAPERID as PAPERID,MA.SSN as SSN,MA.HOSPITAL as HOSPITAL,MA.HOSPITALLEVEL as HOSPITALEVEL, "
+				+ " MA.SICKENCONTENT as SICKENCONTENT,MA.BEGINTIME as BEGINTIME,MA.ENDTIME as ENDTIME,MA.APPROVERESULT as APPROVERESULT,MA.APPROVECONTENT as APPROVECONTENT,MA.TOTALCOST as TOTALCOST, "
+				+ " MA.INSUREPAY as INSUREPAY,MA.OUTPAY as OUTPAY,MA.CAPAY as CAPAY,MA.BUSINESSPAY as BUSINESSPAY,MA.ASISSTPAY as ASISSTPAY,MA.CREATETIME as CREATETIME,MA.UPDATETIME as UPDATETIME, "
+				+ " MA.MEMBER_ID as MEMBER_ID,MA.MEMBER_TYPE as MEMBER_TYPE,MA.IMPLSTS as IMPLSTS,MA.TIKETNO as TIKETNO,MA.MEDICALTYPE as MEDICALTYPE,MA.INSURETYPE as INSURETYPE,MA.PERSONTYPE as PERSONTYPE, "
+				+ " MA.ON_NO as ON_NO,MA.PAY_LINE as PAY_LINE,MA.HOSPITALPAY as HOSPITALPAY,MA.DIAGNOSE as DIAGNOSE,MA.FAMCOUNT as FAMCOUNT,MA.FAMADDR as FAMADDR,MA.TELEPHONE as TELEPHONE,MA.SEX as SEX, "
+				+ " MA.BIRTHDAY  as BIRTHDAY FROM JZ_MEDICALAFTER MA WHERE 1=1" + jwhere 
+				+ " ORDER BY MA.UPDATETIME DESC,MA.FAMILYNO ";
+			title.put("FAMILYNO", "家庭编号");
+			title.put("MEMBERNAME", "姓名");
+			title.put("SEX", "性别");
+			title.put("PAPERID", "身份证号码");
+			title.put("SSN", "医保卡号");
+			title.put("HOSPITAL", "医院名称");
+			title.put("HOSPITALEVEL", "医院级别");
+			title.put("BEGINTIME", "入院世间");
+			title.put("ENDTIME", "出院时间");
+			title.put("TOTALCOST", "总费用");
+			title.put("INSUREPAY", "统筹支付");
+			title.put("OUTPAY", "目录外费用");
+			title.put("CAPAY", "大病保险");
+			title.put("ASISSTPAY", "救助金额");
+			title.put("PAY_LINE", "起助线");
+			title.put("HOSPITALPAY", "医院补助");
+			title.put("FAMADDR", "家庭住址");
+			
+		}
 		
 		String f = new String("生成excel".getBytes("gb2312"), "ISO8859-1");
 		fileName = "attachment; filename=" + f + ".xls";

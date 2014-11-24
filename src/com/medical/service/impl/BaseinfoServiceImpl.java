@@ -17,6 +17,7 @@ import com.medical.dao.JzBizDAO;
 import com.medical.dao.JzMedicalafterDAO;
 import com.medical.dao.MemberBaseinfoDAO;
 import com.medical.dao.TestSsnDAO;
+import com.medical.dto.ActDTO;
 import com.medical.dto.BaseInfoDTO;
 import com.medical.dto.BizDTO;
 import com.medical.dto.CheckDTO;
@@ -816,6 +817,37 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			u=1;
 		}
 		return u;
+	}
+	
+	public ActDTO findActByID(BaseInfoDTO baseInfoDTO){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		int year = calendar.get(Calendar.YEAR);
+		ActDTO actDTO = new ActDTO();
+		JzActExample example = new JzActExample();
+		com.medical.model.JzActExample.Criteria criteria = example.createCriteria();
+		criteria.andMemberIdEqualTo(baseInfoDTO.getMemberId())
+			.andMemberTypeEqualTo(baseInfoDTO.getDs())
+			.andActYearEqualTo((short)year);
+		List<JzAct> acts = jzActDAO.selectByExample(example);
+		if(acts.size()>0){
+			JzAct act = acts.get(0);
+			actDTO.setActId(act.getActId());
+			actDTO.setMemberId(act.getMemberId());
+			actDTO.setHospitalId(act.getHospitalId());
+			actDTO.setCenterId(act.getCenterId());
+			actDTO.setActYear(act.getActYear());
+			actDTO.setActBizType(act.getActBizType());
+			actDTO.setActBizTimes(act.getActBizTimes());
+			actDTO.setActBizMoney(act.getActBizMoney());
+			actDTO.setActBizInhospitalTimes(act.getActBizInhospitalTimes());
+			actDTO.setActBizMoney2(act.getActBizMoney2());
+			actDTO.setActBizMoneyOld(act.getActBizMoneyOld());
+			actDTO.setAddMz(act.getAddMz());
+			actDTO.setAddZy(act.getAddZy());
+			actDTO.setMemberType(act.getMemberType());
+		}
+		return actDTO;
 	}
 
 	public MemberBaseinfoDAO getMemberBaseinfoDAO() {

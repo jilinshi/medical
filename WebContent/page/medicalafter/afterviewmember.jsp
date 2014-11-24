@@ -11,7 +11,7 @@
 <script type="text/javascript">
 	function apply(m1,m2){
 		var url="afterapplyinit.action?baseInfoDTO.memberId="+m1+"&baseInfoDTO.ds="+m2;
-		var f="dialogWidth=950px;dialogHeight=460px;status=no;help=no;scroll=auto";
+		var f="dialogWidth=950px;dialogHeight=580px;status=no;help=no;scroll=auto";
 		window.showModalDialog(url,window,f);
 	}
 </script>

@@ -85,6 +85,16 @@
 				</param>
 			</result>
 		</action>
+		<action name="viewafter" class="medicalafterAction" method="viewafter">
+			<result name="success">
+				/page/medicalafter/afterapplyview.jsp
+			</result>
+		</action>
+		<action name="viewafterfile" class="medicalafterAction" method="viewafterfile">
+			<result name="success">
+				/page/medicalafter/viewafterfile.jsp
+			</result>
+		</action>
 	</package>
 	<package name="printmedicalafter" extends="jasperreports-default"
 		namespace="/page/medicalafter">
@@ -130,10 +140,6 @@
 				<param name="reportParameters">map</param>
 			</result>
 		</action>
-		<action name="viewafter" class="medicalafterAction" method="viewafter">
-			<result name="success">
-				/page/medicalafter/afterapplyview.jsp
-			</result>
-		</action>
+		
 	</package>
 </struts>

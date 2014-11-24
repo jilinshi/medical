@@ -3,6 +3,7 @@ package com.medical.service;
 import java.util.List;
 
 import com.medical.common.Pager;
+import com.medical.dto.ActDTO;
 import com.medical.dto.BaseInfoDTO;
 import com.medical.dto.CheckDTO;
 import com.medical.dto.HealthDTO;
@@ -45,4 +46,6 @@ public interface BaseinfoService {
 	public MedicalafterDTO findMemberByKey(MedicalafterDTO m);
 	
 	public int updateMedicalafter(MedicalafterDTO m);
+	
+	public ActDTO findActByID(BaseInfoDTO baseInfoDTO);
 }

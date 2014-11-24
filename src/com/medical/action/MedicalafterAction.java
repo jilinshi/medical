@@ -1,7 +1,9 @@
 package com.medical.action;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import net.sf.json.JSONObject;
 
 import com.medical.common.Base64Image;
 import com.medical.common.FileUpload;
+import com.medical.dto.ActDTO;
 import com.medical.dto.BaseInfoDTO;
 import com.medical.dto.MedicalafterDTO;
 import com.medical.dto.OrganDTO;
@@ -44,6 +47,7 @@ public class MedicalafterAction extends ActionSupport {
 	private String value;
 	private String opertime1;
 	private String opertime2;
+	private ActDTO actDTO;
 
 	private HashMap<String, String> map;
 
@@ -87,6 +91,8 @@ public class MedicalafterAction extends ActionSupport {
 	public String afterapplyinit() {
 		// 查询人员基本信息
 		medicalafterDTO = this.baseinfoService.findMemberByID(baseInfoDTO);
+		// 查询本年救助信息：jz_act
+		actDTO = this.baseinfoService.findActByID(baseInfoDTO);
 		return SUCCESS;
 	}
 
@@ -126,18 +132,24 @@ public class MedicalafterAction extends ActionSupport {
 		UserInfoDTO userinfo = (UserInfoDTO) session.get("user");
 		String orgid = userinfo.getOrganizationId();
 		JzMedicalafterExample example = new JzMedicalafterExample();
+		String jwhere = "";
 		if (null == cur_page || "".equals(cur_page)) {
 			com.medical.model.JzMedicalafterExample.Criteria criteria = example
 					.createCriteria();
 			criteria.andOnNoLike(oid + "%");
+			jwhere = jwhere + "and ma.on_no like '" + oid + "%'";
 			if ("SSN".equals(term)) {
 				criteria.andSsnLike(value + "%");
+				jwhere = jwhere + "and ma.ssn like '" + value + "%'";
 			} else if ("FAMILYNO".equals(term)) {
 				criteria.andFamilynoLike(value + "%");
+				jwhere = jwhere + "and ma.familyno like '" + value + "%'";
 			} else if ("MEMBERNAME".equals(term)) {
 				criteria.andMembernameLike(value + "%");
+				jwhere = jwhere + "and ma.membername like '" + value + "%'"; 
 			} else if ("PAPERID".equals(term)) {
 				criteria.andPaperidLike(value + "%");
+				jwhere = jwhere + "and ma.paperid like '" + value + "%'";
 			} else {
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -158,15 +170,20 @@ public class MedicalafterAction extends ActionSupport {
 					&& (opertime2.equals("") || null == opertime2)) {
 			} else if (opertime1.equals("") || null == opertime1) {
 				criteria.andUpdatetimeGreaterThan(opertimeto);
+				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') >= '" + opertime2 + "'";
 			} else if (opertime2.equals("") || null == opertime2) {
 				criteria.andUpdatetimeLessThan(opertimefrom);
+				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') < '" + opertime1 + "'";
 			} else {
 				criteria.andUpdatetimeBetween(opertimefrom, opertimeto);
+				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') >='" + opertime1 + "' and to_char(ma.updatetime,'yyyy-MM-dd') < '" + opertime2 + "'";
 			}
 			session.put("sql", example);
+			session.put("jwhere", jwhere);
 			cur_page = "1";
 		} else {
 			example = (JzMedicalafterExample) session.get("sql");
+			jwhere = (String)session.get("jwhere");
 		}
 
 		this.setMedicalafters(this.baseinfoService.queryMedicalafters(example,
@@ -419,6 +436,22 @@ public class MedicalafterAction extends ActionSupport {
 		result = json.toString();
 		return SUCCESS;
 	}
+	
+	public String viewafterfile(){
+		medicalafters = new ArrayList<MedicalafterDTO>();
+		File dir = new File("Z:\\pic\\medicalafter\\"+medicalafterDTO.getMaId());
+		File[] fs = dir.listFiles();
+		for(int i=0; i<fs.length; i++){
+			MedicalafterDTO e = new MedicalafterDTO();
+			String path = fs[i].getAbsolutePath();
+			String name = fs[i].getName();
+			e.setFilepath(path);
+			e.setFilename(name);
+			System.out.println(name);
+			medicalafters.add(e);
+		}
+		return SUCCESS;
+	}
 
 	public BaseinfoService getBaseinfoService() {
 		return baseinfoService;
@@ -571,4 +604,13 @@ public class MedicalafterAction extends ActionSupport {
 	public void setOpertime2(String opertime2) {
 		this.opertime2 = opertime2;
 	}
+
+	public ActDTO getActDTO() {
+		return actDTO;
+	}
+
+	public void setActDTO(ActDTO actDTO) {
+		this.actDTO = actDTO;
+	}
+	
 }

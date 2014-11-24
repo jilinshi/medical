@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>补录查询页面</title>
+<title>查询页面</title>
 <s:head theme="simple" />
 <link rel="stylesheet" href="../css/table-style.css" type="text/css"></link>
 <link type="text/css" href="../js/themes/base/jquery.ui.all.css" rel="stylesheet" />
@@ -54,6 +55,11 @@
 			}
 		}); 
 	}
+	function viewpic(maid){
+		var url="viewafterfile.action?medicalafterDTO.maId="+maid;
+		var f="dialogWidth=800px;dialogHeight=600px;status=no;help=no;scroll=auto";		
+		window.showModalDialog(url,window,f);
+	}
 </script>
 </head>
 <body>
@@ -78,7 +84,8 @@
 		value="<s:date name="opertime1" format="yyyy-MM-dd"/>" />至
 		<input type="text" readonly="readonly" id="opertime2" name="opertime2"
 		value="<s:date name="opertime2" format="yyyy-MM-dd"/>" />&nbsp;&nbsp;
-	<s:submit value="查询"></s:submit>
+	<s:submit value="查询"></s:submit>&nbsp;&nbsp;
+	<button onclick="window.open('../downloadExcel.action?type=7')">导出excel</button>
 </s:form>
 <table align="center" width="99%" class="t1" border="0" cellpadding="0"
 	cellspacing="0">
@@ -127,6 +134,7 @@
 			&nbsp;&nbsp;
 			<a href="javascript:void(0)" onclick="cancel('<s:property value="maId" />','<s:property value="memberId" />','<s:property value="memberType" />','<s:property value="asisstpay"/>','<s:property value="medicaltype"/>')">作废</a>
 			&nbsp;&nbsp;
+			<a href="javascript:void(0)" onclick="viewpic('<s:property value="maId"/>')">查看附件</a>
 			</div>
 			</td>
 		</tr>

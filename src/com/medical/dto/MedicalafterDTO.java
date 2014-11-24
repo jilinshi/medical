@@ -60,6 +60,8 @@ public class MedicalafterDTO {
 	private String fSalvationcount;
     private String fPersoncount;
     private String fAccounts;
+    private String filepath;
+    private String filename;
 
 	public BigDecimal getSumpay() {
 		return sumpay;
@@ -493,6 +495,22 @@ public class MedicalafterDTO {
 
 	public void setFamcountval(String famcountval) {
 		this.famcountval = famcountval;
+	}
+
+	public String getFilepath() {
+		return filepath;
+	}
+
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 	 
 	

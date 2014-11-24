@@ -108,6 +108,29 @@
 		<table align="center" width="100%" class="t1" border="0"
 			cellpadding="0" cellspacing="0">
 			<tr>
+				<th colspan="6"><s:property value="medicalafterDTO.membername" />救助信息</th>
+			</tr>
+			<tr>
+				<td >姓名</td>
+				<td >救助年份</td>
+				<td >总次数</td>
+				<td >住院次数</td>
+				<td >累计住院救助金</td>
+				<td >累计门诊救助金</td>
+			</tr>
+			<tr>
+				<td ><s:property value="medicalafterDTO.membername" />&nbsp;</td>
+				<td ><s:property value="actDTO.actYear" />&nbsp;</td>
+				<td ><s:property value="actDTO.actBizTimes" />&nbsp;</td>
+				<td ><s:property value="actDTO.actBizInhospitalTimes" />&nbsp;</td>
+				<td ><s:property value="actDTO.actBizMoney" />&nbsp;</td>
+				<td ><s:property value="actDTO.actBizMoney2" />&nbsp;</td>
+			</tr>
+		</table>
+		<br/>
+		<table align="center" width="100%" class="t1" border="0"
+			cellpadding="0" cellspacing="0">
+			<tr>
 				<th colspan="6"><s:property value="medicalafterDTO.membername" />医后报销录入审批表
 					[当前状态：<s:property value="medicalafterDTO.personstate" />] [身份类别：<s:if
 						test="medicalafterDTO.assistType==11||medicalafterDTO.assistType==10">在保户</s:if>
