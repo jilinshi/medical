@@ -41,9 +41,9 @@ function printhr(id){
 			</s:select>&nbsp; 查询值：<s:textfield name="value"></s:textfield>&nbsp; 街道审批：<s:select
 				list="#{'':'全部','1':'同意 ','2':'不同意'}" listKey="key" listValue="value"
 				name="app1"></s:select> &nbsp; 区县审批：<s:select
-				list="#{'':'未审批','1':'同意 ','2':'不同意'}" listKey="key"
+				list="#{'':'全部','1':'同意 ','2':'不同意'}" listKey="key"
 				listValue="value" name="app2"></s:select> &nbsp;市级审批：<s:select
-				list="#{'':'未审批','1':'同意 ','2':'不同意','3':'体检中'}" listKey="key"
+				list="#{'':'全部','1':'同意 ','2':'不同意','3':'体检中'}" listKey="key"
 				listValue="value" name="app3"></s:select>&nbsp;</td>
 		</tr>
 		<tr>
@@ -55,7 +55,9 @@ function printhr(id){
 				listKey="key" listValue="value"></s:select> 
 				&nbsp;
 			审批状态：<s:select name="flag" list="#{'':'全部','0':'作废'}"
-				listKey="key" listValue="value" headerKey="1" headerValue="正常"></s:select>
+				listKey="key" listValue="value" headerKey="1" headerValue="正常"></s:select>&nbsp;
+			救助状态：<s:select name="state" list="#{'':'全部','0':'非救助对象','1':'救助对象'}"
+				listKey="key" listValue="value" ></s:select>&nbsp;
 				<s:submit value="查询"></s:submit>&nbsp;&nbsp;
 			<button onclick="window.open('../downloadExcel.action?type=2')">导出excel</button>
 			</td>
@@ -72,7 +74,7 @@ function printhr(id){
 		<th>审批状态</th>
 		<th>审批时间</th>
 		<th>数据来源</th>
-		<!--<th>当前救助状态</th>-->
+		<th>当前救助状态</th>
 		<th>操作</th>
 	</tr>
 	<s:iterator value="cas">
@@ -112,8 +114,8 @@ function printhr(id){
 				</s:if> <s:if test="memberType==2">
 				农村
 				</s:if></td>
-			<!--<td><s:if test="state==1">救助对象</s:if> <s:if test="state==0">非救助对象</s:if>
-			</td>-->
+			<td><s:if test="state==1">救助对象</s:if> <s:if test="state==0">非救助对象</s:if><s:if test="state==null">非救助对象</s:if>
+			</td>
 			<td><s:if test="(#session.user.organizationId.length()==6)||(#session.user.organizationId.length()==4)">
 				<s:url id="cancel" action="approvechronicmemberinit">
 					<s:param name="chronicApproveDTO.chronicapproveId">

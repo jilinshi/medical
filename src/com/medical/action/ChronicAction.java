@@ -75,6 +75,7 @@ public class ChronicAction extends ActionSupport {
 	private String flag;
 	private String memberId;
 	private String apds;
+	private String state;
 
 	@SuppressWarnings({ "rawtypes" })
 	public String checkChronicMemberInit() {
@@ -295,6 +296,14 @@ public class ChronicAction extends ActionSupport {
 			} else {
 			}
 
+			if("".equals(state)){
+				
+			}else if("0".equals(state)){
+				sql = sql + " and (t.state='0' or t.state is null) ";
+			}else if("1".equals(state)){
+				sql = sql + " and t.state='1' ";
+			}
+			
 			if ("".equals(app1)) {
 			} else if ("1".equals(app1)) {
 				sql = sql + " and t.APRRESULT1='1'";
@@ -321,7 +330,7 @@ public class ChronicAction extends ActionSupport {
 				sql = sql + " and t.FLAG='" + flag + "'";
 			}
 			if (!"".equals(orgno)) {
-				sql = sql + " and t.on_no like '" + orgno + "%'";
+				sql = sql + " and t.area like '" + orgno + "%'";
 			}
 			sql = sql + "  order by  chronicapprove_id desc ";
 			session.put("sql", sql);
@@ -1238,6 +1247,14 @@ public class ChronicAction extends ActionSupport {
 
 	public void setCcs(List<CurrectChronicDTO> ccs) {
 		this.ccs = ccs;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 }
