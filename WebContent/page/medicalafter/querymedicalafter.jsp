@@ -57,7 +57,7 @@
 	}
 	function viewpic(maid){
 		var url="viewafterfile.action?medicalafterDTO.maId="+maid;
-		var f="dialogWidth=800px;dialogHeight=600px;status=no;help=no;scroll=auto";		
+		var f="dialogWidth=800px;dialogHeight=600px;status=no;help=no;scroll=auto;resizable=yes";		
 		window.showModalDialog(url,window,f);
 	}
 </script>

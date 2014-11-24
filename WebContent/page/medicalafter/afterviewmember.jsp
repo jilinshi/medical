@@ -56,7 +56,9 @@
 <br>
 <table align="center" width="100%" class="t1" border="0" cellpadding="0"
 	cellspacing="0">
-	<caption style="font-size: 12px">业务信息</caption>
+	<caption style="font-size: 12px">业务信息
+	<button>刷新</button>
+	</caption>
 	<tr>
 		<th>姓名</th>
 		<th>业务类别</th>
