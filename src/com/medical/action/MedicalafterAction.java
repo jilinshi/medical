@@ -93,6 +93,8 @@ public class MedicalafterAction extends ActionSupport {
 		medicalafterDTO = this.baseinfoService.findMemberByID(baseInfoDTO);
 		// 查询本年救助信息：jz_act
 		actDTO = this.baseinfoService.findActByID(baseInfoDTO);
+		// 查询人员的低保救助时间、再保障救助时间
+		baseInfoDTO = this.baseinfoService.findSalvationStatus(baseInfoDTO);
 		return SUCCESS;
 	}
 

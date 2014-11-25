@@ -34,6 +34,11 @@ public class BaseInfoDTO {
 	private String fSalvationcount;
     private String fPersoncount;
     private String fAccounts;
+    //
+    private String dbstate;
+    private String dbtime;
+    private String zbzstate;
+    private String zbztime;
     
 	public String getMemberId() {
 		return memberId;
@@ -214,5 +219,29 @@ public class BaseInfoDTO {
 	}
 	public void setfAccounts(String fAccounts) {
 		this.fAccounts = fAccounts;
+	}
+	public String getDbstate() {
+		return dbstate;
+	}
+	public void setDbstate(String dbstate) {
+		this.dbstate = dbstate;
+	}
+	public String getDbtime() {
+		return dbtime;
+	}
+	public void setDbtime(String dbtime) {
+		this.dbtime = dbtime;
+	}
+	public String getZbzstate() {
+		return zbzstate;
+	}
+	public void setZbzstate(String zbzstate) {
+		this.zbzstate = zbzstate;
+	}
+	public String getZbztime() {
+		return zbztime;
+	}
+	public void setZbztime(String zbztime) {
+		this.zbztime = zbztime;
 	}
 }

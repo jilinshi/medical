@@ -9,8 +9,8 @@
 <title>医后报销审批信息</title>
 </head>
 <script type="text/javascript">
-	function apply(m1,m2){
-		var url="afterapplyinit.action?baseInfoDTO.memberId="+m1+"&baseInfoDTO.ds="+m2;
+	function apply(m1,m2,m3){
+		var url="afterapplyinit.action?baseInfoDTO.memberId="+m1+"&baseInfoDTO.ds="+m2+"&baseInfoDTO.familyno="+m3;
 		var f="dialogWidth=950px;dialogHeight=580px;status=no;help=no;scroll=auto";
 		window.showModalDialog(url,window,f);
 	}
@@ -47,7 +47,7 @@
 			<s:if test="asort==1">; 再保障</s:if>
 		</td>
 		<td width="200">
-		<button type="button" onclick="apply('<s:property value="memberId"/>','<s:property value="ds"/>')">添加业务</button>
+		<button type="button" onclick="apply('<s:property value="memberId"/>','<s:property value="ds"/>','<s:property value="familyno"/>')">添加业务</button>
 		</td>
 	</tr>
 	</s:iterator>
@@ -57,7 +57,9 @@
 <table align="center" width="100%" class="t1" border="0" cellpadding="0"
 	cellspacing="0">
 	<caption style="font-size: 12px">业务信息
-	<button>刷新</button>
+	&nbsp;&nbsp;
+	<!-- <button style="width:60;height:18;COLOR: white;FONT-SIZE: 9pt;
+	filter:Alpha(style=3,opacity=100,finishOpacity=20);background:green;">刷新</button> -->
 	</caption>
 	<tr>
 		<th>姓名</th>

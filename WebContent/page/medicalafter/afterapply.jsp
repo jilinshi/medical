@@ -108,11 +108,15 @@
 		<table align="center" width="100%" class="t1" border="0"
 			cellpadding="0" cellspacing="0">
 			<tr>
-				<th colspan="6"><s:property value="medicalafterDTO.membername" />救助信息</th>
+				<th colspan="10"><s:property value="medicalafterDTO.membername" />救助信息</th>
 			</tr>
 			<tr>
 				<td >姓名</td>
-				<td >救助年份</td>
+				<td>当前低保状态</td>
+				<td>低保开始时间</td>
+				<td>当前再保障状态</td>
+				<td>再保障开始时间</td>
+				<td >年份</td>
 				<td >总次数</td>
 				<td >住院次数</td>
 				<td >累计住院救助金</td>
@@ -120,6 +124,10 @@
 			</tr>
 			<tr>
 				<td ><s:property value="medicalafterDTO.membername" />&nbsp;</td>
+				<td ><s:property value="baseInfoDTO.dbstate" />&nbsp;</td>
+				<td ><s:property value="baseInfoDTO.dbtime" />&nbsp;</td>
+				<td ><s:property value="baseInfoDTO.zbzstate" />&nbsp;</td>
+				<td ><s:property value="baseInfoDTO.zbztime" />&nbsp;</td>
 				<td ><s:property value="actDTO.actYear" />&nbsp;</td>
 				<td ><s:property value="actDTO.actBizTimes" />&nbsp;</td>
 				<td ><s:property value="actDTO.actBizInhospitalTimes" />&nbsp;</td>

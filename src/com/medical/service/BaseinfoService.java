@@ -48,4 +48,6 @@ public interface BaseinfoService {
 	public int updateMedicalafter(MedicalafterDTO m);
 	
 	public ActDTO findActByID(BaseInfoDTO baseInfoDTO);
+	
+	public BaseInfoDTO findSalvationStatus(BaseInfoDTO baseInfoDTO);
 }

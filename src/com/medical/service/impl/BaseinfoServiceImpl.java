@@ -849,6 +849,41 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		}
 		return actDTO;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	public BaseInfoDTO findSalvationStatus(BaseInfoDTO baseInfoDTO){
+		BaseInfoDTO b = new BaseInfoDTO();
+		try {
+			String from = "";
+			if("1".equals(baseInfoDTO.getDs())){
+				from = "from salvationstatus@cs.regress.rdbms.dev.us.oracle.com ss,familyinfo@cs.regress.rdbms.dev.us.oracle.com info ";
+			}else if("2".equals(baseInfoDTO.getDs())){
+				from = "from salvationstatus@nc.regress.rdbms.dev.us.oracle.com ss,familyinfo@nc.regress.rdbms.dev.us.oracle.com info ";
+			}
+			String sql=" select ss.ss_ot_id, "
+					+ " max(case ss.st_id when '1' then ss.ss_state end) as dbstate, "
+					+ " max(case ss.st_id when '1' then to_char(ss.ss_begintime,'yyyy-MM-dd') end) as dbtime, "
+					+ " max(case ss.st_id when '31' then ss.ss_state end) as zbzstate, "
+					+ " max(case ss.st_id when '31' then to_char(ss.ss_begintime,'yyyy-MM-dd') end) as zbztime "
+					+ from 
+					+ " where ss.ss_ot_id = info.familyid "
+					+ " and info.familyno = '" + baseInfoDTO.getFamilyno() + "' "
+					+ " group by ss.ss_ot_id ";
+			ExecutSQL executSQL = new ExecutSQL();
+			executSQL.setExecutsql(sql);
+			List<HashMap> map = executSQLDAO.queryAll(executSQL);
+			if(map.size()>0){
+				HashMap m = map.get(0);
+				b.setDbstate((String)m.get("DBSTATE"));
+				b.setDbtime((String)m.get("DBTIME"));
+				b.setZbzstate((String)m.get("ZBZSTATE"));
+				b.setZbztime((String)m.get("ZBZTIME"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return b;
+	}
 
 	public MemberBaseinfoDAO getMemberBaseinfoDAO() {
 		return memberBaseinfoDAO;
