@@ -655,7 +655,13 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			String result = (String) maps.get(0).get("R");
 			System.out.println(result);
 			medicalafterDTO.setR(result);
-			BigDecimal asisstpay = new BigDecimal(result.split("-")[0]);
+			String[] i=result.split("-");
+			BigDecimal asisstpay = BigDecimal.ZERO;
+			if(i.length==2){
+				asisstpay = new BigDecimal(i[0]);
+			}else if(i.length==3){
+				asisstpay = new BigDecimal("-"+i[1]);
+			}
 			medicalafterDTO.setAsisstpay(asisstpay);
 			medicalafterDTO.setActId(currentact.getActId());
 		} catch (SQLException e) {

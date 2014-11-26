@@ -403,8 +403,12 @@
 	        	 alert(dataObj.r);
 	        	 $("#asisstpay")[0].value=dataObj.assitpay;
 	        	 $("#actid")[0].value=dataObj.actId;
-	        	 $("#sub")[0].disabled = false;
-	        }    
+	        	 if(dataObj.assitpay>=0){
+	        	 	$("#sub")[0].disabled = false;
+	        	 }else{
+	        		 $("#sub")[0].disabled = true;
+	        	 }
+	        }
 	    }); 
 	}
 </script>
