@@ -21,13 +21,15 @@ String basePath = request.getScheme() + "://"
 <title>核对医保卡号</title>
 <script type="text/javascript">
 	function savessn(){
+			 var ssncheck = $("input[name='ssncheck']:checked").val();
 			 var arr = {
 				"checkDTO.ds" : $('#ds')[0].value,
 				"checkDTO.memberId" : $('#memberid')[0].value,
 				"checkDTO.ssn1" : $('#ssn1')[0].value,
 				"checkDTO.ssn2" : $('#ssn2')[0].value,
 				"checkDTO.ssn3" : $('#ssn3')[0].value,
-				"checkDTO.paperid" : $('#paperid')[0].value
+				"checkDTO.paperid" : $('#paperid')[0].value,
+				"checkDTO.ssncheck" : ssncheck
 			}; 
 			$.ajax( {
 				type : "post",
@@ -48,7 +50,7 @@ String basePath = request.getScheme() + "://"
 						alert("同步医保卡号失败！");
 					}
 				}
-			}); 
+			});
 	}
 </script>
 </head>
@@ -121,15 +123,30 @@ String basePath = request.getScheme() + "://"
 				</tr>
 				<tr>
 					<td width="40%" style="text-align:right">医保卡号1:</td>
-					<td><s:property value="ybcheckDTO.ssn1"/>&nbsp;</td>
+					<td>
+						<s:if test="ybcheckDTO.ssn1!=null">
+							<input type="radio" name="ssncheck" value="<s:property value='ybcheckDTO.ssn1'/>" />&nbsp;
+						</s:if>
+						<s:property value="ybcheckDTO.ssn1"/>&nbsp;
+					</td>
 				</tr>
 				<tr>
 					<td width="40%" style="text-align:right">医保卡号2:</td>
-					<td><s:property value="ybcheckDTO.ssn2"/>&nbsp;</td>
+					<td>
+						<s:if test="ybcheckDTO.ssn2!=null">
+						<input type="radio" name="ssncheck" value="<s:property value='ybcheckDTO.ssn2'/>" />&nbsp;
+						</s:if>
+						<s:property value="ybcheckDTO.ssn2"/>&nbsp;
+					</td>
 				</tr>
 				<tr>
 					<td width="40%" style="text-align:right">医保卡号3:</td>
-					<td><s:property value="ybcheckDTO.ssn3"/>&nbsp;</td>
+					<td>
+						<s:if test="ybcheckDTO.ssn3!=null">
+						<input type="radio" name="ssncheck" value="<s:property value='ybcheckDTO.ssn3'/>" />&nbsp;
+						</s:if>
+						<s:property value="ybcheckDTO.ssn3"/>&nbsp;
+					</td>
 				</tr>
 				<s:hidden id="ssn1" name="ybcheckDTO.ssn1"></s:hidden>
 				<s:hidden id="ssn2" name="ybcheckDTO.ssn2"></s:hidden>

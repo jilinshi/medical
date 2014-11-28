@@ -335,13 +335,13 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		Criteria criteria1 = example1.createCriteria();
 		criteria1.andMemberIdEqualTo(checkDTO.getMemberId());
 		criteria1.andDsEqualTo(checkDTO.getDs());
-		record1.setSsn(checkDTO.getSsn1());
+		record1.setSsn(checkDTO.getSsncheck());
 		m = memberBaseinfoDAO.updateByExampleSelective(record1, example1);
 		// 更新城市人员信息表
 		if ("1".equals(checkDTO.getDs())) {
 			String sql = " update familymember@cs.regress.rdbms.dev.us.oracle.com fcs "
 					+ " set fcs.indi_id='"
-					+ checkDTO.getSsn1()
+					+ checkDTO.getSsncheck()
 					+ "'"
 					+ " where fcs.fm_id='" + checkDTO.getMemberId() + "'";
 			ExecutSQL executSQL = new ExecutSQL();
@@ -554,6 +554,9 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			record.setFamaddr(medicalafterDTO.getFamaddr());
 			record.setFamcount(medicalafterDTO.getFamcount());
 			record.setBirthday(medicalafterDTO.getBirthday());
+			record.setWsflag(medicalafterDTO.getWsflag());
+			record.setPzPrinum(Long.valueOf("0"));
+			record.setAppPrinum(Long.valueOf("0"));
 			BigDecimal id = jzMedicalafterDAO.insertSelective(record);
 			medicalafterDTO.setMaId(id);
 			JzAct jzAct = jzActDAO.selectByPrimaryKey(medicalafterDTO
@@ -683,7 +686,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 					+ " jma.tiketno, jma.medicaltype, jma.insuretype, jma.persontype, jma.on_no, jma.pay_line, "
 					+ " jma.hospitalpay, jma.diagnose, jma.famcount, jma.famaddr, jma.telephone, jma.sex, jma.birthday,"
 					+ " c.act_biz_inhospital_times as num, c.act_biz_money as sumpay, "
-					+ " (trunc(jma.endtime, 'dd') - trunc(jma.begintime, 'dd')) as indate "
+					+ " (trunc(jma.endtime, 'dd') - trunc(jma.begintime, 'dd')) as indate, "
+					+ " jma.pz_prinum, jma.app_prinum "
 					+ " from jz_medicalafter jma, "
 					+ " jz_act c "
 					+ " where 1=1 "
@@ -734,6 +738,10 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			BigDecimal famcount = (BigDecimal) map.get("FAMCOUNT");
 			medicalafterDTO.setFamcountval(famcount.toString());
 			medicalafterDTO.setFamcount(famcount.shortValue());
+			BigDecimal pz = (BigDecimal)map.get("PZ_PRINUM");
+			medicalafterDTO.setPzPrinum(pz.toString());
+			BigDecimal app = (BigDecimal)map.get("APP_PRINUM");
+			medicalafterDTO.setAppPrinum(app.toString());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -788,6 +796,9 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		e.setSex(s.getSex());
 		e.setMasterName(mb.getMasterName());
 		e.setRelmaster(mb.getRelmaster());
+		e.setWsflag(s.getWsflag());
+		e.setPzPrinum(s.getPzPrinum().toString());
+		e.setAppPrinum(s.getAppPrinum().toString());
 		return e;
 	}
 	
@@ -889,6 +900,47 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			e.printStackTrace();
 		}
 		return b;
+	}
+	
+	public int updateMedicalpzPinSum(MedicalafterDTO m,String type){
+		int i=0;
+		JzMedicalafter record = new JzMedicalafter(); 
+		record.setMaId(m.getMaId());
+		if("pz".equals(type)){
+			record.setPzPrinum(Long.valueOf(m.getPzPrinum()));
+		}else if("app".equals(type)){
+			record.setAppPrinum(Long.valueOf(m.getAppPrinum()));
+		}
+		i = jzMedicalafterDAO.updateByPrimaryKeySelective(record);
+		return i; 
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public MedicalafterDTO findSumPayDbbx(MedicalafterDTO m){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		int year = calendar.get(Calendar.YEAR);
+		try {
+			String sql = "select x.idcard, sum(x.pay_total) as total, sum(x.pay_medicare) as medicare, sum(x.pay_outmedicare) as outmedicare,"
+						+ " sum(x.pay_assist) as assist, sum(x.pay_ciassist) as ciassist, sum(x.pay_business) as business "
+						+ " from v_pay_dbbx x "
+						+ " where x.idcard = '"+ m.getPaperid() +"' "
+						+ " and to_char(x.end_date, 'yyyy') = '"+ year +"' "
+						+ " group by x.idcard ";
+			ExecutSQL executSQL = new ExecutSQL();
+			executSQL.setExecutsql(sql);
+			List<HashMap> maps = executSQLDAO.queryAll(executSQL);
+			if(maps.size()>0){
+				HashMap map = maps.get(0);
+				m.setSumtotalcost((BigDecimal)map.get("TOTAL"));
+				m.setSuminsurepay((BigDecimal)map.get("MEDICARE"));
+				m.setSumoutpay((BigDecimal)map.get("OUTMEDICARE"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return m;
 	}
 
 	public MemberBaseinfoDAO getMemberBaseinfoDAO() {

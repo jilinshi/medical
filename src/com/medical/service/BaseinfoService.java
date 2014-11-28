@@ -50,4 +50,8 @@ public interface BaseinfoService {
 	public ActDTO findActByID(BaseInfoDTO baseInfoDTO);
 	
 	public BaseInfoDTO findSalvationStatus(BaseInfoDTO baseInfoDTO);
+	
+	public int updateMedicalpzPinSum(MedicalafterDTO m,String type);
+	
+	public MedicalafterDTO findSumPayDbbx(MedicalafterDTO m);
 }

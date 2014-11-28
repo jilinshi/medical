@@ -36,6 +36,7 @@ public class CheckDTO {
 	private String ssn1;
 	private String ssn2;
 	private String ssn3;
+	private String ssncheck;
 	
 	public String getMemberId() {
 		return memberId;
@@ -216,6 +217,12 @@ public class CheckDTO {
 	}
 	public void setSsn3(String ssn3) {
 		this.ssn3 = ssn3;
+	}
+	public String getSsncheck() {
+		return ssncheck;
+	}
+	public void setSsncheck(String ssncheck) {
+		this.ssncheck = ssncheck;
 	}
 
 }

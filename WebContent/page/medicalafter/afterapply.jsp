@@ -65,16 +65,31 @@
 	function medicaltypechange(b){
 		var diagnose = document.getElementById("diagnose");
 		var sickencontent = document.getElementById("sickencontent");
+		var wsflag = document.getElementsByName("medicalafterDTO.wsflag");
 		 if(b.value==1){
 			diagnose.value = "-1";
 			diagnose.disabled = true;
 			sickencontent.value = "";
 			sickencontent.disabled = false;
+			for(var i=0;i<wsflag.length;i++){ //对所有结果进行遍历，如果状态是被选中的，则将其选择取消
+				if (wsflag[i].checked==true)
+				{
+					wsflag[i].checked=false;
+				}
+				wsflag[i].disabled = false;
+			}
 		}else if (b.value==2){
 			diagnose.value = "-1";
 			diagnose.disabled = false;
 			sickencontent.value = "";
 			sickencontent.disabled = true;
+			for(var i=0;i<wsflag.length;i++){ //对所有结果进行遍历，如果状态是被选中的，则将其选择取消
+				if (wsflag[i].checked==true)
+				{
+					wsflag[i].checked=false;
+				}
+				wsflag[i].disabled = true;
+			}
 		} 
 
 	}
@@ -224,6 +239,13 @@
 						name="medicalafterDTO.sickencontent"/></td>
 			</tr>
 			<tr>
+				<td width="17%">住院类别</td>
+				<td	colspan="5">
+				<s:radio list="#{'0':'普通住院','1':'外伤、未经新农合转诊的转院'}" name="medicalafterDTO.wsflag"
+						listKey="key" listValue="value" ></s:radio>
+				</td>
+			</tr>
+			<tr>
 				<td width="17%">总费用</td>
 				<td><s:textfield id="totalcost"
 						name="medicalafterDTO.totalcost" value="0"
@@ -258,18 +280,21 @@
 						onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}" /></td>
 			</tr>
 			<tr>
+				<td width="17%">商业保险</td>
+				<td><s:textfield id="businesspay"
+						name="medicalafterDTO.businesspay" value="0"
+						onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
+						onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
+						onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}" /></td>
 				<td width="17%">大病保险金额</td>
 				<td><s:textfield id="capay" name="medicalafterDTO.capay"
 						value="0"
 						onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
 						onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
 						onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}" /></td>
-				<td width="17%">商业保险</td>
-				<td colspan="3"><s:textfield id="businesspay"
-						name="medicalafterDTO.businesspay" value="0"
-						onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
-						onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
-						onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}" /></td>
+				<td colspan="2">
+				<button type="button" style="width: 250px;" onclick="countdbbx()">计算大病保险</button>
+				</td>
 			</tr>
 			<tr>
 				<td width="17%">救助金额</td>
@@ -410,6 +435,26 @@
 	        	 }
 	        }
 	    }); 
+	}
+	function countdbbx(){
+		var wsflag = $("input[name='medicalafterDTO.wsflag']:checked").val();
+		if( wsflag=="0" || wsflag=="1" ){
+			var formParam = $("#aaaaa").serialize();//序列化表格内容为字符串    
+			$.ajax({    
+		        type:'post',        
+		        url:'<%=basePath%>page/medicalafter/countdbbx.action',    
+		        data:formParam,    
+		        cache:false,    
+		        dataType:'json',    
+		        success:function(data){
+		        	var dataObj=eval("("+data+")");
+		        	alert("本次大病保险费用：" + dataObj.dbbx);
+		        	$("#capay")[0].value=dataObj.dbbx;
+		        }
+		    }); 
+		}else{
+			alert("请选择住院类别！");
+		}
 	}
 </script>
 </html>

@@ -72,18 +72,18 @@
 			<generatedKey column="MA_ID"
 				sqlStatement="select CC.nextval from dual" />  
 			</table> -->
-<!-- 			<table schema="yljzn" tableName="JZ_MEDICALAFTER">
+ 			<table schema="yljzn" tableName="JZ_MEDICALAFTER">
 			<property name="ignoreQualifiersAtRuntime" value="true" />
 			<generatedKey column="MA_ID"
 				sqlStatement="select CC.nextval from dual" />  
-			</table> -->
+			</table>
 			<!-- <table schema="yljzn" tableName="JZ_ACT">
 			<property name="ignoreQualifiersAtRuntime" value="true" />
 			<generatedKey column="ACT_ID"
 				sqlStatement="select JZ_ACT_SEQ.NEXTVAL from dual" />  
 			</table> -->
-			<table schema="yljzn" 
+<!-- 			<table schema="yljzn" 
 			tableName="MEMBER_BASEINFO"> <property name="ignoreQualifiersAtRuntime" value="true" 
-			/> </table> 
+			/> </table>  -->
 	</ibatorContext>
 </ibatorConfiguration>

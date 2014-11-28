@@ -1,6 +1,8 @@
 package com.medical.action;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +27,9 @@ import com.medical.service.BusinessService;
 import com.medical.service.SearchService;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+
+import dbbx.ServiceMainSoap;
+import dbbx.ServiceMainSoapProxy;
 
 public class MedicalafterAction extends ActionSupport {
 	private static final long serialVersionUID = -5126976226423666862L;
@@ -51,6 +56,7 @@ public class MedicalafterAction extends ActionSupport {
 
 	private HashMap<String, String> map;
 
+	@SuppressWarnings("unused")
 	public String countassist() {
 		medicalafterDTO = baseinfoService.findCountAssist(medicalafterDTO);
 		JSONObject json = new JSONObject();
@@ -58,6 +64,31 @@ public class MedicalafterAction extends ActionSupport {
 		json.put("assitpay", medicalafterDTO.getAsisstpay());
 		json.put("actId", medicalafterDTO.getActId());
 		result = json.toString();
+		return SUCCESS;
+	}
+
+	public String countdbbx() {
+		JSONObject json = new JSONObject();
+		ServiceMainSoap sms = new ServiceMainSoapProxy();
+		BigDecimal sumPreScope = BigDecimal.ZERO;
+		medicalafterDTO = baseinfoService.findSumPayDbbx(medicalafterDTO);
+		sumPreScope = medicalafterDTO.getSumtotalcost()
+				.subtract(medicalafterDTO.getSuminsurepay())
+				.subtract(medicalafterDTO.getSumoutpay());
+		try {
+			String s = sms.getDbbxValue(sumPreScope,
+					medicalafterDTO.getTotalcost(), medicalafterDTO.getInsurepay(),
+					medicalafterDTO.getOutpay(), Integer.valueOf(medicalafterDTO.getWsflag()),
+					Integer.valueOf(medicalafterDTO.getMemberType()));
+			json.put("dbbx", s);
+			result = json.toString();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return SUCCESS;
 	}
 
@@ -148,7 +179,7 @@ public class MedicalafterAction extends ActionSupport {
 				jwhere = jwhere + "and ma.familyno like '" + value + "%'";
 			} else if ("MEMBERNAME".equals(term)) {
 				criteria.andMembernameLike(value + "%");
-				jwhere = jwhere + "and ma.membername like '" + value + "%'"; 
+				jwhere = jwhere + "and ma.membername like '" + value + "%'";
 			} else if ("PAPERID".equals(term)) {
 				criteria.andPaperidLike(value + "%");
 				jwhere = jwhere + "and ma.paperid like '" + value + "%'";
@@ -158,11 +189,11 @@ public class MedicalafterAction extends ActionSupport {
 			Date opertimefrom = new Date();
 			Date opertimeto = new Date();
 			try {
-				if(!opertime1.equals("")){
-					opertimefrom = sdf.parse( opertime1.substring(0,10));
+				if (!opertime1.equals("")) {
+					opertimefrom = sdf.parse(opertime1.substring(0, 10));
 				}
-				if(!opertime2.equals("")){
-					opertimeto = sdf.parse( opertime2.substring(0,10));
+				if (!opertime2.equals("")) {
+					opertimeto = sdf.parse(opertime2.substring(0, 10));
 				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -172,20 +203,26 @@ public class MedicalafterAction extends ActionSupport {
 					&& (opertime2.equals("") || null == opertime2)) {
 			} else if (opertime1.equals("") || null == opertime1) {
 				criteria.andUpdatetimeGreaterThan(opertimeto);
-				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') >= '" + opertime2 + "'";
+				jwhere = jwhere
+						+ "and to_char(ma.updatetime,'yyyy-MM-dd') >= '"
+						+ opertime2 + "'";
 			} else if (opertime2.equals("") || null == opertime2) {
 				criteria.andUpdatetimeLessThan(opertimefrom);
-				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') < '" + opertime1 + "'";
+				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') < '"
+						+ opertime1 + "'";
 			} else {
 				criteria.andUpdatetimeBetween(opertimefrom, opertimeto);
-				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') >='" + opertime1 + "' and to_char(ma.updatetime,'yyyy-MM-dd') < '" + opertime2 + "'";
+				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') >='"
+						+ opertime1
+						+ "' and to_char(ma.updatetime,'yyyy-MM-dd') < '"
+						+ opertime2 + "'";
 			}
 			session.put("sql", example);
 			session.put("jwhere", jwhere);
 			cur_page = "1";
 		} else {
 			example = (JzMedicalafterExample) session.get("sql");
-			jwhere = (String)session.get("jwhere");
+			jwhere = (String) session.get("jwhere");
 		}
 
 		this.setMedicalafters(this.baseinfoService.queryMedicalafters(example,
@@ -268,6 +305,12 @@ public class MedicalafterAction extends ActionSupport {
 		map.put("PAYLINE", medicalafterDTO.getPayLine().toString());
 		map.put("HOSIPITALPAY", medicalafterDTO.getHospitalpay().toString());
 		map.put("SUMPAY", medicalafterDTO.getSumpay().toString());
+
+		// 记录打印报销凭证次数
+		int pzprinum = Integer.valueOf(medicalafterDTO.getPzPrinum()) + 1;
+		medicalafterDTO.setPzPrinum(pzprinum + "");
+		int u = this.baseinfoService.updateMedicalpzPinSum(medicalafterDTO,
+				"pz");
 		return SUCCESS;
 	}
 
@@ -344,6 +387,12 @@ public class MedicalafterAction extends ActionSupport {
 		map.put("PAYLINE", medicalafterDTO.getPayLine().toString());
 		map.put("HOSIPITALPAY", medicalafterDTO.getHospitalpay().toString());
 		map.put("SUMPAY", medicalafterDTO.getSumpay().toString());
+
+		// 记录打印报销凭证次数
+		int pzprinum = Integer.valueOf(medicalafterDTO.getPzPrinum()) + 1;
+		medicalafterDTO.setPzPrinum(pzprinum + "");
+		int u = this.baseinfoService.updateMedicalpzPinSum(medicalafterDTO,
+				"pz");
 		return SUCCESS;
 	}
 
@@ -423,27 +472,34 @@ public class MedicalafterAction extends ActionSupport {
 		map.put("TELEPHONE", medicalafterDTO.getTelephone());
 		map.put("FAMCOUNT", medicalafterDTO.getFamcountval());
 		map.put("BIRTHDAY", medicalafterDTO.getBirthdayval());
+
+		// 记录打印报销凭证次数
+		int appprinum = Integer.valueOf(medicalafterDTO.getAppPrinum()) + 1;
+		medicalafterDTO.setAppPrinum(appprinum + "");
+		int u = this.baseinfoService.updateMedicalpzPinSum(medicalafterDTO,
+				"app");
 		return SUCCESS;
 	}
-	
-	public String viewafter(){
+
+	public String viewafter() {
 		medicalafterDTO = this.baseinfoService.findMemberByKey(medicalafterDTO);
 		return SUCCESS;
 	}
-	
-	public String cancelafter(){
+
+	public String cancelafter() {
 		JSONObject json = new JSONObject();
 		int u = this.baseinfoService.updateMedicalafter(medicalafterDTO);
 		json.put("u", u);
 		result = json.toString();
 		return SUCCESS;
 	}
-	
-	public String viewafterfile(){
+
+	public String viewafterfile() {
 		medicalafters = new ArrayList<MedicalafterDTO>();
-		File dir = new File("Z:\\pic\\medicalafter\\"+medicalafterDTO.getMaId());
+		File dir = new File("Z:\\pic\\medicalafter\\"
+				+ medicalafterDTO.getMaId());
 		File[] fs = dir.listFiles();
-		for(int i=0; i<fs.length; i++){
+		for (int i = 0; i < fs.length; i++) {
 			MedicalafterDTO e = new MedicalafterDTO();
 			String path = fs[i].getAbsolutePath();
 			String name = fs[i].getName();
@@ -614,5 +670,5 @@ public class MedicalafterAction extends ActionSupport {
 	public void setActDTO(ActDTO actDTO) {
 		this.actDTO = actDTO;
 	}
-	
+
 }

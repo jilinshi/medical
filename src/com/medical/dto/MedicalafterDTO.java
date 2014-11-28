@@ -62,6 +62,14 @@ public class MedicalafterDTO {
     private String fAccounts;
     private String filepath;
     private String filename;
+    private String wsflag;//住院类别
+    private String pzPrinum;
+    private String appPrinum;
+    
+    private BigDecimal sumtotalcost;
+	private BigDecimal suminsurepay;
+	private BigDecimal sumoutpay;
+	private BigDecimal sumasisstpay;
 
 	public BigDecimal getSumpay() {
 		return sumpay;
@@ -511,6 +519,62 @@ public class MedicalafterDTO {
 
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+
+	public String getWsflag() {
+		return wsflag;
+	}
+
+	public void setWsflag(String wsflag) {
+		this.wsflag = wsflag;
+	}
+
+	public String getPzPrinum() {
+		return pzPrinum;
+	}
+
+	public void setPzPrinum(String pzPrinum) {
+		this.pzPrinum = pzPrinum;
+	}
+
+	public String getAppPrinum() {
+		return appPrinum;
+	}
+
+	public void setAppPrinum(String appPrinum) {
+		this.appPrinum = appPrinum;
+	}
+
+	public BigDecimal getSumtotalcost() {
+		return sumtotalcost;
+	}
+
+	public void setSumtotalcost(BigDecimal sumtotalcost) {
+		this.sumtotalcost = sumtotalcost;
+	}
+
+	public BigDecimal getSuminsurepay() {
+		return suminsurepay;
+	}
+
+	public void setSuminsurepay(BigDecimal suminsurepay) {
+		this.suminsurepay = suminsurepay;
+	}
+
+	public BigDecimal getSumoutpay() {
+		return sumoutpay;
+	}
+
+	public void setSumoutpay(BigDecimal sumoutpay) {
+		this.sumoutpay = sumoutpay;
+	}
+
+	public BigDecimal getSumasisstpay() {
+		return sumasisstpay;
+	}
+
+	public void setSumasisstpay(BigDecimal sumasisstpay) {
+		this.sumasisstpay = sumasisstpay;
 	}
 	 
 	

@@ -129,6 +129,17 @@
 			<td ><s:property value="medicalafterDTO.sickencontent"/>&nbsp;</td>
 		</tr>
 		<tr>
+			<td width="17%">住院类别</td>
+			<td colspan="5">
+				<s:if test="medicalafterDTO.wsflag==0">
+					普通住院
+				</s:if>
+				<s:elseif test="medicalafterDTO.wsflag==1">
+					外伤、未经新农合转诊的转院
+				</s:elseif>
+			</td>
+		</tr>
+		<tr>
 			<td width="17%">总费用</td>
 			<td><s:property value="medicalafterDTO.totalcost"/>&nbsp;</td>
 			<td width="17%">报销金额（医保/农合）</td>
