@@ -127,7 +127,7 @@
 		<global-results>
 			<result name="login" type="redirect">
 				/logout.jsp
-            </result>
+			</result>
 		</global-results>
 		<action name="printinhospital" class="medicalafterAction"
 			method="printinhospital">
@@ -147,8 +147,7 @@
 				<param name="reportParameters">map</param>
 			</result>
 		</action>
-		<action name="printapp" class="medicalafterAction"
-			method="printapp">
+		<action name="printapp" class="medicalafterAction" method="printapp">
 			<result name="success" type="jasper">
 				<param name="location">/page/medicalafter/medicalafter_app.jasper</param>
 				<param name="dataSource">medicalafterDTO</param>
@@ -156,6 +155,29 @@
 				<param name="reportParameters">map</param>
 			</result>
 		</action>
-		
+		<action name="queryafterffinit" method="queryafterffinit"
+			class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/queryafterff.jsp
+			</result>
+		</action>
+		<action name="queryafterff" method="queryafterff"
+			class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/queryafterff.jsp
+			</result>
+		</action>
+		<action name="genmabillinit" method="genmabillinit"
+			class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/genmabill.jsp
+			</result>
+		</action>
+		<action name="genmabill" method="genmabill"
+			class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/genmabill.jsp
+			</result>
+		</action>
 	</package>
 </struts>

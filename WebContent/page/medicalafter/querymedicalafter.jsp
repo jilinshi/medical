@@ -83,7 +83,8 @@
 		<input type="text" readonly="readonly" id="opertime1" name="opertime1"
 		value="<s:date name="opertime1" format="yyyy-MM-dd"/>" />至
 		<input type="text" readonly="readonly" id="opertime2" name="opertime2"
-		value="<s:date name="opertime2" format="yyyy-MM-dd"/>" />&nbsp;&nbsp;
+		value="<s:date name="opertime2" format="yyyy-MM-dd"/>" />&nbsp;&nbsp;数据来源：
+		<s:select list="#{'':'全部','1':'城市','2':'农村'}" name="ds"></s:select> &nbsp;&nbsp;
 	<s:submit value="查询"></s:submit>&nbsp;&nbsp;
 	<button onclick="window.open('../downloadExcel.action?type=7')">导出excel</button>
 </s:form>

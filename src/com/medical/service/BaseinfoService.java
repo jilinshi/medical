@@ -37,7 +37,7 @@ public interface BaseinfoService {
 	
 	public List<MedicalafterDTO> findMedicalaftersByPaperId(BaseInfoDTO baseInfoDTO);
 	
-	public List<MedicalafterDTO> queryMedicalafters(JzMedicalafterExample example,Integer curpage);
+	public List<MedicalafterDTO> queryMedicalafters(JzMedicalafterExample example,Integer curpage,String url);
 
 	public MedicalafterDTO findCountAssist(MedicalafterDTO medicalafterDTO);
 	
@@ -54,4 +54,6 @@ public interface BaseinfoService {
 	public int updateMedicalpzPinSum(MedicalafterDTO m,String type);
 	
 	public MedicalafterDTO findSumPayDbbx(MedicalafterDTO m);
+
+	public String queryMaStat(String jwhere);
 }

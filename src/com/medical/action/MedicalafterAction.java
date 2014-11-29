@@ -53,10 +53,11 @@ public class MedicalafterAction extends ActionSupport {
 	private String opertime1;
 	private String opertime2;
 	private ActDTO actDTO;
+	private String aasql;
+	private String ds;
 
 	private HashMap<String, String> map;
 
-	@SuppressWarnings("unused")
 	public String countassist() {
 		medicalafterDTO = baseinfoService.findCountAssist(medicalafterDTO);
 		JSONObject json = new JSONObject();
@@ -77,16 +78,16 @@ public class MedicalafterAction extends ActionSupport {
 				.subtract(medicalafterDTO.getSumoutpay());
 		try {
 			String s = sms.getDbbxValue(sumPreScope,
-					medicalafterDTO.getTotalcost(), medicalafterDTO.getInsurepay(),
-					medicalafterDTO.getOutpay(), Integer.valueOf(medicalafterDTO.getWsflag()),
+					medicalafterDTO.getTotalcost(),
+					medicalafterDTO.getInsurepay(),
+					medicalafterDTO.getOutpay(),
+					Integer.valueOf(medicalafterDTO.getWsflag()),
 					Integer.valueOf(medicalafterDTO.getMemberType()));
 			json.put("dbbx", s);
 			result = json.toString();
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return SUCCESS;
@@ -185,6 +186,10 @@ public class MedicalafterAction extends ActionSupport {
 				jwhere = jwhere + "and ma.paperid like '" + value + "%'";
 			} else {
 			}
+			if(!"".equals(ds)){
+				criteria.andMemberTypeEqualTo(ds);
+				jwhere = jwhere + " and ma.member_type='"+ds+"'" ;
+			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date opertimefrom = new Date();
 			Date opertimeto = new Date();
@@ -196,7 +201,6 @@ public class MedicalafterAction extends ActionSupport {
 					opertimeto = sdf.parse(opertime2.substring(0, 10));
 				}
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			if ((opertime1.equals("") || null == opertime1)
@@ -226,9 +230,120 @@ public class MedicalafterAction extends ActionSupport {
 		}
 
 		this.setMedicalafters(this.baseinfoService.queryMedicalafters(example,
-				new Integer(cur_page)));
+				new Integer(cur_page), "queryafter.action"));
 		this.setToolsmenu(this.businessService.getPager().getToolsmenu());
 		this.setOrgs(this.businessService.getOrganList(orgid));
+		return SUCCESS;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public String queryafterffinit() {
+		Map session = ActionContext.getContext().getSession();
+		UserInfoDTO userinfo = (UserInfoDTO) session.get("user");
+		String orgid = userinfo.getOrganizationId();
+		if (4 == orgid.length()) {
+			this.setOrgs(this.businessService.getOrganList(userinfo
+					.getOrganizationId()));
+			return SUCCESS;
+		} else {
+			this.result = "您所在的机构，没有查询权限！";
+			return "result";
+		}
+
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String queryafterff() {
+		Map session = ActionContext.getContext().getSession();
+		UserInfoDTO userinfo = (UserInfoDTO) session.get("user");
+		String orgid = userinfo.getOrganizationId();
+		JzMedicalafterExample example = new JzMedicalafterExample();
+		String jwhere = "";
+		if (null == cur_page || "".equals(cur_page)) {
+			com.medical.model.JzMedicalafterExample.Criteria criteria = example
+					.createCriteria();
+			criteria.andOnNoLike(oid + "%");
+			jwhere = jwhere + "and ma.on_no like '" + oid + "%'";
+			if ("SSN".equals(term)) {
+				criteria.andSsnLike(value + "%");
+				jwhere = jwhere + "and ma.ssn like '" + value + "%'";
+			} else if ("FAMILYNO".equals(term)) {
+				criteria.andFamilynoLike(value + "%");
+				jwhere = jwhere + "and ma.familyno like '" + value + "%'";
+			} else if ("MEMBERNAME".equals(term)) {
+				criteria.andMembernameLike(value + "%");
+				jwhere = jwhere + "and ma.membername like '" + value + "%'";
+			} else if ("PAPERID".equals(term)) {
+				criteria.andPaperidLike(value + "%");
+				jwhere = jwhere + "and ma.paperid like '" + value + "%'";
+			} else {
+			}
+			if(!"".equals(ds)){
+				criteria.andMemberTypeEqualTo(ds);
+				jwhere = jwhere + " and ma.member_type='"+ds+"'" ;
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date opertimefrom = new Date();
+			Date opertimeto = new Date();
+			try {
+				if (!opertime1.equals("")) {
+					opertimefrom = sdf.parse(opertime1.substring(0, 10));
+				}
+				if (!opertime2.equals("")) {
+					opertimeto = sdf.parse(opertime2.substring(0, 10));
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			if ((opertime1.equals("") || null == opertime1)
+					&& (opertime2.equals("") || null == opertime2)) {
+			} else if (opertime1.equals("") || null == opertime1) {
+				criteria.andUpdatetimeGreaterThan(opertimeto);
+				jwhere = jwhere
+						+ "and to_char(ma.updatetime,'yyyy-MM-dd') >= '"
+						+ opertime2 + "'";
+			} else if (opertime2.equals("") || null == opertime2) {
+				criteria.andUpdatetimeLessThan(opertimefrom);
+				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') < '"
+						+ opertime1 + "'";
+			} else {
+				criteria.andUpdatetimeBetween(opertimefrom, opertimeto);
+				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') >='"
+						+ opertime1
+						+ "' and to_char(ma.updatetime,'yyyy-MM-dd') < '"
+						+ opertime2 + "'";
+			}
+			session.put("sql", example);
+			session.put("jwhere", jwhere);
+			cur_page = "1";
+		} else {
+			example = (JzMedicalafterExample) session.get("sql");
+			jwhere = (String) session.get("jwhere");
+		}
+		String aasql = " SELECT count(*) as rc,    sum(ma.totalcost) as totalcost, "
+				+ " sum(ma.insurepay) as insurepay,        sum(ma.asisstpay) as asisstpay "
+				+ " FROM JZ_MEDICALAFTER MA  WHERE 1 = 1    "
+				+ jwhere
+				+ " "
+				+ " and ma.implsts = 0    and ma.approveresult = '1'  and 1=1 ";
+		System.out.println(aasql);
+		String u = baseinfoService.queryMaStat(aasql);
+		this.setMedicalafters(this.baseinfoService.queryMedicalafters(example,
+				new Integer(cur_page), "queryafterff.action"));
+		this.setToolsmenu(this.businessService.getPager().getToolsmenu());
+		this.setOrgs(this.businessService.getOrganList(orgid));
+		this.setResult(u);
+		session.put("aasql", aasql);
+		return SUCCESS;
+	}
+
+	public String genmabillinit() {
+		
+		return SUCCESS;
+	}
+
+	public String genmabill() {
+
 		return SUCCESS;
 	}
 
@@ -311,6 +426,7 @@ public class MedicalafterAction extends ActionSupport {
 		medicalafterDTO.setPzPrinum(pzprinum + "");
 		int u = this.baseinfoService.updateMedicalpzPinSum(medicalafterDTO,
 				"pz");
+		System.out.println(u);
 		return SUCCESS;
 	}
 
@@ -393,6 +509,7 @@ public class MedicalafterAction extends ActionSupport {
 		medicalafterDTO.setPzPrinum(pzprinum + "");
 		int u = this.baseinfoService.updateMedicalpzPinSum(medicalafterDTO,
 				"pz");
+		System.out.println(u);
 		return SUCCESS;
 	}
 
@@ -478,6 +595,7 @@ public class MedicalafterAction extends ActionSupport {
 		medicalafterDTO.setAppPrinum(appprinum + "");
 		int u = this.baseinfoService.updateMedicalpzPinSum(medicalafterDTO,
 				"app");
+		System.out.println(u);
 		return SUCCESS;
 	}
 
@@ -669,6 +787,22 @@ public class MedicalafterAction extends ActionSupport {
 
 	public void setActDTO(ActDTO actDTO) {
 		this.actDTO = actDTO;
+	}
+
+	public String getAasql() {
+		return aasql;
+	}
+
+	public void setAasql(String aasql) {
+		this.aasql = aasql;
+	}
+
+	public String getDs() {
+		return ds;
+	}
+
+	public void setDs(String ds) {
+		this.ds = ds;
 	}
 
 }

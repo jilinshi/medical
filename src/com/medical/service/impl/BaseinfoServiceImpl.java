@@ -441,12 +441,12 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 	}
 
 	public List<MedicalafterDTO> queryMedicalafters(
-			JzMedicalafterExample example, Integer curpage) {
+			JzMedicalafterExample example, Integer curpage, String url) {
 		List<JzMedicalafter> info = jzMedicalafterDAO.selectByExample(example);
 		List<MedicalafterDTO> madtos = new ArrayList<MedicalafterDTO>();
 
 		pager.setAll(info.size());
-		pager.setUrl("queryafter.action");
+		pager.setUrl(url);
 		pager.setCurrentpage(curpage.intValue());
 		pager.setPagesize(14);
 		pager.getToolsmenu();
@@ -658,12 +658,12 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			String result = (String) maps.get(0).get("R");
 			System.out.println(result);
 			medicalafterDTO.setR(result);
-			String[] i=result.split("-");
+			String[] i = result.split("-");
 			BigDecimal asisstpay = BigDecimal.ZERO;
-			if(i.length==2){
+			if (i.length == 2) {
 				asisstpay = new BigDecimal(i[0]);
-			}else if(i.length==3){
-				asisstpay = new BigDecimal("-"+i[1]);
+			} else if (i.length == 3) {
+				asisstpay = new BigDecimal("-" + i[1]);
 			}
 			medicalafterDTO.setAsisstpay(asisstpay);
 			medicalafterDTO.setActId(currentact.getActId());
@@ -738,18 +738,17 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			BigDecimal famcount = (BigDecimal) map.get("FAMCOUNT");
 			medicalafterDTO.setFamcountval(famcount.toString());
 			medicalafterDTO.setFamcount(famcount.shortValue());
-			BigDecimal pz = (BigDecimal)map.get("PZ_PRINUM");
+			BigDecimal pz = (BigDecimal) map.get("PZ_PRINUM");
 			medicalafterDTO.setPzPrinum(pz.toString());
-			BigDecimal app = (BigDecimal)map.get("APP_PRINUM");
+			BigDecimal app = (BigDecimal) map.get("APP_PRINUM");
 			medicalafterDTO.setAppPrinum(app.toString());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return medicalafterDTO;
 	}
-	
-	public MedicalafterDTO findMemberByKey(MedicalafterDTO m){
+
+	public MedicalafterDTO findMemberByKey(MedicalafterDTO m) {
 		MedicalafterDTO e = new MedicalafterDTO();
 		JzMedicalafterExample example = new JzMedicalafterExample();
 		com.medical.model.JzMedicalafterExample.Criteria criteria = example
@@ -757,7 +756,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		criteria.andMaIdEqualTo(m.getMaId());
 		JzMedicalafter s = jzMedicalafterDAO.selectByExample(example).get(0);
 		MemberBaseinfoExample example1 = new MemberBaseinfoExample();
-		com.medical.model.MemberBaseinfoExample.Criteria  criteria1 = example1.createCriteria();
+		com.medical.model.MemberBaseinfoExample.Criteria criteria1 = example1
+				.createCriteria();
 		criteria1.andMemberIdEqualTo(m.getMemberId());
 		criteria1.andDsEqualTo(m.getMemberType());
 		MemberBaseinfo mb = memberBaseinfoDAO.selectByExampleWithoutBLOBs(
@@ -801,53 +801,56 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		e.setAppPrinum(s.getAppPrinum().toString());
 		return e;
 	}
-	
-	public int updateMedicalafter(MedicalafterDTO m){
+
+	public int updateMedicalafter(MedicalafterDTO m) {
 		int u = 0;
-		JzMedicalafter record = new JzMedicalafter(); 
+		JzMedicalafter record = new JzMedicalafter();
 		record.setMaId(m.getMaId());
 		record.setApproveresult("-1");
 		record.setUpdatetime(new Date());
 		int jmd = jzMedicalafterDAO.updateByPrimaryKeySelective(record);
-		//处理jz_act
-		//(1)查询jz_act
+		// 处理jz_act
+		// (1)查询jz_act
 		Calendar cal = Calendar.getInstance();
 		int year = cal.get(Calendar.YEAR);
 		JzActExample example = new JzActExample();
-		example.createCriteria()
-		.andMemberIdEqualTo(m.getMemberId())
-		.andMemberTypeEqualTo(m.getMemberType())
-		.andActYearEqualTo((short) year);
+		example.createCriteria().andMemberIdEqualTo(m.getMemberId())
+				.andMemberTypeEqualTo(m.getMemberType())
+				.andActYearEqualTo((short) year);
 		JzAct ja = jzActDAO.selectByExample(example).get(0);
-		//(2)修改jz_act
+		// (2)修改jz_act
 		JzAct record1 = new JzAct();
-		if("1".equals(m.getMedicaltype())){
-			record1.setActBizMoney(ja.getActBizMoney().subtract(m.getAsisstpay()));
-			record1.setActBizInhospitalTimes((short)(ja.getActBizInhospitalTimes()-1));
-		}else if("2".equals(m.getMedicaltype())){
-			record1.setActBizMoney2(ja.getActBizMoney2().subtract(m.getAsisstpay()));
+		if ("1".equals(m.getMedicaltype())) {
+			record1.setActBizMoney(ja.getActBizMoney().subtract(
+					m.getAsisstpay()));
+			record1.setActBizInhospitalTimes((short) (ja
+					.getActBizInhospitalTimes() - 1));
+		} else if ("2".equals(m.getMedicaltype())) {
+			record1.setActBizMoney2(ja.getActBizMoney2().subtract(
+					m.getAsisstpay()));
 		}
-		record1.setActBizTimes((short)(ja.getActBizTimes()-1));
+		record1.setActBizTimes((short) (ja.getActBizTimes() - 1));
 		record1.setActId(ja.getActId());
 		int jad = jzActDAO.updateByPrimaryKeySelective(record1);
-		if(jmd>0 && jad>0){
-			u=1;
+		if (jmd > 0 && jad > 0) {
+			u = 1;
 		}
 		return u;
 	}
-	
-	public ActDTO findActByID(BaseInfoDTO baseInfoDTO){
+
+	public ActDTO findActByID(BaseInfoDTO baseInfoDTO) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		int year = calendar.get(Calendar.YEAR);
 		ActDTO actDTO = new ActDTO();
 		JzActExample example = new JzActExample();
-		com.medical.model.JzActExample.Criteria criteria = example.createCriteria();
+		com.medical.model.JzActExample.Criteria criteria = example
+				.createCriteria();
 		criteria.andMemberIdEqualTo(baseInfoDTO.getMemberId())
-			.andMemberTypeEqualTo(baseInfoDTO.getDs())
-			.andActYearEqualTo((short)year);
+				.andMemberTypeEqualTo(baseInfoDTO.getDs())
+				.andActYearEqualTo((short) year);
 		List<JzAct> acts = jzActDAO.selectByExample(example);
-		if(acts.size()>0){
+		if (acts.size() > 0) {
 			JzAct act = acts.get(0);
 			actDTO.setActId(act.getActId());
 			actDTO.setMemberId(act.getMemberId());
@@ -866,81 +869,105 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		}
 		return actDTO;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	public BaseInfoDTO findSalvationStatus(BaseInfoDTO baseInfoDTO){
+	public BaseInfoDTO findSalvationStatus(BaseInfoDTO baseInfoDTO) {
 		BaseInfoDTO b = new BaseInfoDTO();
 		try {
 			String from = "";
-			if("1".equals(baseInfoDTO.getDs())){
+			if ("1".equals(baseInfoDTO.getDs())) {
 				from = "from salvationstatus@cs.regress.rdbms.dev.us.oracle.com ss,familyinfo@cs.regress.rdbms.dev.us.oracle.com info ";
-			}else if("2".equals(baseInfoDTO.getDs())){
+			} else if ("2".equals(baseInfoDTO.getDs())) {
 				from = "from salvationstatus@nc.regress.rdbms.dev.us.oracle.com ss,familyinfo@nc.regress.rdbms.dev.us.oracle.com info ";
 			}
-			String sql=" select ss.ss_ot_id, "
+			String sql = " select ss.ss_ot_id, "
 					+ " max(case ss.st_id when '1' then ss.ss_state end) as dbstate, "
 					+ " max(case ss.st_id when '1' then to_char(ss.ss_begintime,'yyyy-MM-dd') end) as dbtime, "
 					+ " max(case ss.st_id when '31' then ss.ss_state end) as zbzstate, "
 					+ " max(case ss.st_id when '31' then to_char(ss.ss_begintime,'yyyy-MM-dd') end) as zbztime "
-					+ from 
-					+ " where ss.ss_ot_id = info.familyid "
-					+ " and info.familyno = '" + baseInfoDTO.getFamilyno() + "' "
-					+ " group by ss.ss_ot_id ";
+					+ from + " where ss.ss_ot_id = info.familyid "
+					+ " and info.familyno = '" + baseInfoDTO.getFamilyno()
+					+ "' " + " group by ss.ss_ot_id ";
 			ExecutSQL executSQL = new ExecutSQL();
 			executSQL.setExecutsql(sql);
 			List<HashMap> map = executSQLDAO.queryAll(executSQL);
-			if(map.size()>0){
+			if (map.size() > 0) {
 				HashMap m = map.get(0);
-				b.setDbstate((String)m.get("DBSTATE"));
-				b.setDbtime((String)m.get("DBTIME"));
-				b.setZbzstate((String)m.get("ZBZSTATE"));
-				b.setZbztime((String)m.get("ZBZTIME"));
+				b.setDbstate((String) m.get("DBSTATE"));
+				b.setDbtime((String) m.get("DBTIME"));
+				b.setZbzstate((String) m.get("ZBZSTATE"));
+				b.setZbztime((String) m.get("ZBZTIME"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return b;
 	}
-	
-	public int updateMedicalpzPinSum(MedicalafterDTO m,String type){
-		int i=0;
-		JzMedicalafter record = new JzMedicalafter(); 
+
+	public int updateMedicalpzPinSum(MedicalafterDTO m, String type) {
+		int i = 0;
+		JzMedicalafter record = new JzMedicalafter();
 		record.setMaId(m.getMaId());
-		if("pz".equals(type)){
+		if ("pz".equals(type)) {
 			record.setPzPrinum(Long.valueOf(m.getPzPrinum()));
-		}else if("app".equals(type)){
+		} else if ("app".equals(type)) {
 			record.setAppPrinum(Long.valueOf(m.getAppPrinum()));
 		}
 		i = jzMedicalafterDAO.updateByPrimaryKeySelective(record);
-		return i; 
+		return i;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	public MedicalafterDTO findSumPayDbbx(MedicalafterDTO m){
+	public MedicalafterDTO findSumPayDbbx(MedicalafterDTO m) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		int year = calendar.get(Calendar.YEAR);
 		try {
 			String sql = "select x.idcard, sum(x.pay_total) as total, sum(x.pay_medicare) as medicare, sum(x.pay_outmedicare) as outmedicare,"
-						+ " sum(x.pay_assist) as assist, sum(x.pay_ciassist) as ciassist, sum(x.pay_business) as business "
-						+ " from v_pay_dbbx x "
-						+ " where x.idcard = '"+ m.getPaperid() +"' "
-						+ " and to_char(x.end_date, 'yyyy') = '"+ year +"' "
-						+ " group by x.idcard ";
+					+ " sum(x.pay_assist) as assist, sum(x.pay_ciassist) as ciassist, sum(x.pay_business) as business "
+					+ " from v_pay_dbbx x "
+					+ " where x.idcard = '"
+					+ m.getPaperid()
+					+ "' "
+					+ " and to_char(x.end_date, 'yyyy') = '"
+					+ year
+					+ "' "
+					+ " group by x.idcard ";
 			ExecutSQL executSQL = new ExecutSQL();
 			executSQL.setExecutsql(sql);
 			List<HashMap> maps = executSQLDAO.queryAll(executSQL);
-			if(maps.size()>0){
+			if (maps.size() > 0) {
 				HashMap map = maps.get(0);
-				m.setSumtotalcost((BigDecimal)map.get("TOTAL"));
-				m.setSuminsurepay((BigDecimal)map.get("MEDICARE"));
-				m.setSumoutpay((BigDecimal)map.get("OUTMEDICARE"));
+				m.setSumtotalcost((BigDecimal) map.get("TOTAL"));
+				m.setSuminsurepay((BigDecimal) map.get("MEDICARE"));
+				m.setSumoutpay((BigDecimal) map.get("OUTMEDICARE"));
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return m;
+	}
+
+	/**
+	 * RC 180 TOTALCOST 1880670.08 INSUREPAY 893508.16 ASISSTPAY 307103.92
+	 */ 
+	@SuppressWarnings("rawtypes")
+	@Override
+	public String queryMaStat(String jwhere) {
+		String u = "";
+		ExecutSQL executSQL = new ExecutSQL();
+		executSQL.setExecutsql(jwhere);
+		List<HashMap> maps;
+		try {
+			maps = executSQLDAO.queryAll(executSQL);
+			if (maps.size() > 0) {
+				u = "【救助人次：" + maps.get(0).get("RC") + "  救助金总额："+maps.get(0).get("ASISSTPAY")+"元】 ";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return u;
 	}
 
 	public MemberBaseinfoDAO getMemberBaseinfoDAO() {
@@ -1006,5 +1033,4 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 	public void setJzActDAO(JzActDAO jzActDAO) {
 		this.jzActDAO = jzActDAO;
 	}
-
 }

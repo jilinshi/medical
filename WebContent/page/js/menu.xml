@@ -197,6 +197,10 @@
 			url="/medical/page/contentframe.jsp?url=medicalafter/queryafterinit.action&amp;nav=农合医后报销审批>>查询"
 			target="mainFrame">
 		</menu>
+		<menu name="发放"
+			url="/medical/page/contentframe.jsp?url=medicalafter/queryafterffinit.action&amp;nav=农合医后报销审批>>发放"
+			target="mainFrame">
+		</menu>
 	</menu>
 	<menu name="社会救助卡预览">
 		<menu name="日常救助制卡预览"
