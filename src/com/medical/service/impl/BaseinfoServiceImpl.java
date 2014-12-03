@@ -951,7 +951,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 
 	/**
 	 * RC 180 TOTALCOST 1880670.08 INSUREPAY 893508.16 ASISSTPAY 307103.92
-	 */ 
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public String queryMaStat(String jwhere) {
@@ -962,7 +962,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		try {
 			maps = executSQLDAO.queryAll(executSQL);
 			if (maps.size() > 0) {
-				u = "【救助人次：" + maps.get(0).get("RC") + "  救助金总额："+maps.get(0).get("ASISSTPAY")+"元】 ";
+				u = "【救助人次：" + maps.get(0).get("RC") + "  救助金总额："
+						+ maps.get(0).get("ASISSTPAY") + "元】 ";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1032,5 +1033,34 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 
 	public void setJzActDAO(JzActDAO jzActDAO) {
 		this.jzActDAO = jzActDAO;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<MedicalafterDTO> queryMaBillStat(String sql) {
+		List<MedicalafterDTO> list = new ArrayList<MedicalafterDTO>();
+		ExecutSQL executSQL = new ExecutSQL();
+		executSQL.setExecutsql(sql);
+		List<HashMap> maps;
+		/*
+		 * DS 1 ON_NO 220201 BATCHNAME 2014年12月医疗救助 RC 6 ASISSTPAY 10295.04
+		 */
+
+		try {
+			maps = executSQLDAO.queryAll(executSQL);
+			for (HashMap s : maps) {
+				MedicalafterDTO e = new MedicalafterDTO();
+				e.setDs((String) s.get("DS"));
+				e.setBatchname((String) s.get("BATCHNAME"));
+				e.setRc((BigDecimal) s.get("RC"));
+				e.setOnNo((String) s.get("ON_NO"));
+				e.setAsisstpay((BigDecimal) s.get("ASISSTPAY"));
+				list.add(e);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

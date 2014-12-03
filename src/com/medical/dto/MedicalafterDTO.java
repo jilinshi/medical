@@ -46,30 +46,49 @@ public class MedicalafterDTO {
 	private String diagnose;
 	private Integer actId;
 	private String r;
-	private BigDecimal num;//年度出院次数
-	private BigDecimal indate;//住院天数
-	private BigDecimal sumpay;//累计救助金
+	private BigDecimal num;// 年度出院次数
+	private BigDecimal indate;// 住院天数
+	private BigDecimal sumpay;// 累计救助金
 
-	private short famcount; //家庭人口数
+	private short famcount; // 家庭人口数
 	private String famcountval;
-    private String famaddr; //家庭住址
-    private String telephone; //电话
-    private String sex; //性别
-    private Date birthday; //出生日期
-    private String birthdayval;
+	private String famaddr; // 家庭住址
+	private String telephone; // 电话
+	private String sex; // 性别
+	private Date birthday; // 出生日期
+	private String birthdayval;
 	private String fSalvationcount;
-    private String fPersoncount;
-    private String fAccounts;
-    private String filepath;
-    private String filename;
-    private String wsflag;//住院类别
-    private String pzPrinum;
-    private String appPrinum;
-    
-    private BigDecimal sumtotalcost;
+	private String fPersoncount;
+	private String fAccounts;
+	private String filepath;
+	private String filename;
+	private String wsflag;// 住院类别
+	private String pzPrinum;
+	private String appPrinum;
+
+	private BigDecimal sumtotalcost;
 	private BigDecimal suminsurepay;
 	private BigDecimal sumoutpay;
 	private BigDecimal sumasisstpay;
+
+	private BigDecimal rc;
+	private String batchname;
+
+	public BigDecimal getRc() {
+		return rc;
+	}
+
+	public void setRc(BigDecimal rc) {
+		this.rc = rc;
+	}
+
+	public String getBatchname() {
+		return batchname;
+	}
+
+	public void setBatchname(String batchname) {
+		this.batchname = batchname;
+	}
 
 	public BigDecimal getSumpay() {
 		return sumpay;
@@ -375,8 +394,6 @@ public class MedicalafterDTO {
 		this.hospitalpay = hospitalpay;
 	}
 
-	
-
 	public String getDiagnose() {
 		return diagnose;
 	}
@@ -576,6 +593,5 @@ public class MedicalafterDTO {
 	public void setSumasisstpay(BigDecimal sumasisstpay) {
 		this.sumasisstpay = sumasisstpay;
 	}
-	 
-	
+
 }

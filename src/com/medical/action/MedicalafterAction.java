@@ -186,9 +186,9 @@ public class MedicalafterAction extends ActionSupport {
 				jwhere = jwhere + "and ma.paperid like '" + value + "%'";
 			} else {
 			}
-			if(!"".equals(ds)){
+			if (!"".equals(ds)) {
 				criteria.andMemberTypeEqualTo(ds);
-				jwhere = jwhere + " and ma.member_type='"+ds+"'" ;
+				jwhere = jwhere + " and ma.member_type='" + ds + "'";
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date opertimefrom = new Date();
@@ -278,9 +278,9 @@ public class MedicalafterAction extends ActionSupport {
 				jwhere = jwhere + "and ma.paperid like '" + value + "%'";
 			} else {
 			}
-			if(!"".equals(ds)){
+			if (!"".equals(ds)) {
 				criteria.andMemberTypeEqualTo(ds);
-				jwhere = jwhere + " and ma.member_type='"+ds+"'" ;
+				jwhere = jwhere + " and ma.member_type='" + ds + "'";
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date opertimefrom = new Date();
@@ -338,7 +338,23 @@ public class MedicalafterAction extends ActionSupport {
 	}
 
 	public String genmabillinit() {
-		
+		String sql = "select sb.ds, sb.on_no, max(sb.sb_batchname) as batchname, "
+				+ " count(*) rc, sum(ma.asisstpay) as asisstpay "
+				+ " from jz_medicalafter ma, (select sb.sb_batchname,  sb.sb_id, "
+				+ " sb.sb_disposests,  '1' as ds,  sb.on_no "
+				+ " from salvationbatch@cs sb, salvationoperation@cs so "
+				+ " where so.so_id = sb.so_id  and so.st_id = '4' "
+				+ " and sb.sb_disposests = '处理中' union all "
+				+ " select sb.sb_batchname, sb.sb_id,  sb.sb_disposests, "
+				+ " '2' as ds, sb.on_no "
+				+ " from salvationbatch@nc sb, salvationoperation@nc so "
+				+ " where so.so_id = sb.so_id and so.st_id = '4' "
+				+ " and sb.sb_disposests = '处理中') sb "
+				+ " where sb.on_no = substr(ma.on_no, 1, 6) and sb.ds = ma.member_type "
+				+ " and ma.implsts = '0' and ma.approveresult = '1' "
+				+ " group by sb.on_no, sb.ds  order by sb.ds, sb.on_no";
+		medicalafters = baseinfoService.queryMaBillStat(sql);
+
 		return SUCCESS;
 	}
 

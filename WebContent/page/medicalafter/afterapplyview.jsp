@@ -75,13 +75,13 @@
 			<td colspan="2"><s:property value="medicalafterDTO.hospital"/>&nbsp;</td>
 			<td width="17%">医院级别</td>
 			<td colspan="2">
-				<s:if test="medicalafterDTO.hospitallevel==1">
+				<s:if test="medicalafterDTO.hospitallevel==3">
 					省级
 				</s:if>
 				<s:if test="medicalafterDTO.hospitallevel==2">
 					市级
 				</s:if>
-				<s:if test="medicalafterDTO.hospitallevel==3">
+				<s:if test="medicalafterDTO.hospitallevel==1">
 					区级
 				</s:if>
 				&nbsp;
