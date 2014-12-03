@@ -56,4 +56,6 @@ public interface BaseinfoService {
 	public MedicalafterDTO findSumPayDbbx(MedicalafterDTO m);
 
 	public String queryMaStat(String jwhere);
+
+	public List<MedicalafterDTO> queryMaBillStat(String sql);
 }
