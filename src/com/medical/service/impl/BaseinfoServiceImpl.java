@@ -14,6 +14,7 @@ import com.medical.common.Pager;
 import com.medical.dao.ExecutSQLDAO;
 import com.medical.dao.JzActDAO;
 import com.medical.dao.JzBizDAO;
+import com.medical.dao.JzMabillsDAO;
 import com.medical.dao.JzMedicalafterDAO;
 import com.medical.dao.MemberBaseinfoDAO;
 import com.medical.dao.TestSsnDAO;
@@ -28,6 +29,8 @@ import com.medical.model.JzAct;
 import com.medical.model.JzActExample;
 import com.medical.model.JzBiz;
 import com.medical.model.JzBizExample;
+import com.medical.model.JzMabills;
+import com.medical.model.JzMabillsExample;
 import com.medical.model.JzMedicalafter;
 import com.medical.model.JzMedicalafterExample;
 import com.medical.model.MemberBaseinfo;
@@ -45,6 +48,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 	private String toolsmenu;
 	private TestSsnDAO testSsnDAO;
 	private JzMedicalafterDAO jzMedicalafterDAO;
+	private JzMabillsDAO jzMabillsDAO;
 	private JzActDAO jzActDAO;
 
 	@Override
@@ -483,6 +487,26 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 				e.setInsuretype(s.getInsuretype());
 				e.setPersontype(s.getPersontype());
 				madtos.add(e);
+			}
+		}
+		return madtos;
+	}
+
+	public List<JzMabills> queryMedicalafters01(JzMabillsExample example,
+			Integer curpage, String url) {
+		List<JzMabills> info = jzMabillsDAO.selectByExample(example);
+		List<JzMabills> madtos = new ArrayList<JzMabills>();
+
+		pager.setAll(info.size());
+		pager.setUrl(url);
+		pager.setCurrentpage(curpage.intValue());
+		pager.setPagesize(14);
+		pager.getToolsmenu();
+
+		for (int i = 0; i < pager.getPagesize(); i++) {
+			if (pager.getStart() + i < pager.getAll()) {
+				JzMabills s = info.get(pager.getStart() + i);
+				madtos.add(s);
 			}
 		}
 		return madtos;
@@ -1055,6 +1079,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 				e.setRc((BigDecimal) s.get("RC"));
 				e.setOnNo((String) s.get("ON_NO"));
 				e.setAsisstpay((BigDecimal) s.get("ASISSTPAY"));
+				e.setApprovecontent((String) s.get("ORGNAME"));
 				list.add(e);
 			}
 
@@ -1062,5 +1087,125 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	@Override
+	public void saveMaBatchDone() {
+		String sql = "";
+		try {
+			ExecutSQL executSQL = new ExecutSQL();
+			// 1
+			sql = "insert into jz_mabills (bill_id, ma_id, "
+					+ " familyno,  membername,  paperid,  ctime, utime,  assispay,  ds, sb_id,  batchname) "
+					+ " select XMABILL.Nextval,  ma.ma_id,  ma.familyno, ma.membername,  ma.paperid, "
+					+ " sysdate, sysdate, ma.asisstpay, sb.ds, sb_id, sb.sb_batchname "
+					+ " from jz_medicalafter ma, (select sb.sb_batchname, sb.sb_id,  sb.sb_disposests, "
+					+ " '1' as ds,   sb.on_no from salvationbatch@cs sb, salvationoperation@cs so "
+					+ " where so.so_id = sb.so_id and so.st_id = '4'  and sb.sb_disposests = '处理中' "
+					+ " union all select sb.sb_batchname, sb.sb_id, sb.sb_disposests,  '2' as ds, "
+					+ " sb.on_no  from salvationbatch@nc sb, salvationoperation@nc so "
+					+ " where so.so_id = sb.so_id  and so.st_id = '4' and sb.sb_disposests = '处理中') sb "
+					+ " where sb.on_no = substr(ma.on_no, 1, 6) and sb.ds = ma.member_type and ma.implsts = '0' "
+					+ " and ma.approveresult = '1' ";
+			System.out.println(sql);
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+			// 2
+			sql = "update jz_medicalafter ma set ma.implsts = '1' where ma.ma_id in "
+					+ " (select b.ma_id from jz_mabills b where b.sb_id in "
+					+ " (select sb.sb_id from salvationbatch@cs sb, salvationoperation@cs so "
+					+ " where so.so_id = sb.so_id and so.st_id = '4'  and sb.sb_disposests = '处理中' "
+					+ " union all  select sb.sb_id from salvationbatch@nc sb, salvationoperation@nc so "
+					+ " where so.so_id = sb.so_id  and so.st_id = '4' "
+					+ " and sb.sb_disposests = '处理中'))";
+			System.out.println(sql);
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+			sql = " delete from batch_almsreckoning@cs b  where b.st_id = '4' "
+					+ " and b.sb_id in (select sb.sb_id   from salvationbatch@cs sb, salvationoperation@cs so "
+					+ " where so.so_id = sb.so_id    and so.st_id = '4'    and sb.sb_disposests = '处理中')";
+			System.out.println(sql);
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+			sql = " delete from batch_almsreckoning@nc b  where b.st_id = '4' "
+					+ " and b.sb_id in (select sb.sb_id   from salvationbatch@nc sb, salvationoperation@nc so "
+					+ " where so.so_id = sb.so_id    and so.st_id = '4'    and sb.sb_disposests = '处理中')";
+			System.out.println(sql);
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+			// 3
+			sql = " insert into batch_almsreckoning@cs (bar_id, bar_subject, bar_money, "
+					+ " bar_master, bar_fmidcard, bar_bank_accounts,  sb_id,  ar_id, "
+					+ " bar_familyno, bar_awardflag, bar_familyid, on_no,  sa_id, "
+					+ " bar_familycount,  st_id) select xbatch_almsreckoning.nextval@cs, "
+					+ " sb.batchname,  sb.assispay, fi.mastername, fi.paperid, "
+					+ " fi.accounts, sb.sb_id, null, fi.familyno, "
+					+ " null, fi.familyid,  fi.on_no, null,  fi.salcount, '4' "
+					+ " from familyinfo@cs fi, (select max(b.sb_id) as sb_id, "
+					+ " max(b.batchname) as batchname, max(b.assispay) as assispay, "
+					+ " max(b.familyno) as familyno from jz_mabills b "
+					+ " where b.ds = '1'  group by b.familyno) sb "
+					+ " where fi.familyno = sb.familyno";
+			System.out.println(sql);
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+			// 4
+			sql = "insert into batch_almsreckoning@nc (bar_id, "
+					+ " bar_subject,  bar_money,     bar_master,     bar_fmidcard, "
+					+ " bar_bank_accounts,     sb_id,     bar_familyno,     bar_awardflag, "
+					+ " bar_familyid,     on_no,     sa_id,     bar_familycount, "
+					+ " st_id)    select xbatch_almsreckoning.nextval@nc, "
+					+ " sb.batchname,    sb.assispay,      fi.mastername, "
+					+ " fi.paperid,      fi.accounts,      sb.sb_id, "
+					+ " fi.familyno,     null,    fi.familyid, "
+					+ " fi.on_no,    null,     fi.salcount,   '4' "
+					+ " from familyinfo@nc fi, (select max(b.sb_id) as sb_id,   max(b.batchname) as batchname, "
+					+ " max(b.assispay) as assispay, max(b.familyno) as familyno   from jz_mabills b "
+					+ " where b.ds = '2'  group by b.familyno) sb   where fi.familyno = sb.familyno";
+			System.out.println(sql);
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<CheckDTO> getMonths() {
+		String sql = " select * from ( select  distinct(substr( b.batchname,1,8)) as b  from jz_mabills b   ) order by b";
+		List<CheckDTO> list = new ArrayList<CheckDTO>();
+		ExecutSQL executSQL = new ExecutSQL();
+		executSQL.setExecutsql(sql);
+		List<HashMap> maps;
+		/*
+		 * DS 1 ON_NO 220201 BATCHNAME 2014年12月医疗救助 RC 6 ASISSTPAY 10295.04
+		 */
+
+		try {
+			maps = executSQLDAO.queryAll(executSQL);
+			for (HashMap s : maps) {
+				CheckDTO e = new CheckDTO();
+				e.setDs((String) s.get("B"));
+				list.add(e);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public JzMabillsDAO getJzMabillsDAO() {
+		return jzMabillsDAO;
+	}
+
+	public void setJzMabillsDAO(JzMabillsDAO jzMabillsDAO) {
+		this.jzMabillsDAO = jzMabillsDAO;
 	}
 }

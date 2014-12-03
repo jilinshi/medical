@@ -85,4 +85,7 @@
 	<bean id="jzMedicalafterDAO" class="com.medical.dao.JzMedicalafterDAOImpl">
 		<property name="sqlMapClientTemplate" ref="sqlMapClientTemplate"></property>
 	</bean>
+	<bean id="jzMabillsDAO" class="com.medical.dao.JzMabillsDAOImpl">
+		<property name="sqlMapClientTemplate" ref="sqlMapClientTemplate"></property>
+	</bean>
 </beans>

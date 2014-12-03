@@ -18,9 +18,12 @@ import com.medical.common.Base64Image;
 import com.medical.common.FileUpload;
 import com.medical.dto.ActDTO;
 import com.medical.dto.BaseInfoDTO;
+import com.medical.dto.CheckDTO;
 import com.medical.dto.MedicalafterDTO;
 import com.medical.dto.OrganDTO;
 import com.medical.dto.UserInfoDTO;
+import com.medical.model.JzMabills;
+import com.medical.model.JzMabillsExample;
 import com.medical.model.JzMedicalafterExample;
 import com.medical.service.BaseinfoService;
 import com.medical.service.BusinessService;
@@ -42,6 +45,9 @@ public class MedicalafterAction extends ActionSupport {
 	private String result;
 	private BusinessService businessService;
 	private List<OrganDTO> orgs;
+	private List<CheckDTO> months;
+	private List<JzMabills> mabills;
+	private String m;
 	private String[] filebase64;
 
 	private String cur_page;
@@ -282,6 +288,8 @@ public class MedicalafterAction extends ActionSupport {
 				criteria.andMemberTypeEqualTo(ds);
 				jwhere = jwhere + " and ma.member_type='" + ds + "'";
 			}
+			criteria.andImplstsEqualTo("0");
+			jwhere = jwhere + " and ma.implsts = 0 ";
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date opertimefrom = new Date();
 			Date opertimeto = new Date();
@@ -338,7 +346,10 @@ public class MedicalafterAction extends ActionSupport {
 	}
 
 	public String genmabillinit() {
-		String sql = "select sb.ds, sb.on_no, max(sb.sb_batchname) as batchname, "
+		String sql = "select (select org.organization_id||'-'||org.asorgname from "
+				+ "sys_t_organization org where org.organization_id=sb.on_no) as orgname , "
+				+ " decode(sb.ds,'1','城市' ,'2','农村',null) as ds,  "
+				+ "sb.on_no, max(sb.sb_batchname) as batchname, "
 				+ " count(*) rc, sum(ma.asisstpay) as asisstpay "
 				+ " from jz_medicalafter ma, (select sb.sb_batchname,  sb.sb_id, "
 				+ " sb.sb_disposests,  '1' as ds,  sb.on_no "
@@ -360,6 +371,130 @@ public class MedicalafterAction extends ActionSupport {
 
 	public String genmabill() {
 
+		baseinfoService.saveMaBatchDone();
+		String sql = "select (select org.organization_id||'-'||org.asorgname from "
+				+ "sys_t_organization org where org.organization_id=sb.on_no) as orgname , "
+				+ " decode(sb.ds,'1','城市' ,'2','农村',null) as ds,  "
+				+ "sb.on_no, max(sb.sb_batchname) as batchname, "
+				+ " count(*) rc, sum(ma.asisstpay) as asisstpay "
+				+ " from jz_medicalafter ma, (select sb.sb_batchname,  sb.sb_id, "
+				+ " sb.sb_disposests,  '1' as ds,  sb.on_no "
+				+ " from salvationbatch@cs sb, salvationoperation@cs so "
+				+ " where so.so_id = sb.so_id  and so.st_id = '4' "
+				+ " and sb.sb_disposests = '处理中' union all "
+				+ " select sb.sb_batchname, sb.sb_id,  sb.sb_disposests, "
+				+ " '2' as ds, sb.on_no "
+				+ " from salvationbatch@nc sb, salvationoperation@nc so "
+				+ " where so.so_id = sb.so_id and so.st_id = '4' "
+				+ " and sb.sb_disposests = '处理中') sb ,jz_mabills mb "
+				+ " where sb.on_no = substr(ma.on_no, 1, 6) and sb.ds = ma.member_type "
+				+ " and ma.implsts = '1' and ma.approveresult = '1' and mb.sb_id=sb.sb_id "
+				+ " group by sb.on_no, sb.ds  order by sb.ds, sb.on_no";
+		System.out.println(sql);
+		medicalafters = baseinfoService.queryMaBillStat(sql);
+		this.setResult("结算完毕");
+		return SUCCESS;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public String queryafterffdoneinit() {
+		Map session = ActionContext.getContext().getSession();
+		UserInfoDTO userinfo = (UserInfoDTO) session.get("user");
+		String orgid = userinfo.getOrganizationId();
+		if (4 == orgid.length()) {
+			this.setOrgs(this.businessService.getOrganList(userinfo
+					.getOrganizationId()));
+			this.setMonths(this.baseinfoService.getMonths());
+			return SUCCESS;
+		} else {
+			this.result = "您所在的机构，没有查询权限！";
+			return "result";
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String queryafterffdone() {
+		Map session = ActionContext.getContext().getSession();
+		UserInfoDTO userinfo = (UserInfoDTO) session.get("user");
+		String orgid = userinfo.getOrganizationId();
+		JzMabillsExample example = new JzMabillsExample();
+		String jwhere = "";
+		if (null == cur_page || "".equals(cur_page)) {
+			com.medical.model.JzMabillsExample.Criteria criteria = example
+					.createCriteria();
+		/*	if ("SSN".equals(term)) {
+			} else if ("FAMILYNO".equals(term)) {
+				criteria.andFamilynoLike(value + "%");
+				jwhere = jwhere + "and ma.familyno like '" + value + "%'";
+			} else if ("MEMBERNAME".equals(term)) {
+				criteria.andMembernameLike(value + "%");
+				jwhere = jwhere + "and ma.membername like '" + value + "%'";
+			} else if ("PAPERID".equals(term)) {
+				criteria.andPaperidLike(value + "%");
+				jwhere = jwhere + "and ma.paperid like '" + value + "%'";
+			} else {
+			}*/
+			if (!"".equals(ds)) {
+				criteria.andDsEqualTo(ds);	
+			}
+			if (!"".equals(m)) {
+				criteria.andBatchnameLike(m + "%");
+			}
+			
+			/*
+			 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			 * Date opertimefrom = new Date();
+			Date opertimeto = new Date();
+			try {
+				if (!opertime1.equals("")) {
+					opertimefrom = sdf.parse(opertime1.substring(0, 10));
+				}
+				if (!opertime2.equals("")) {
+					opertimeto = sdf.parse(opertime2.substring(0, 10));
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			if ((opertime1.equals("") || null == opertime1)
+					&& (opertime2.equals("") || null == opertime2)) {
+			} else if (opertime1.equals("") || null == opertime1) {
+				criteria.andUpdatetimeGreaterThan(opertimeto);
+				jwhere = jwhere
+						+ "and to_char(ma.updatetime,'yyyy-MM-dd') >= '"
+						+ opertime2 + "'";
+			} else if (opertime2.equals("") || null == opertime2) {
+				criteria.andUpdatetimeLessThan(opertimefrom);
+				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') < '"
+						+ opertime1 + "'";
+			} else {
+				criteria.andUpdatetimeBetween(opertimefrom, opertimeto);
+				jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') >='"
+						+ opertime1
+						+ "' and to_char(ma.updatetime,'yyyy-MM-dd') < '"
+						+ opertime2 + "'";
+			}*/
+			session.put("sql", example);
+			session.put("jwhere", jwhere);
+			cur_page = "1";
+		} else {
+			example = (JzMabillsExample) session.get("sql");
+			jwhere = (String) session.get("jwhere");
+		}
+		/*String aasql = " SELECT count(*) as rc,    sum(ma.totalcost) as totalcost, "
+				+ " sum(ma.insurepay) as insurepay,        sum(ma.asisstpay) as asisstpay "
+				+ " FROM JZ_MEDICALAFTER MA  WHERE 1 = 1    "
+				+ jwhere
+				+ " "
+				+ " and ma.implsts = 0    and ma.approveresult = '1'  and 1=1 ";*/
+		//System.out.println(aasql);
+		//String u = baseinfoService.queryMaStat(aasql);
+		this.setMabills(this.baseinfoService.queryMedicalafters01(example,
+				new Integer(cur_page), "queryafterffdone.action"));
+		this.setToolsmenu(this.businessService.getPager().getToolsmenu());
+		this.setOrgs(this.businessService.getOrganList(orgid));
+		this.setMonths(this.baseinfoService.getMonths());
+		//this.setResult(u);
+		session.put("aasql", aasql);
 		return SUCCESS;
 	}
 
@@ -820,5 +955,31 @@ public class MedicalafterAction extends ActionSupport {
 	public void setDs(String ds) {
 		this.ds = ds;
 	}
+
+	public List<CheckDTO> getMonths() {
+		return months;
+	}
+
+	public void setMonths(List<CheckDTO> months) {
+		this.months = months;
+	}
+
+	public String getM() {
+		return m;
+	}
+
+	public void setM(String m) {
+		this.m = m;
+	}
+
+	public List<JzMabills> getMabills() {
+		return mabills;
+	}
+
+	public void setMabills(List<JzMabills> mabills) {
+		this.mabills = mabills;
+	}
+
+	 
 
 }

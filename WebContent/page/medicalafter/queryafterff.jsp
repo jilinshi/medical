@@ -26,6 +26,11 @@
 		var f="dialogWidth=950px;dialogHeight=460px;status=no;help=no;scroll=auto";		
 		window.showModalDialog(url,window,f);
 	}
+	function view1(){
+		var url="genmabillinit.action";
+		var f="dialogWidth=950px;dialogHeight=460px;status=no;help=no;scroll=auto";		
+		window.showModalDialog(url,window,f);
+	}
 	function cancel(id,memberid,membertype,assistpay,medicaltype){
 		 var arr = {
 			"medicalafterDTO.maId" : id,
@@ -90,7 +95,7 @@
 	<button onclick="window.open('../downloadExcel.action?type=7')">导出excel</button>
 </s:form>
 <div align="center" style="font-size: 16px"><s:property
-	value="result" escape="false" />&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="window.open('genmabillinit.action?aasql=7')">点击生成账单</button></div>
+	value="result" escape="false" />&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="view1()">点击生成账单</button></div>
 <table align="center" width="99%" class="t1" border="0" cellpadding="0"
 	cellspacing="0">
 	<caption style="font-size: 12px">未生成账单业务信息</caption>

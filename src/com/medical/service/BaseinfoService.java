@@ -8,6 +8,8 @@ import com.medical.dto.BaseInfoDTO;
 import com.medical.dto.CheckDTO;
 import com.medical.dto.HealthDTO;
 import com.medical.dto.MedicalafterDTO;
+import com.medical.model.JzMabills;
+import com.medical.model.JzMabillsExample;
 import com.medical.model.JzMedicalafterExample;
 
 public interface BaseinfoService {
@@ -58,4 +60,11 @@ public interface BaseinfoService {
 	public String queryMaStat(String jwhere);
 
 	public List<MedicalafterDTO> queryMaBillStat(String sql);
+
+	public void saveMaBatchDone();
+
+	public List<CheckDTO> getMonths();
+
+	public List<JzMabills> queryMedicalafters01(JzMabillsExample example,
+			Integer integer, String string);
 }

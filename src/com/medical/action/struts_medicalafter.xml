@@ -179,5 +179,17 @@
 				/page/medicalafter/genmabill.jsp
 			</result>
 		</action>
+		<action name="queryafterffdoneinit" method="queryafterffdoneinit"
+			class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/queryafterffdone.jsp
+			</result>
+		</action>
+		<action name="queryafterffdone" method="queryafterffdone"
+			class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/queryafterffdone.jsp
+			</result>
+		</action>
 	</package>
 </struts>

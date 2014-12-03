@@ -50,6 +50,7 @@
 		<property name="testSsnDAO" ref="testSsnDAO"></property>
 		<property name="jzMedicalafterDAO" ref="jzMedicalafterDAO"></property>
 		<property name="jzActDAO" ref="jzActDAO"></property>
+		<property name="jzMabillsDAO" ref="jzMabillsDAO"></property>
 	</bean>
 	<bean id="emeCheckService" class="com.medical.service.impl.EmeCheckServiceImpl">
 		<property name="pager" ref="pager"></property>
