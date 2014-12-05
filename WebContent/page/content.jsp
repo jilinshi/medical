@@ -32,7 +32,7 @@ body,td,th {
 		nav = "";
 	} else {
 		nav = new String(request.getParameter("nav").getBytes(
-				"ISO8859_1"), "utf-8");
+				"utf-8"), "utf-8");
 	}
 %>
 </head>

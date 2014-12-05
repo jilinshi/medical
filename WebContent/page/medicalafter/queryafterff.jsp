@@ -92,10 +92,10 @@
 		数据来源：
 		<s:select list="#{'':'全部','1':'城市','2':'农村'}" name="ds"></s:select>&nbsp;&nbsp;
 	<s:submit value="查询"></s:submit>&nbsp;&nbsp;
-	<button onclick="window.open('../downloadExcel.action?type=7')">导出excel</button>
+	<button onclick="window.open('../downloadExcel.action?type=7')">结算处理中业务</button>
 </s:form>
 <div align="center" style="font-size: 16px"><s:property
-	value="result" escape="false" />&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="view1()">点击生成账单</button></div>
+	value="result" escape="false" />&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="view1()">向处理中业务批次添加账单</button></div>
 <table align="center" width="99%" class="t1" border="0" cellpadding="0"
 	cellspacing="0">
 	<caption style="font-size: 12px">未生成账单业务信息</caption>

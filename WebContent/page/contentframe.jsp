@@ -12,7 +12,7 @@
 	if (null == nav || "".equals(nav)) {
 		nav = "";
 	} else {
-		nav = new String(new String(nav.getBytes("ISO8859_1"), "utf-8"));
+		nav = new String(new String(nav.getBytes("utf-8"), "utf-8"));
 	}
 
 	String type = request.getParameter("type");

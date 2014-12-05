@@ -79,6 +79,11 @@ public class MedicalafterAction extends ActionSupport {
 		ServiceMainSoap sms = new ServiceMainSoapProxy();
 		BigDecimal sumPreScope = BigDecimal.ZERO;
 		medicalafterDTO = baseinfoService.findSumPayDbbx(medicalafterDTO);
+		if(medicalafterDTO.getSumtotalcost()==null){
+			medicalafterDTO.setSumtotalcost(BigDecimal.ZERO);
+			medicalafterDTO.setSuminsurepay(BigDecimal.ZERO);
+			medicalafterDTO.setSumoutpay(BigDecimal.ZERO);
+		}
 		sumPreScope = medicalafterDTO.getSumtotalcost()
 				.subtract(medicalafterDTO.getSuminsurepay())
 				.subtract(medicalafterDTO.getSumoutpay());

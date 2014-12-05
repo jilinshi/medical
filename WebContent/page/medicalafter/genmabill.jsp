@@ -40,7 +40,7 @@
 		</s:if>
 		<s:else>
 		<div align="center">
-			<button type="submit">结算生成账单</button>
+			<button type="submit">生成账单</button>
 		</div>
 		</s:else>
 		
