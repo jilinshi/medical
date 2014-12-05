@@ -93,6 +93,18 @@
 		} 
 
 	}
+	
+	function insuretypechange(v){
+		var div_wsflag_title = document.getElementById("div_wsflag_title");
+		var div_wsflag = document.getElementById("div_wsflag");
+		if(v.value=="2"){
+			div_wsflag_title.style.display='block';
+			div_wsflag.style.display='block';
+		}else{
+			div_wsflag_title.style.display='none';
+			div_wsflag.style.display='none';
+		}
+	}
 </script>
 <title>医后报销录入</title>
 </head>
@@ -119,7 +131,8 @@
 		<s:hidden name="medicalafterDTO.famcount"></s:hidden>
 		<s:hidden name="medicalafterDTO.persontype"
 			value="%{medicalafterDTO.assistType}%{medicalafterDTO.asort}"></s:hidden>
-			<s:hidden name="medicalafterDTO.actId" id="actid"></s:hidden>
+		<s:hidden name="medicalafterDTO.actId" id="actid"></s:hidden>
+		<s:hidden name="medicalafterDTO.wsflag" id="wsflag"></s:hidden>
 		<table align="center" width="100%" class="t1" border="0"
 			cellpadding="0" cellspacing="0">
 			<tr>
@@ -187,17 +200,17 @@
 				<s:if test="medicalafterDTO.memberType==1">
 				<s:radio id="insuretype"
 						name="medicalafterDTO.insuretype"
-						list="%{#{'1':'医保','2':'农合','3':'其他'}}" value="1"></s:radio>
+						list="%{#{'1':'医保','2':'农合','3':'其他'}}" value="1" onclick="insuretypechange(this)"></s:radio>
 				</s:if>
 				<s:elseif test="medicalafterDTO.memberType==2">
 				<s:radio id="insuretype"
 						name="medicalafterDTO.insuretype"
-						list="%{#{'1':'医保','2':'农合','3':'其他'}}" value="2"></s:radio>
+						list="%{#{'1':'医保','2':'农合','3':'其他'}}" value="2" onclick="insuretypechange(this)"></s:radio>
 				</s:elseif>
 				<s:else>
 				<s:radio id="insuretype"
 						name="medicalafterDTO.insuretype"
-						list="%{#{'1':'医保','2':'农合','3':'其他'}}" value="3"></s:radio>
+						list="%{#{'1':'医保','2':'农合','3':'其他'}}" value="3" onclick="insuretypechange(this)"></s:radio>
 				</s:else>		
 				&nbsp;</td>
 			</tr>
@@ -234,17 +247,45 @@
 				<td colspan="1">
 						<s:select disabled="true" id="diagnose" name="medicalafterDTO.diagnose" list="#{'-1':'其他','0001':'尿毒症','0002':'肝、肾脏移植（抗排异治疗）','0004':'肿瘤（仅限于放疗、化疗）','0005':'骨髓移植（抗排异治疗）','0006':'心脏移植（抗排异治疗）'}" listKey="key" listValue="value"></s:select>
 					</td>
-					<td>患病名称</td>
-					<td><s:textfield id="sickencontent" disabled="false"
-						name="medicalafterDTO.sickencontent"/></td>
+					<td>
+					<div id="div_sickencontent_title" style="display:block">
+					患病名称
+					</div>
+					</td>
+					<td>
+					<div id="div_sickencontent" style="display:block">
+					<s:textfield id="sickencontent" disabled="false"
+						name="medicalafterDTO.sickencontent"/>
+					</div>	
+					</td>
 			</tr>
+			
 			<tr>
-				<td width="17%">住院类别</td>
+			
+				<td width="17%">
+				<s:if test="medicalafterDTO.memberType==2">
+				<div id="div_wsflag_title" style="display:block">住院类别</div>
+				</s:if>
+				<s:else>
+				<div id="div_wsflag_title" style="display:none">住院类别</div>
+				</s:else>
+				</td>
 				<td	colspan="5">
+				<s:if test="medicalafterDTO.memberType==2">
+				<div id="div_wsflag" style="display:block">
 				<s:radio list="#{'0':'普通住院','1':'外伤、未经新农合转诊的转院'}" name="medicalafterDTO.wsflag"
-						listKey="key" listValue="value" ></s:radio>
+						listKey="key" listValue="value" value="0"></s:radio>
+				</div>
+				</s:if>
+				<s:else>
+				<div id="div_wsflag" style="display:none">
+				<s:radio list="#{'0':'普通住院','1':'外伤、未经新农合转诊的转院'}" name="medicalafterDTO.wsflag"
+						listKey="key" listValue="value" value="0"></s:radio>
+				</div>
+				</s:else>
 				</td>
 			</tr>
+			
 			<tr>
 				<td width="17%">总费用</td>
 				<td><s:textfield id="totalcost"
@@ -438,7 +479,17 @@
 	}
 	function countdbbx(){
 		var wsflag = $("input[name='medicalafterDTO.wsflag']:checked").val();
-		if( wsflag=="0" || wsflag=="1" ){
+		var medicaltype = $("#medicaltype")[0].value;
+		var flag = true;
+		if(medicaltype=="1"){
+			if( wsflag=="0" || wsflag=="1" ){
+			}else{
+				alert("请选择住院类别！");
+				flag = false;
+				return flag;
+			}
+		}
+		if(flag){
 			var formParam = $("#aaaaa").serialize();//序列化表格内容为字符串    
 			$.ajax({    
 		        type:'post',        
@@ -452,8 +503,6 @@
 		        	$("#capay")[0].value=dataObj.dbbx;
 		        }
 		    }); 
-		}else{
-			alert("请选择住院类别！");
 		}
 	}
 </script>
