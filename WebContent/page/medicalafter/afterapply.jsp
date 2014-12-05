@@ -65,31 +65,28 @@
 	function medicaltypechange(b){
 		var diagnose = document.getElementById("diagnose");
 		var sickencontent = document.getElementById("sickencontent");
-		var wsflag = document.getElementsByName("medicalafterDTO.wsflag");
+		var div_wsflag_title = document.getElementById("div_wsflag_title");
+		var div_wsflag = document.getElementById("div_wsflag");
+		var div_sickencontent_title = document.getElementById("div_sickencontent_title");
+		var div_sickencontent = document.getElementById("div_sickencontent");
 		 if(b.value==1){
 			diagnose.value = "-1";
 			diagnose.disabled = true;
 			sickencontent.value = "";
 			sickencontent.disabled = false;
-			for(var i=0;i<wsflag.length;i++){ //对所有结果进行遍历，如果状态是被选中的，则将其选择取消
-				if (wsflag[i].checked==true)
-				{
-					wsflag[i].checked=false;
-				}
-				wsflag[i].disabled = false;
-			}
+			div_sickencontent.style.display="block";
+			div_sickencontent_title.style.display="block";
+			div_wsflag_title.style.display="block";
+			div_wsflag.style.display="block";
 		}else if (b.value==2){
 			diagnose.value = "-1";
 			diagnose.disabled = false;
 			sickencontent.value = "";
 			sickencontent.disabled = true;
-			for(var i=0;i<wsflag.length;i++){ //对所有结果进行遍历，如果状态是被选中的，则将其选择取消
-				if (wsflag[i].checked==true)
-				{
-					wsflag[i].checked=false;
-				}
-				wsflag[i].disabled = true;
-			}
+			div_sickencontent.style.display="none";
+			div_sickencontent_title.style.display="none";
+			div_wsflag_title.style.display="none";
+			div_wsflag.style.display="none";
 		} 
 
 	}
@@ -132,7 +129,6 @@
 		<s:hidden name="medicalafterDTO.persontype"
 			value="%{medicalafterDTO.assistType}%{medicalafterDTO.asort}"></s:hidden>
 		<s:hidden name="medicalafterDTO.actId" id="actid"></s:hidden>
-		<s:hidden name="medicalafterDTO.wsflag" id="wsflag"></s:hidden>
 		<table align="center" width="100%" class="t1" border="0"
 			cellpadding="0" cellspacing="0">
 			<tr>
@@ -280,7 +276,7 @@
 				<s:else>
 				<div id="div_wsflag" style="display:none">
 				<s:radio list="#{'0':'普通住院','1':'外伤、未经新农合转诊的转院'}" name="medicalafterDTO.wsflag"
-						listKey="key" listValue="value" value="0"></s:radio>
+						listKey="key" listValue="value"  value="0"></s:radio>
 				</div>
 				</s:else>
 				</td>
@@ -480,14 +476,21 @@
 	function countdbbx(){
 		var wsflag = $("input[name='medicalafterDTO.wsflag']:checked").val();
 		var medicaltype = $("#medicaltype")[0].value;
+		var insuretype = $("input[name='medicalafterDTO.insuretype']:checked").val();
+		var totalcost = $("#totalcost")[0].value;
 		var flag = true;
-		if(medicaltype=="1"){
+		if(insuretype=="2"&&medicaltype=="1"){
 			if( wsflag=="0" || wsflag=="1" ){
 			}else{
 				alert("请选择住院类别！");
 				flag = false;
 				return flag;
 			}
+		}
+		if(totalcost==0){
+			alert("总费用必须大于0！");
+			flag=false;
+			return flag;
 		}
 		if(flag){
 			var formParam = $("#aaaaa").serialize();//序列化表格内容为字符串    
