@@ -111,6 +111,59 @@
 				/page/medicalafter/viewafterfile.jsp
 			</result>
 		</action>
+		<action name="queryafterffinit" method="queryafterffinit"
+			class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/queryafterff.jsp
+			</result>
+		</action>
+		<action name="queryafterff" method="queryafterff" class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/queryafterff.jsp
+			</result>
+		</action>
+		<action name="genmabillinit" method="genmabillinit" class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/genmabill.jsp
+			</result>
+		</action>
+		<action name="genmabill" method="genmabill" class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/genmabill.jsp
+			</result>
+		</action>
+		<action name="queryafterffdoneinit" method="queryafterffdoneinit"
+			class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/queryafterffdone.jsp
+			</result>
+		</action>
+		<action name="queryafterffdone" method="queryafterffdone"
+			class="medicalafterAction">
+			<result name="success">
+				/page/medicalafter/queryafterffdone.jsp
+			</result>
+		</action>
+		<action name="fileDownload" class="medicalafterAction" method="fileDownload">
+			<result name="success" type="stream">
+				<param name="contentType">text/plain</param>
+				<param name="contentDisposition">attachment;fileName="${fileName}"</param>
+				<param name="inputName">download</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="medicalusebatchinit" class="medicalafterAction"
+			method="medicalusebatchinit">
+			<result name="success">
+				/page/medicalafter/medicalusebatch.jsp
+			</result>
+		</action>
+		<action name="medicalusebatch" class="medicalafterAction"
+			method="medicalusebatch">
+			<result name="success">
+				/page/medicalafter/medicalusebatch.jsp
+			</result>
+		</action>
 	</package>
 	<package name="printmedicalafter" extends="jasperreports-default"
 		namespace="/page/medicalafter">
@@ -153,42 +206,6 @@
 				<param name="dataSource">medicalafterDTO</param>
 				<param name="format">PDF</param>
 				<param name="reportParameters">map</param>
-			</result>
-		</action>
-		<action name="queryafterffinit" method="queryafterffinit"
-			class="medicalafterAction">
-			<result name="success">
-				/page/medicalafter/queryafterff.jsp
-			</result>
-		</action>
-		<action name="queryafterff" method="queryafterff"
-			class="medicalafterAction">
-			<result name="success">
-				/page/medicalafter/queryafterff.jsp
-			</result>
-		</action>
-		<action name="genmabillinit" method="genmabillinit"
-			class="medicalafterAction">
-			<result name="success">
-				/page/medicalafter/genmabill.jsp
-			</result>
-		</action>
-		<action name="genmabill" method="genmabill"
-			class="medicalafterAction">
-			<result name="success">
-				/page/medicalafter/genmabill.jsp
-			</result>
-		</action>
-		<action name="queryafterffdoneinit" method="queryafterffdoneinit"
-			class="medicalafterAction">
-			<result name="success">
-				/page/medicalafter/queryafterffdone.jsp
-			</result>
-		</action>
-		<action name="queryafterffdone" method="queryafterffdone"
-			class="medicalafterAction">
-			<result name="success">
-				/page/medicalafter/queryafterffdone.jsp
 			</result>
 		</action>
 	</package>

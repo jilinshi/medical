@@ -1208,4 +1208,75 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 	public void setJzMabillsDAO(JzMabillsDAO jzMabillsDAO) {
 		this.jzMabillsDAO = jzMabillsDAO;
 	}
+
+	@Override
+	public void saveCommitMaBatch() {
+		try {
+			ExecutSQL executSQL = new ExecutSQL();
+			String sql = "update salvationbatch@cs sb  set sb.sb_disposests = '待统计' "
+					+ " where sb.sb_id in (select sb.sb_id from salvationbatch@cs sb, salvationoperation@cs so "
+					+ " where so.so_id = sb.so_id and so.st_id = '4'  and sb.sb_disposests = '处理中')";
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+			sql = "update salvationbatch@nc sb  set sb.sb_disposests = '待统计' "
+					+ " where sb.sb_id in (select sb.sb_id from salvationbatch@nc sb, salvationoperation@nc so "
+					+ " where so.so_id = sb.so_id and so.st_id = '4'  and sb.sb_disposests = '处理中')";
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void saveCancelMaBatch(String batchname) {
+		try {
+			String sql = "";
+			sql = "update jz_medicalafter t  set t.implsts = '0' "
+					+ "where t.ma_id in (select b.ma_id from jz_mabills b "
+					+ "where b.batchname like '" + batchname + "%')";
+			ExecutSQL executSQL = new ExecutSQL();
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+			sql = "delete   batch_almsreckoning@cs b  where b.st_id = '4'   "
+					+ "and b.sb_id in (select distinct (b.sb_id) "
+					+ " from jz_mabills b	  where b.batchname like '"
+					+ batchname + "%'  and b.ds = '1')";
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+			sql = "delete   batch_almsreckoning@nc b	where b.st_id = '4'"
+					+ "	and b.sb_id in (select distinct (b.sb_id)  "
+					+ "from jz_mabills b	where b.batchname like " + "'"
+					+ batchname + "%'	 and b.ds = '2')";
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+			sql = "update salvationbatch@cs sb  set sb.sb_disposests = '处理中' where sb.sb_id in (select sb.sb_id"
+					+ " from salvationbatch@cs sb, salvationoperation@cs so  where so.so_id = sb.so_id  "
+					+ "and so.st_id = '4'   and sb.sb_disposests = '待统计' and sb.sb_batchname like '"
+					+ batchname + "%')";
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+			sql = "update salvationbatch@nc sb  set sb.sb_disposests = '处理中' where sb.sb_id in (select sb.sb_id"
+					+ " from salvationbatch@nc sb, salvationoperation@nc so  where so.so_id = sb.so_id  "
+					+ "and so.st_id = '4'   and sb.sb_disposests = '待统计' and sb.sb_batchname like '"
+					+ batchname + "%')";
+
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+			sql = " delete jz_mabills b   where b.sb_id in "
+					+ "(select distinct (b.sb_id) from "
+					+ "jz_mabills b where b.batchname like '" + batchname
+					+ "%')";
+			executSQL.setExecutsql(sql);
+			executSQLDAO.updateSQL(executSQL);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

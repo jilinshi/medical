@@ -79,8 +79,8 @@
 <body>
 	<s:form theme="simple" action="queryafterffdone" method="post"
 		cssStyle="font-size:12px">&nbsp;&nbsp;
-	发放时间：<s:select name="m" list="months" listKey="ds"
-			listValue="ds"></s:select>&nbsp;&nbsp;
+选择发放时间：<s:select name="m" list="months" listKey="ds" listValue="ds"
+			headerKey="-1" headerValue="未选择"></s:select>&nbsp;&nbsp;
 	选择地区：<s:select name="oid" list="orgs" listKey="orgid"
 			listValue="orgname"></s:select>&nbsp;&nbsp;
 	<!--查询条件：
@@ -102,31 +102,38 @@
 			value="<s:date name="opertime2" format="yyyy-MM-dd"/>" />&nbsp;&nbsp; --%>
 		数据来源：
 		<s:select list="#{'':'全部','1':'城市','2':'农村'}" name="ds"></s:select>&nbsp;&nbsp;
-	<s:submit value="查询"></s:submit>&nbsp;&nbsp;
-	<button onclick="window.open('../downloadExcel.action?type=7')">导出excel</button>
+	<s:submit value="点击生成发放文件"></s:submit>
 	</s:form>
-	<%-- <div align="center" style="font-size: 16px">
-		<s:property value="result" escape="false" />
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		<button onclick="view1()">点击生成账单</button>
-	</div> --%>
+	<div align="center" style="font-size: 16px">
+
+		<s:if test="m==-1||m==null">	请选择发放月份并且查询然后生成账单文件</s:if>
+	
+		<s:else>
+			<a target="_blank" href="fileDownload.action?ds=cs&type=add"><s:property
+					value="m" />城市新开折 </a>&nbsp;&nbsp;
+		 <a target="_blank" href="fileDownload.action?ds=cs&type=xc"><s:property
+					value="m" />城市续存 </a>&nbsp;&nbsp;
+		 <a target="_blank" href="fileDownload.action?ds=nc&type=add"><s:property
+					value="m" />农村新开折 </a>&nbsp;&nbsp;
+		 <a target="_blank" href="fileDownload.action?ds=nc&type=xc"><s:property
+					value="m" />农村续存 </a>
+		</s:else>
+	</div>
 	<table align="center" width="99%" class="t1" border="0" cellpadding="0"
 		cellspacing="0">
 		<caption style="font-size: 12px">生成账单业务信息</caption>
 		<tr>
-		<th>批次名称</th>
+			<th>批次名称</th>
 			<th>家庭编号</th>
 			<th>姓名</th>
 			<th>身份证号码</th>
-			 <th>救助金额</th>
+			<th>救助金额</th>
 			<!--  <th align="center">操作</th>-->
 		</tr>
 		<s:iterator value="mabills">
 			<tr>
-			<td width="10%">
-			<s:if test="ds==1">城市</s:if> <s:elseif
-						test="ds==2">农村</s:elseif>-
-			<s:property value="batchname" /></td>
+				<td width="10%"><s:if test="ds==1">城市</s:if> <s:elseif
+						test="ds==2">农村</s:elseif>- <s:property value="batchname" /></td>
 				<td width="10%"><s:property value="familyno" /></td>
 				<td width="5%"><s:property value="membername" /></td>
 				<td width="12%"><s:property value="paperid" /></td>

@@ -67,4 +67,8 @@ public interface BaseinfoService {
 
 	public List<JzMabills> queryMedicalafters01(JzMabillsExample example,
 			Integer integer, String string);
+
+	public void saveCommitMaBatch();
+
+	public void saveCancelMaBatch(String m);
 }

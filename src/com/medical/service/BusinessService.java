@@ -297,4 +297,6 @@ public interface BusinessService {
 	 */
 	public void findCountAssist(MedicalafterDTO medicalafterDTO);
 
+	public String findMaBillContent(String m, String ds, String type);
+
 }

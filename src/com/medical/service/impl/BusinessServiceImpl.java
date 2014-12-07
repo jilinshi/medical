@@ -43,9 +43,9 @@ import com.medical.model.JzPaylist;
 import com.medical.model.JzPaylistExample;
 import com.medical.model.MemberBaseinfo;
 import com.medical.model.MemberBaseinfoExample;
+import com.medical.model.MemberBaseinfoExample.Criteria;
 import com.medical.model.SysTOrganization;
 import com.medical.model.SysTOrganizationExample;
-import com.medical.model.MemberBaseinfoExample.Criteria;
 import com.medical.service.BusinessService;
 import com.medical.system.DictionaryHandle;
 import com.webclient.client.MyClient;
@@ -270,7 +270,8 @@ public class BusinessServiceImpl implements BusinessService {
 		criteria.andFamilynoEqualTo(personDTO.getFamilyno()).andFamilynoLike(
 				personDTO.getOrganizationId() + "%");
 
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(exam);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO
+				.selectByExampleWithoutBLOBs(exam);
 		for (MemberBaseinfo memberBaseinfo : rs) {
 			personDTO = new PersonDTO();
 			personDTO.setAddress(memberBaseinfo.getAddress());
@@ -342,7 +343,8 @@ public class BusinessServiceImpl implements BusinessService {
 			criteria.andAssistTypeIn(ts);
 		}
 
-		List<MemberBaseinfo> list = memberBaseinfoDAO.selectByExampleWithoutBLOBs(exam);
+		List<MemberBaseinfo> list = memberBaseinfoDAO
+				.selectByExampleWithoutBLOBs(exam);
 
 		if (list != null && list.size() == 1) {
 
@@ -646,7 +648,8 @@ public class BusinessServiceImpl implements BusinessService {
 		criteria.andFamilynoEqualTo(familyno).andFamilynoLike(
 				organizationId + "%");
 
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(exam);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO
+				.selectByExampleWithoutBLOBs(exam);
 		for (MemberBaseinfo memberBaseinfo : rs) {
 			PersonDTO personDTO = new PersonDTO();
 			personDTO.setAddress(memberBaseinfo.getAddress());
@@ -758,7 +761,8 @@ public class BusinessServiceImpl implements BusinessService {
 		criteria.andFamilynoEqualTo(familyno).andFamilynoLike(
 				organizationId + "%");
 
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(exam);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO
+				.selectByExampleWithoutBLOBs(exam);
 		for (MemberBaseinfo memberBaseinfo : rs) {
 			PersonDTO personDTO = new PersonDTO();
 			personDTO.setAddress(memberBaseinfo.getAddress());
@@ -2089,7 +2093,9 @@ public class BusinessServiceImpl implements BusinessService {
 					+ "sum(mztc) as mztc,"
 					+ "sum(mzgrzf) as mzgrzf "
 					+ "from monthbill x "
-					+ "where 1=1   "+b+" and to_date(x.mon, 'yyyy-mm-dd') between to_date('"
+					+ "where 1=1   "
+					+ b
+					+ " and to_date(x.mon, 'yyyy-mm-dd') between to_date('"
 					+ printBillDTO.getBeginval().trim()
 					+ "', 'yyyy-mm-dd') and to_date('"
 					+ printBillDTO.getEndval().trim()
@@ -2128,6 +2134,61 @@ public class BusinessServiceImpl implements BusinessService {
 	@Override
 	public void findCountAssist(MedicalafterDTO medicalafterDTO) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public String findMaBillContent(String m, String ds, String type) {
+		StringBuffer sb = new StringBuffer();
+		try {
+			String sql = "";
+			String jwhere = "";
+			if ("add".equals(type)) {
+				jwhere = " and b.BAR_BANK_ACCOUNTS is null ";
+			} else {
+
+			}
+			if ("cs".equals(ds)) {
+				sql = "select * from batch_almsreckoning@cs b where   b.st_id = '4'  "
+						+ jwhere
+						+ "and b.sb_id in (select distinct (t.sb_id) from JZ_MABILLS t where t.batchname like '"
+						+ m + "%')";
+			} else if ("nc".equals(ds)) {
+				sql = "select * from batch_almsreckoning@nc b where b.st_id = '4'  "
+						+ jwhere
+						+ "and b.sb_id in (select distinct (t.sb_id) from JZ_MABILLS t where t.batchname like '"
+						+ m + "%')";
+			} else {
+				sql = "";
+			}
+			/*
+			 * BAR_ID 1747067 BAR_SUBJECT 2014年12月医疗救助 BAR_MONEY 1700.21
+			 * BAR_MASTER 王淑申 BAR_FMIDCARD 220221193908270527 BAR_BANK_ACCOUNTS
+			 * 0720602011009801119011
+			 */
+			System.out.println(sql);
+			if (!"".equals(sql)) {
+				ExecutSQL executSQL = new ExecutSQL();
+				executSQL.setExecutsql(sql);
+				List<HashMap> rs = this.executSQLDAO.queryAll(executSQL);
+				for (HashMap map : rs) {
+					String BAR_MASTER = (String) map.get("BAR_MASTER");
+					BigDecimal BAR_MONEY = (BigDecimal) map.get("BAR_MONEY");
+					String BAR_BANK_ACCOUNTS = (String) map
+							.get("BAR_BANK_ACCOUNTS");
+					String BAR_FMIDCARD = (String) map.get("BAR_FMIDCARD");
+					sb.append(BAR_MASTER + "," + BAR_FMIDCARD + ","
+							+ BAR_BANK_ACCOUNTS + "," + BAR_MONEY.toString()
+							+ System.getProperty("line.separator"));
+				}
+				return sb.toString();
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 }
