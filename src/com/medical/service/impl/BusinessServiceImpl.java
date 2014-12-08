@@ -2145,40 +2145,39 @@ public class BusinessServiceImpl implements BusinessService {
 			String sql = "";
 			String jwhere = "";
 			if ("add".equals(type)) {
-				jwhere = " and b.BAR_BANK_ACCOUNTS is null ";
+				// jwhere = " and b.BAR_BANK_ACCOUNTS is null ";
 			} else {
 
 			}
 			if ("cs".equals(ds)) {
-				sql = "select * from batch_almsreckoning@cs b where   b.st_id = '4'  "
-						+ jwhere
-						+ "and b.sb_id in (select distinct (t.sb_id) from JZ_MABILLS t where t.batchname like '"
-						+ m + "%')";
+				sql = " select decode(t.bank_account1, null, t.mastername, t.membername) as membername, "
+						+ " decode(t.bank_account1, null, t.bank_account, t.bank_account1) as bankaccount, "
+						+ " decode(t.bank_account1, null, t.masteridcard, t.membername) as idcard, "
+						+ " t.assispay from jz_mabills t where t.batchname like '"
+						+ m + "%' and t.ds='1'";
 			} else if ("nc".equals(ds)) {
-				sql = "select * from batch_almsreckoning@nc b where b.st_id = '4'  "
-						+ jwhere
-						+ "and b.sb_id in (select distinct (t.sb_id) from JZ_MABILLS t where t.batchname like '"
-						+ m + "%')";
+				sql = " select decode(t.bank_account1, null, t.mastername, t.membername) as membername, "
+						+ " decode(t.bank_account1, null, t.bank_account, t.bank_account1) as bankaccount, "
+						+ " decode(t.bank_account1, null, t.masteridcard, t.membername) as idcard, "
+						+ " t.assispay from jz_mabills t where t.batchname like '"
+						+ m + "%' and t.ds='2'";
 			} else {
 				sql = "";
 			}
-			/*
-			 * BAR_ID 1747067 BAR_SUBJECT 2014年12月医疗救助 BAR_MONEY 1700.21
-			 * BAR_MASTER 王淑申 BAR_FMIDCARD 220221193908270527 BAR_BANK_ACCOUNTS
-			 * 0720602011009801119011
-			 */
+			//MEMBERNAME	BANKACCOUNT	IDCARD	ASSISPAY	
+
 			System.out.println(sql);
 			if (!"".equals(sql)) {
 				ExecutSQL executSQL = new ExecutSQL();
 				executSQL.setExecutsql(sql);
 				List<HashMap> rs = this.executSQLDAO.queryAll(executSQL);
 				for (HashMap map : rs) {
-					String BAR_MASTER = (String) map.get("BAR_MASTER");
-					BigDecimal BAR_MONEY = (BigDecimal) map.get("BAR_MONEY");
+					String BAR_MASTER = (String) map.get("MEMBERNAME");
+					BigDecimal BAR_MONEY = (BigDecimal) map.get("ASSISPAY");
 					String BAR_BANK_ACCOUNTS = (String) map
-							.get("BAR_BANK_ACCOUNTS");
-					String BAR_FMIDCARD = (String) map.get("BAR_FMIDCARD");
-					sb.append(BAR_MASTER + "," + BAR_FMIDCARD + ","
+							.get("BANKACCOUNT");
+					//String BAR_FMIDCARD = (String) map.get("IDCARD");
+					sb.append(BAR_MASTER + ","  
 							+ BAR_BANK_ACCOUNTS + "," + BAR_MONEY.toString()
 							+ System.getProperty("line.separator"));
 				}

@@ -430,16 +430,6 @@ public class MedicalafterAction extends ActionSupport {
 		if (null == cur_page || "".equals(cur_page)) {
 			com.medical.model.JzMabillsExample.Criteria criteria = example
 					.createCriteria();
-			/*
-			 * if ("SSN".equals(term)) { } else if ("FAMILYNO".equals(term)) {
-			 * criteria.andFamilynoLike(value + "%"); jwhere = jwhere +
-			 * "and ma.familyno like '" + value + "%'"; } else if
-			 * ("MEMBERNAME".equals(term)) { criteria.andMembernameLike(value +
-			 * "%"); jwhere = jwhere + "and ma.membername like '" + value +
-			 * "%'"; } else if ("PAPERID".equals(term)) {
-			 * criteria.andPaperidLike(value + "%"); jwhere = jwhere +
-			 * "and ma.paperid like '" + value + "%'"; } else { }
-			 */
 			if (!"".equals(ds)) {
 				criteria.andDsEqualTo(ds);
 			}
@@ -447,26 +437,13 @@ public class MedicalafterAction extends ActionSupport {
 				criteria.andBatchnameLike(m + "%");
 			}
 
-			/*
-			 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); Date
-			 * opertimefrom = new Date(); Date opertimeto = new Date(); try { if
-			 * (!opertime1.equals("")) { opertimefrom =
-			 * sdf.parse(opertime1.substring(0, 10)); } if
-			 * (!opertime2.equals("")) { opertimeto =
-			 * sdf.parse(opertime2.substring(0, 10)); } } catch (ParseException
-			 * e) { e.printStackTrace(); } if ((opertime1.equals("") || null ==
-			 * opertime1) && (opertime2.equals("") || null == opertime2)) { }
-			 * else if (opertime1.equals("") || null == opertime1) {
-			 * criteria.andUpdatetimeGreaterThan(opertimeto); jwhere = jwhere +
-			 * "and to_char(ma.updatetime,'yyyy-MM-dd') >= '" + opertime2 + "'";
-			 * } else if (opertime2.equals("") || null == opertime2) {
-			 * criteria.andUpdatetimeLessThan(opertimefrom); jwhere = jwhere +
-			 * "and to_char(ma.updatetime,'yyyy-MM-dd') < '" + opertime1 + "'";
-			 * } else { criteria.andUpdatetimeBetween(opertimefrom, opertimeto);
-			 * jwhere = jwhere + "and to_char(ma.updatetime,'yyyy-MM-dd') >='" +
-			 * opertime1 + "' and to_char(ma.updatetime,'yyyy-MM-dd') < '" +
-			 * opertime2 + "'"; }
-			 */
+			jwhere = "select  t.familyno, t.membername,  t.paperid, t.assispay, "
+					+ " t.batchname,  t.mastername,  t.masteridcard, t.bank_account, t.bank_account1 "
+					+ " from JZ_MABILLS t where t.batchname like '" + m
+					+ "%' and t.ds like '" + ds + "%'";
+			
+			System.out.println(jwhere);
+
 			session.put("sql", example);
 			session.put("jwhere", jwhere);
 			session.put("m1", m);
@@ -474,23 +451,14 @@ public class MedicalafterAction extends ActionSupport {
 		} else {
 			example = (JzMabillsExample) session.get("sql");
 			jwhere = (String) session.get("jwhere");
+			this.m = (String) session.get("m1");
 		}
-		/*
-		 * String aasql =
-		 * " SELECT count(*) as rc,    sum(ma.totalcost) as totalcost, " +
-		 * " sum(ma.insurepay) as insurepay,        sum(ma.asisstpay) as asisstpay "
-		 * + " FROM JZ_MEDICALAFTER MA  WHERE 1 = 1    " + jwhere + " " +
-		 * " and ma.implsts = 0    and ma.approveresult = '1'  and 1=1 ";
-		 */
-		// System.out.println(aasql);
-		// String u = baseinfoService.queryMaStat(aasql);
+
 		this.setMabills(this.baseinfoService.queryMedicalafters01(example,
-				new Integer(cur_page), "queryafterffdone.action?m=" + this.m));
+				new Integer(cur_page), "queryafterffdone.action"));
 		this.setToolsmenu(this.businessService.getPager().getToolsmenu());
 		this.setOrgs(this.businessService.getOrganList(orgid));
 		this.setMonths(this.baseinfoService.getMonths());
-		// this.setResult(u);
-		session.put("aasql", aasql);
 		return SUCCESS;
 	}
 

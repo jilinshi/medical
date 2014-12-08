@@ -537,6 +537,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		e.setFamaddr(s.getAddress());
 		e.setTelephone(s.getLinkmode());
 		e.setFamcount(Short.parseShort(s.getfPersoncount()));
+		e.setBankaccounts(s.getfAccounts());		
 		return e;
 	}
 
@@ -544,6 +545,9 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 
 		JzMedicalafter record = new JzMedicalafter();
 		if (null == medicalafterDTO.getMaId()) {
+			record.setBankAccount(medicalafterDTO.getBankaccounts());
+			record.setBankAccount1(medicalafterDTO.getBankaccounts1());
+			record.setMastername(medicalafterDTO.getMasterName());
 			record.setFamilyno(medicalafterDTO.getFamilyno());
 			record.setMembername(medicalafterDTO.getMembername());
 			record.setPaperid(medicalafterDTO.getPaperid());
@@ -1096,9 +1100,9 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			ExecutSQL executSQL = new ExecutSQL();
 			// 1
 			sql = "insert into jz_mabills (bill_id, ma_id, "
-					+ " familyno,  membername,  paperid,  ctime, utime,  assispay,  ds, sb_id,  batchname) "
+					+ " familyno,  membername,  paperid,  ctime, utime,  assispay,  ds, sb_id,  batchname, mastername,   bank_account ,bank_account1) "
 					+ " select XMABILL.Nextval,  ma.ma_id,  ma.familyno, ma.membername,  ma.paperid, "
-					+ " sysdate, sysdate, ma.asisstpay, sb.ds, sb_id, sb.sb_batchname "
+					+ " sysdate, sysdate, ma.asisstpay, sb.ds, sb_id, sb.sb_batchname  ,ma.mastername, ma.bank_account,  ma.bank_account1 "
 					+ " from jz_medicalafter ma, (select sb.sb_batchname, sb.sb_id,  sb.sb_disposests, "
 					+ " '1' as ds,   sb.on_no from salvationbatch@cs sb, salvationoperation@cs so "
 					+ " where so.so_id = sb.so_id and so.st_id = '4'  and sb.sb_disposests = '¥¶¿Ì÷–' "

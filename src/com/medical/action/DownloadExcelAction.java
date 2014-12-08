@@ -98,10 +98,10 @@ public class DownloadExcelAction extends ActionSupport {
 					+ " where c.biz_id = biz.biz_id  and biz.assist_flag = 1 and biz.biz_type = 3 "
 					+ " and d.hospital_id(+) = biz.hospital_id and e.icd_id(+) = biz.icd_id   "
 					+ jwhere + " order by biz.end_time desc";
-			
-			  sql = " select * from chronic_remote biz where 1=1  " + jwhere
+
+			sql = " select * from chronic_remote biz where 1=1  " + jwhere
 					+ " order by biz.end_time desc";
-			  System.out.println("导出sql:"+sql);
+			System.out.println("导出sql:" + sql);
 
 			title.put("FAMILY_ID", "家庭编号");
 			title.put("NAME", "姓名");
@@ -117,14 +117,14 @@ public class DownloadExcelAction extends ActionSupport {
 			title.put("HNAME", "医院");
 			title.put("ASSISTPAY", "救助金额");
 		}
-		if("5".equals(type)){
-			// NAME  HNAME  HOSPITAL_ID  BIZ_TYPE  SSN  FAMILY_ID  BEGIN_DATE  END_DATE  INDAYS  IN_DISEASE_NAME  DIAGNOSE_NAME  
-			//FIN_DISEASE_NAME  SAL  CNT  BIZ_NAME_SHOW  DEPTNAME
+		if ("5".equals(type)) {
+			// NAME HNAME HOSPITAL_ID BIZ_TYPE SSN FAMILY_ID BEGIN_DATE END_DATE
+			// INDAYS IN_DISEASE_NAME DIAGNOSE_NAME
+			// FIN_DISEASE_NAME SAL CNT BIZ_NAME_SHOW DEPTNAME
 			BizCheckDTO jwhere = (BizCheckDTO) session.get("sql");
-			  sql = "SELECT BIZ.BIZ_ID, " + " BIZ.NAME,"
-					+ " DEPT.NAME AS HNAME," + " DEPT.HOSPITAL_ID,"
-					+ " BIZ.BIZ_TYPE," + " SSN," + " FAMILY_ID," + " BEGIN_DATE,"
-					+ " BIZ.END_DATE,"
+			sql = "SELECT BIZ.BIZ_ID, " + " BIZ.NAME," + " DEPT.NAME AS HNAME,"
+					+ " DEPT.HOSPITAL_ID," + " BIZ.BIZ_TYPE," + " SSN,"
+					+ " FAMILY_ID," + " BEGIN_DATE," + " BIZ.END_DATE,"
 					+ " ROUND(BIZ.END_DATE - BIZ.BEGIN_DATE) AS INDAYS,"
 					+ " IN_DISEASE_NAME," + " DIAGNOSE_NAME,"
 					+ " FIN_DISEASE_NAME," + " " + " SAL," + " CNT,"
@@ -138,7 +138,8 @@ public class DownloadExcelAction extends ActionSupport {
 					+ " WHERE DM.BIZ_TYPE = BIZ.BIZ_TYPE"
 					+ " AND BIZ.BIZ_ID = FY.BIZ_ID(+)"
 					+ " AND DEPT.HOSPITAL_ID = BIZ.HOSPITAL_ID";
-			sql = sql + jwhere.getJwhere()+" order by BEGIN_DATE desc, FAMILY_ID";
+			sql = sql + jwhere.getJwhere()
+					+ " order by BEGIN_DATE desc, FAMILY_ID";
 			title.put("HNAME", "医院");
 			title.put("FAMILY_ID", "家庭编号");
 			title.put("BEGIN_DATE", "入院时间 ");
@@ -147,24 +148,24 @@ public class DownloadExcelAction extends ActionSupport {
 			title.put("NAME", "姓名");
 			title.put("SSN", "社会救助号");
 		}
-		if("6".equals(type)){
-			// //   	CS	CS1	CS2	ORGNAME
+		if ("6".equals(type)) {
+			// // CS CS1 CS2 ORGNAME
 			sql = (String) session.get("sql");
 			title.put("ORGNAME", "慢性病名称");
 			title.put("CS1", "城市人数");
 			title.put("CS2", "农村人数");
 			title.put("CS", "总人数");
 		}
-		if("7".equals(type)){
+		if ("7".equals(type)) {
 			String jwhere = (String) session.get("jwhere");
 			sql = " SELECT MA.MA_ID,MA.FAMILYNO as FAMILYNO,MA.MEMBERNAME as MEMBERNAME,MA.PAPERID as PAPERID,MA.SSN as SSN,MA.HOSPITAL as HOSPITAL,MA.HOSPITALLEVEL as HOSPITALEVEL, "
-				+ " MA.SICKENCONTENT as SICKENCONTENT,MA.BEGINTIME as BEGINTIME,MA.ENDTIME as ENDTIME,MA.APPROVERESULT as APPROVERESULT,MA.APPROVECONTENT as APPROVECONTENT,MA.TOTALCOST as TOTALCOST, "
-				+ " MA.INSUREPAY as INSUREPAY,MA.OUTPAY as OUTPAY,MA.CAPAY as CAPAY,MA.BUSINESSPAY as BUSINESSPAY,MA.ASISSTPAY as ASISSTPAY,MA.CREATETIME as CREATETIME,MA.UPDATETIME as UPDATETIME, "
-				+ " MA.MEMBER_ID as MEMBER_ID,MA.MEMBER_TYPE as MEMBER_TYPE,MA.IMPLSTS as IMPLSTS,MA.TIKETNO as TIKETNO,MA.MEDICALTYPE as MEDICALTYPE,MA.INSURETYPE as INSURETYPE,MA.PERSONTYPE as PERSONTYPE, "
-				+ " MA.ON_NO as ON_NO,MA.PAY_LINE as PAY_LINE,MA.HOSPITALPAY as HOSPITALPAY,MA.DIAGNOSE as DIAGNOSE,MA.FAMCOUNT as FAMCOUNT,MA.FAMADDR as FAMADDR,MA.TELEPHONE as TELEPHONE,MA.SEX as SEX, "
-				+ " (CASE MA.MEMBER_TYPE WHEN '1' THEN '城市' WHEN '2' THEN '农村' END) AS DSTXT,"
-				+ " MA.BIRTHDAY  as BIRTHDAY FROM JZ_MEDICALAFTER MA WHERE 1=1" + jwhere 
-				+ " ORDER BY MA.UPDATETIME DESC,MA.FAMILYNO ";
+					+ " MA.SICKENCONTENT as SICKENCONTENT,MA.BEGINTIME as BEGINTIME,MA.ENDTIME as ENDTIME,MA.APPROVERESULT as APPROVERESULT,MA.APPROVECONTENT as APPROVECONTENT,MA.TOTALCOST as TOTALCOST, "
+					+ " MA.INSUREPAY as INSUREPAY,MA.OUTPAY as OUTPAY,MA.CAPAY as CAPAY,MA.BUSINESSPAY as BUSINESSPAY,MA.ASISSTPAY as ASISSTPAY,MA.CREATETIME as CREATETIME,MA.UPDATETIME as UPDATETIME, "
+					+ " MA.MEMBER_ID as MEMBER_ID,MA.MEMBER_TYPE as MEMBER_TYPE,MA.IMPLSTS as IMPLSTS,MA.TIKETNO as TIKETNO,MA.MEDICALTYPE as MEDICALTYPE,MA.INSURETYPE as INSURETYPE,MA.PERSONTYPE as PERSONTYPE, "
+					+ " MA.ON_NO as ON_NO,MA.PAY_LINE as PAY_LINE,MA.HOSPITALPAY as HOSPITALPAY,MA.DIAGNOSE as DIAGNOSE,MA.FAMCOUNT as FAMCOUNT,MA.FAMADDR as FAMADDR,MA.TELEPHONE as TELEPHONE,MA.SEX as SEX, "
+					+ " (CASE MA.MEMBER_TYPE WHEN '1' THEN '城市' WHEN '2' THEN '农村' END) AS DSTXT,"
+					+ " MA.BIRTHDAY  as BIRTHDAY FROM JZ_MEDICALAFTER MA WHERE 1=1"
+					+ jwhere + " ORDER BY MA.UPDATETIME DESC,MA.FAMILYNO ";
 			title.put("FAMILYNO", "家庭编号");
 			title.put("MEMBERNAME", "姓名");
 			title.put("SEX", "性别");
@@ -182,10 +183,28 @@ public class DownloadExcelAction extends ActionSupport {
 			title.put("PAY_LINE", "起助线");
 			title.put("HOSPITALPAY", "医院补助");
 			title.put("FAMADDR", "家庭住址");
-			title.put("DSTXT","来源");
-			
+			title.put("DSTXT", "来源");
+
 		}
-		
+
+		/*
+		 * FAMILYNO 220020114080121 MEMBERNAME 张寿清 PAPERID 220211194304280611
+		 * ASSISPAY 319.35 BATCHNAME 2014年12月医疗救助 MASTERNAME 张寿清 MASTERIDCARD
+		 * BANK_ACCOUNT 0720602011009800641449 BANK_ACCOUNT1
+		 */
+
+		if ("8".equals(type)) {
+			String jwhere = (String) session.get("jwhere");
+			sql = jwhere;
+			title.put("FAMILYNO", "家庭编号");
+			title.put("MEMBERNAME", "姓名");
+			title.put("PAPERID", "身份证号");
+			title.put("ASSISPAY", "救助金");
+			title.put("BATCHNAME", "发放批次");
+			title.put("MASTERNAME", "户主姓名");
+			title.put("BANK_ACCOUNT", "家庭银行账号");
+			title.put("BANK_ACCOUNT1", "个人银行账号");
+		}
 		String f = new String("生成excel".getBytes("gb2312"), "ISO8859-1");
 		fileName = "attachment; filename=" + f + ".xls";
 		return super.execute();

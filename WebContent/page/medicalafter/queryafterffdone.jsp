@@ -103,6 +103,9 @@
 		数据来源：
 		<s:select list="#{'':'全部','1':'城市','2':'农村'}" name="ds"></s:select>&nbsp;&nbsp;
 	<s:submit value="点击生成发放文件"></s:submit>
+	&nbsp;&nbsp;
+			<button onclick="window.open('../downloadExcel.action?type=8')">导出excel</button>
+	
 	</s:form>
 	<div align="center" style="font-size: 16px">
 

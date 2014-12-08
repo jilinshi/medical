@@ -38,6 +38,9 @@ public class MedicalafterDTO {
 	private BigDecimal hospitalpay;
 
 	private String masterName;
+	private String masteridcard;
+	private String bankaccounts;
+	private String bankaccounts1;
 	private String ds;
 	private String personstate;
 	private String assistType;
@@ -592,6 +595,30 @@ public class MedicalafterDTO {
 
 	public void setSumasisstpay(BigDecimal sumasisstpay) {
 		this.sumasisstpay = sumasisstpay;
+	}
+
+	public String getMasteridcard() {
+		return masteridcard;
+	}
+
+	public void setMasteridcard(String masteridcard) {
+		this.masteridcard = masteridcard;
+	}
+
+	public String getBankaccounts() {
+		return bankaccounts;
+	}
+
+	public void setBankaccounts(String bankaccounts) {
+		this.bankaccounts = bankaccounts;
+	}
+
+	public String getBankaccounts1() {
+		return bankaccounts1;
+	}
+
+	public void setBankaccounts1(String bankaccounts1) {
+		this.bankaccounts1 = bankaccounts1;
 	}
 
 }
