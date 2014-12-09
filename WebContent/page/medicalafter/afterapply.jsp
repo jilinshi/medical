@@ -126,7 +126,6 @@
 		<s:hidden name="medicalafterDTO.telephone"></s:hidden>
 		<s:hidden name="medicalafterDTO.birthday"></s:hidden>
 		<s:hidden name="medicalafterDTO.famcount"></s:hidden>
-		<s:hidden name="medicalafterDTO.masterName"></s:hidden>
 		<s:hidden name="medicalafterDTO.bankaccounts"></s:hidden>
 		<s:hidden name="medicalafterDTO.persontype"
 			value="%{medicalafterDTO.assistType}%{medicalafterDTO.asort}"></s:hidden>
@@ -197,7 +196,7 @@
 				<td width="16%"><s:property value="medicalafterDTO.bankaccounts" />&nbsp;</td>
 				<td width="17%">填写银行账号</td>
 				<td colspan="3" width="17%">
-				<s:textfield id="tiketno"
+				<s:textfield id="bankaccounts1"
 						name="medicalafterDTO.bankaccounts1"></s:textfield> </td>
 			</tr>
 			<tr>

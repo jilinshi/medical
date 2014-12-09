@@ -31,6 +31,11 @@
 		var f="dialogWidth=950px;dialogHeight=460px;status=no;help=no;scroll=auto";		
 		window.showModalDialog(url,window,f);
 	}
+	function view2(){
+		var url="medicalusebatchinit.action";
+		var f="dialogWidth=950px;dialogHeight=600px;status=no;help=no;scroll=auto";		
+		window.showModalDialog(url,window,f);
+	}
 	function cancel(id,memberid,membertype,assistpay,medicaltype){
 		 var arr = {
 			"medicalafterDTO.maId" : id,
@@ -95,7 +100,7 @@
 	
 </s:form>
 <div align="center" style="font-size: 16px"><s:property
-	value="result" escape="false" />&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="view1()">向处理中业务批次添加账单</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="window.open('medicalusebatchinit.action')">结算处理中业务</button></div>
+	value="result" escape="false" />&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="view1()">向处理中业务批次添加账单</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="view2()">结算处理中业务</button></div>
 <table align="center" width="99%" class="t1" border="0" cellpadding="0"
 	cellspacing="0">
 	<caption style="font-size: 12px">未生成账单业务信息</caption>
