@@ -75,6 +75,7 @@ function printhr(id){
 		<th>审批时间</th>
 		<th>数据来源</th>
 		<th>当前救助状态</th>
+		<th>人员状态</th>
 		<th>操作</th>
 	</tr>
 	<s:iterator value="cas">
@@ -116,6 +117,7 @@ function printhr(id){
 				</s:if></td>
 			<td><s:if test="state==1">救助对象</s:if> <s:if test="state==0">非救助对象</s:if><s:if test="state==null">非救助对象</s:if>
 			</td>
+			<td><s:property value="ps"/></td>
 			<td><s:if test="(#session.user.organizationId.length()==6)||(#session.user.organizationId.length()==4)">
 				<s:url id="cancel" action="approvechronicmemberinit">
 					<s:param name="chronicApproveDTO.chronicapproveId">
@@ -136,7 +138,7 @@ function printhr(id){
 		</tr>
 	</s:iterator>
 	<tr>
-		<td colspan="9">
+		<td colspan="10">
 		<div align="center"><s:property value="toolsmenu" escape="false" /></div>
 		</td>
 	</tr>

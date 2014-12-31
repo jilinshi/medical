@@ -79,7 +79,11 @@
  			<table schema="yljzn" tableName="jz_mabills">
 			<property name="ignoreQualifiersAtRuntime" value="true" />  
 			</table>
-			
+			<table schema="yljzn" tableName="JZ_MEDICALAFTER">
+			<property name="ignoreQualifiersAtRuntime" value="true" /> 
+			<generatedKey column="MA_ID"
+				sqlStatement="select CC.nextval from dual" />   
+			</table>
 			
 			
 			<!-- <table schema="yljzn" tableName="JZ_ACT">

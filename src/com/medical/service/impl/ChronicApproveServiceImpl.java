@@ -134,6 +134,7 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 				e.setAprtime1((Date) s.get("APRTIME1"));
 				e.setAprtime2((Date) s.get("APRTIME2"));
 				e.setAprtime3((Date) s.get("APRTIME3"));
+				e.setPs((String) s.get("PS"));
 				list.add(e);
 			}
 		} catch (SQLException e1) {

@@ -53,7 +53,25 @@ public class ChronicApproveDTO {
 	private String sts;
 	private String remark;
 	private String anFilename;
+	private String ps;
+	private String yw;
 	
+
+	public String getPs() {
+		return ps;
+	}
+
+	public void setPs(String ps) {
+		this.ps = ps;
+	}
+
+	public String getYw() {
+		return yw;
+	}
+
+	public void setYw(String yw) {
+		this.yw = yw;
+	}
 
 	public String getAnFilename() {
 		
