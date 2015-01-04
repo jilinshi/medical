@@ -47,7 +47,7 @@ public interface BaseinfoService {
 	
 	public MedicalafterDTO findMemberByKey(MedicalafterDTO m);
 	
-	public int updateMedicalafter(MedicalafterDTO m);
+	public int updateMedicalafter(MedicalafterDTO medicalafterDTO);
 	
 	public ActDTO findActByID(BaseInfoDTO baseInfoDTO);
 	
@@ -71,4 +71,6 @@ public interface BaseinfoService {
 	public void saveCommitMaBatch();
 
 	public void saveCancelMaBatch(String m);
+
+	public void updateMedicalafterAcc(String sql);
 }

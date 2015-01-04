@@ -537,7 +537,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		e.setFamaddr(s.getAddress());
 		e.setTelephone(s.getLinkmode());
 		e.setFamcount(Short.parseShort(s.getfPersoncount()));
-		e.setBankaccounts(s.getfAccounts());		
+		e.setBankaccounts(s.getfAccounts());
 		return e;
 	}
 
@@ -1283,4 +1283,20 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void updateMedicalafterAcc(String sql) {
+		try {
+			ExecutSQL executSQL = new ExecutSQL();
+
+			System.out.println(sql);
+			executSQL.setExecutsql(sql);
+
+			executSQLDAO.updateSQL(executSQL);
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+	}
+
 }

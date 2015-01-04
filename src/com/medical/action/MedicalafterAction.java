@@ -66,6 +66,7 @@ public class MedicalafterAction extends ActionSupport {
 	private String content;
 	private String type;
 	private HashMap<String, String> map;
+	private String approveresult;
 
 	public String countassist() {
 		medicalafterDTO = baseinfoService.findCountAssist(medicalafterDTO);
@@ -204,6 +205,11 @@ public class MedicalafterAction extends ActionSupport {
 				criteria.andMemberTypeEqualTo(ds);
 				jwhere = jwhere + " and ma.member_type='" + ds + "'";
 			}
+			if (!"".equals(approveresult)) {
+				criteria.andApproveresultEqualTo(approveresult);
+				jwhere = jwhere + " and ma.approveresult='" + approveresult
+						+ "'";
+			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date opertimefrom = new Date();
 			Date opertimeto = new Date();
@@ -296,8 +302,11 @@ public class MedicalafterAction extends ActionSupport {
 				criteria.andMemberTypeEqualTo(ds);
 				jwhere = jwhere + " and ma.member_type='" + ds + "'";
 			}
+
 			criteria.andImplstsEqualTo("0");
 			jwhere = jwhere + " and ma.implsts = 0 ";
+			criteria.andApproveresultEqualTo("1");
+			jwhere = jwhere + " and ma.approveresult='1'";
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date opertimefrom = new Date();
 			Date opertimeto = new Date();
@@ -373,7 +382,9 @@ public class MedicalafterAction extends ActionSupport {
 				+ " and ma.implsts = '0' and ma.approveresult = '1' "
 				+ " group by sb.on_no, sb.ds  order by sb.ds, sb.on_no";
 		medicalafters = baseinfoService.queryMaBillStat(sql);
-
+		sql = "update JZ_MABILLS t   set t.bank_account =       (select max(mem.f_accounts)          from member_baseinfo mem "
+				+ " where mem.familyno = t.familyno) where t.bank_account is null   and t.bank_account1 is null";
+	 baseinfoService.updateMedicalafterAcc(sql);
 		return SUCCESS;
 	}
 
@@ -439,9 +450,10 @@ public class MedicalafterAction extends ActionSupport {
 
 			jwhere = "select  t.familyno, t.membername,  t.paperid, t.assispay, "
 					+ " t.batchname,  t.mastername,  t.masteridcard, t.bank_account, t.bank_account1 "
-					+ " from JZ_MABILLS t where t.batchname like '" + m
+					+ " from JZ_MABILLS t where t.batchname like '"
+					+ m
 					+ "%' and t.ds like '" + ds + "%'";
-			
+
 			System.out.println(jwhere);
 
 			session.put("sql", example);
@@ -1052,4 +1064,13 @@ public class MedicalafterAction extends ActionSupport {
 	public void setContent(String content) {
 		this.content = content;
 	}
+
+	public String getApproveresult() {
+		return approveresult;
+	}
+
+	public void setApproveresult(String approveresult) {
+		this.approveresult = approveresult;
+	}
+
 }
