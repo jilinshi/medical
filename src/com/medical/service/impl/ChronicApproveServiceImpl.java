@@ -363,7 +363,7 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 				po = jzChronicapproveDAO.selectByPrimaryKey(chronicApproveDTO
 						.getChronicapproveId());
 				if (2 == chronicApproveDTO.getAprresult2()) {
-					po.setStatus((short) 2);
+					po.setStatus((short) 0);
 					po.setFlag((short) 1);
 					po.setAprlevel((short) 2);
 				} else {
@@ -607,6 +607,8 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		JzChronicapprove record = jzChronicapproveDAO
 				.selectByPrimaryKey(chronicApproveDTO.getChronicapproveId());
 		record.setFlag((short) 0);
+		record.setApridea3(record.getApridea3()+"@×÷·Ï");
+		record.setAprtime3(new Date());
 		jzChronicapproveDAO.updateByPrimaryKeySelective(record);
 		JzChronicstatusExample example = new JzChronicstatusExample();
 		example.createCriteria().andMemberIdEqualTo(record.getMemberId())
@@ -615,6 +617,7 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		for (JzChronicstatus s : rs) {
 			s.setFlag("0");
 			s.setState("0");
+			s.setApptime(new Date());
 			jzChronicstatusDAO.updateByPrimaryKey(s);
 			JzChronicbillExample v = new JzChronicbillExample();
 			v.createCriteria().andMemberIdEqualTo(s.getMemberId())
