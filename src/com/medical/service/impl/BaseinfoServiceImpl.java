@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.medical.common.Pager;
 import com.medical.dao.ExecutSQLDAO;
 import com.medical.dao.JzActDAO;
@@ -41,6 +43,7 @@ import com.medical.model.TestSsnExample;
 import com.medical.service.BaseinfoService;
 
 public class BaseinfoServiceImpl implements BaseinfoService {
+	static Logger log = Logger.getLogger(BaseinfoServiceImpl.class);
 	private MemberBaseinfoDAO memberBaseinfoDAO;
 	private ExecutSQLDAO executSQLDAO;
 	private JzBizDAO jzBizDAO;
@@ -328,9 +331,22 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 				.createCriteria();
 		criteria.andMemberIdEqualTo(checkDTO.getMemberId());
 		criteria.andDsEqualTo(checkDTO.getDs());
-		record.setSsn1(checkDTO.getSsn1());
-		record.setSsn2(checkDTO.getSsn2());
-		record.setSsn3(checkDTO.getSsn3());
+		if(null == checkDTO.getSsn1()|| "".equals(checkDTO.getSsn1())){
+			
+		}else{
+			record.setSsn1(checkDTO.getSsn1());
+		}
+		if(null == checkDTO.getSsn2()|| "".equals(checkDTO.getSsn2())){
+			
+		}else{
+			record.setSsn2(checkDTO.getSsn2());
+		}
+		if(null == checkDTO.getSsn3()|| "".equals(checkDTO.getSsn3())){
+			
+		}else{
+			record.setSsn3(checkDTO.getSsn3());
+		}
+		record.setUtime(new Date());
 		// 更新test_ssn表
 		u = testSsnDAO.updateByExampleSelective(record, example);
 		// 更新member_baseinfo视图
