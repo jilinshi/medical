@@ -5,12 +5,12 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.BeanUtils;
 
 import com.medical.common.FileHandle;
 import com.medical.common.Pager;
@@ -253,13 +253,16 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 				e.setAprperson3(APRPERSON3);
 				BigDecimal APRLEVEL = (BigDecimal) s.get("APRLEVEL");
 				if (null != APRLEVEL) {
-				e.setAprlevel(APRLEVEL.shortValue());}
+					e.setAprlevel(APRLEVEL.shortValue());
+				}
 				BigDecimal FLAG = (BigDecimal) s.get("FLAG");
 				if (null != FLAG) {
-				e.setFlag(FLAG.shortValue());}
+					e.setFlag(FLAG.shortValue());
+				}
 				BigDecimal STATUS = (BigDecimal) s.get("STATUS");
 				if (null != STATUS) {
-				e.setStatus(STATUS.shortValue());}
+					e.setStatus(STATUS.shortValue());
+				}
 				BigDecimal CHRONICSTATUS_ID1 = (BigDecimal) s
 						.get("CHRONICSTATUS_ID1");
 				e.setChronicstatusId1(CHRONICSTATUS_ID1.longValue());
@@ -416,8 +419,15 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 			}
 
 			chronicApproveDTO = findChronicApproveDTOByID(chronicApproveDTO);
-			chronicApproveDTO.setLinkmode(dictionaryHandle
-					.getDictValue(chronicApproveDTO.getEntity().toString()));
+			if (chronicApproveDTO.getEntity() == null
+					|| "".equals(chronicApproveDTO.getEntity())) {
+
+			} else {
+				chronicApproveDTO
+						.setLinkmode(dictionaryHandle
+								.getDictValue(chronicApproveDTO.getEntity()
+										.toString()));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -451,6 +461,190 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 			record.setCapid(po.getChronicapproveId().toString());
 			jzChronicstatusDAO.insertSelective(record);
 		}
+		saveChronicBill(po);
+	}
+
+	private String saveChronicBill(JzChronicapprove po) {
+		String r = "";
+		Calendar c = Calendar.getInstance();// 可以对每个时间域单独修改
+		int year = c.get(Calendar.YEAR);
+		int month = c.get(Calendar.MONTH) + 1;
+		try {
+			String sql_member = "select oo.asort "
+					+ " from member_baseinfo oo " + " where oo.member_id='"
+					+ po.getMemberId() + "' " + " and oo.ds='"
+					+ po.getMemberType() + "'";
+			ExecutSQL executSQL_member = new ExecutSQL();
+			executSQL_member.setExecutsql(sql_member);
+			HashMap rs_member = executSQLDAO.queryAll(executSQL_member).get(0);
+			BigDecimal asort_member = (BigDecimal) rs_member.get("ASORT");
+			BigDecimal income_type = BigDecimal.ZERO;
+			String type = "";
+			BigDecimal income_year = BigDecimal.ZERO;
+			// 普通低保户
+			if (asort_member.compareTo(BigDecimal.ZERO) == 0) {
+				income_type = new BigDecimal("500");
+				type = "慢性病";
+				// 再保障
+			} else if (asort_member.compareTo(BigDecimal.ONE) == 0) {
+				income_type = new BigDecimal("1000");
+				type = "再保障";
+			}
+			income_year = income_type;
+			String sql = " select * "
+					+ " from (select sum(bill.income) - sum(bill.payout) as end_balance "
+					+ " from jz_chronicbill bill "
+					+ " where bill.member_id = '"
+					+ po.getMemberId()
+					+ "' "
+					+ " and bill.member_type = '"
+					+ po.getMemberType()
+					+ "') a, "
+					+ " (select decode(sum(bill.income),null,0,sum(bill.income)) as sum_income "
+					+ " from jz_chronicbill bill  "
+					+ " where bill.subject like '%存入%' "
+					+ " and to_char(bill.opttime, 'yyyy') = '"
+					+ year
+					+ "' "
+					+ " and bill.income > 0 "
+					+ " and instr(bill.subject, '退费') = 0 "
+					+ " and bill.member_id = '"
+					+ po.getMemberId()
+					+ "' "
+					+ " and bill.member_type = '"
+					+ po.getMemberType()
+					+ "') b, "
+					+ " (select * "
+					+ " from jz_chronicbill "
+					+ " where chronicbill_id in "
+					+ " (select max(bill.chronicbill_id) "
+					+ " from jz_chronicbill bill "
+					+ " where bill.member_id = '"
+					+ po.getMemberId()
+					+ "' "
+					+ " and bill.member_type = '"
+					+ po.getMemberType()
+					+ "' "
+					+ " group by bill.member_id, bill.member_type)) c, "
+					+ " (select oo.asort "
+					+ " from member_baseinfo oo "
+					+ " where oo.member_id='"
+					+ po.getMemberId()
+					+ "' "
+					+ " and oo.ds='" + po.getMemberType() + "') d";
+			ExecutSQL executSQL = new ExecutSQL();
+			executSQL.setExecutsql(sql);
+			List<HashMap> rs = executSQLDAO.queryAll(executSQL);
+			if (rs.size() > 0) {
+				HashMap s = rs.get(0);
+				BigDecimal sumIncome = (BigDecimal) s.get("SUM_INCOME");
+				BigDecimal endBalance = (BigDecimal) s.get("END_BALANCE");
+				BigDecimal income = (BigDecimal) s.get("INCOME");
+				BigDecimal balance = (BigDecimal) s.get("BALANCE");
+				String subject = (String) s.get("SUBJECT");
+				if (subject.indexOf("年末清零") != -1
+						|| sumIncome.compareTo(BigDecimal.ZERO) == 0) {
+					if (income_type.compareTo(sumIncome) == 1
+							|| income_type.compareTo(sumIncome) == 0) {
+						income_year = income_type.subtract(sumIncome);
+					} else {
+						income_year = income_type;
+					}
+					JzChronicbill e = new JzChronicbill();
+					e.setIncome(income_year);
+					e.setBalance(income_year);
+					e.setPayout(new BigDecimal(0));
+					e.setFamilyId(po.getFamilyId());
+					e.setName(po.getName());
+					e.setSsn(po.getSsn());
+					e.setSubject("@@" + year + "年" + month + "月" + type
+							+ "批量存入" + income_year + "元");
+					e.setOpttime(new Date());
+					e.setMemberId(po.getMemberId());
+					e.setMemberType(po.getMemberType());
+					BigDecimal i = jzChronicbillDAO.insertSelective(e);
+					if (i.compareTo(BigDecimal.ZERO) == 1) {
+						r = year + "年" + type + "救助金" + income_year + "元，保存成功！";
+					} else {
+						r = "保存失败！";
+					}
+				} else if (subject.indexOf("清零") != -1
+						&& subject.indexOf("年末清零") == -1) {
+					if (income.compareTo(BigDecimal.ZERO) == -1) {
+						income = income.multiply(new BigDecimal(-1));
+					} else if (income.compareTo(BigDecimal.ZERO) == 0) {
+						income = income_type;
+					}
+					if (income_type.compareTo(sumIncome) == 1
+							|| income_type.compareTo(sumIncome) == 0) {
+						income_year = income_type.subtract(sumIncome).add(
+								income);
+					} else {
+						income_year = income;
+					}
+					JzChronicbill e = new JzChronicbill();
+					e.setIncome(income_year);
+					e.setBalance(endBalance.add(income_year));
+					e.setPayout(new BigDecimal(0));
+					e.setFamilyId(po.getFamilyId());
+					e.setName(po.getName());
+					e.setSsn(po.getSsn());
+					e.setSubject("@@" + year + "年" + month + "月" + type
+							+ "恢复存入" + income_year + "元");
+					e.setOpttime(new Date());
+					e.setMemberId(po.getMemberId());
+					e.setMemberType(po.getMemberType());
+					BigDecimal i = jzChronicbillDAO.insertSelective(e);
+					if (i.compareTo(BigDecimal.ZERO) == 1) {
+						r = "清零后恢复" + income_year + "元，保存成功！";
+					} else {
+						r = "保存失败！";
+					}
+				} else if (sumIncome.compareTo(income_type) == -1) {
+					income_year = income_type.subtract(sumIncome);
+					JzChronicbill e = new JzChronicbill();
+					e.setIncome(income_year);
+					e.setBalance(income_year.add(endBalance));
+					e.setPayout(new BigDecimal(0));
+					e.setFamilyId(po.getFamilyId());
+					e.setName(po.getName());
+					e.setSsn(po.getSsn());
+					e.setSubject("@@" + year + "年" + month + "月" + type
+							+ "批量存入" + income_year + "元");
+					e.setOpttime(new Date());
+					e.setMemberId(po.getMemberId());
+					e.setMemberType(po.getMemberType());
+					BigDecimal i = jzChronicbillDAO.insertSelective(e);
+					if (i.compareTo(BigDecimal.ZERO) == 1) {
+						r = year + "年" + type + "救助金" + income_year + "元，保存成功！";
+					} else {
+						r = "保存失败！";
+					}
+				}
+			} else {
+				JzChronicbill e = new JzChronicbill();
+				e.setIncome(income_year);
+				e.setBalance(income_year);
+				e.setPayout(new BigDecimal(0));
+				e.setFamilyId(po.getFamilyId());
+				e.setName(po.getName());
+				e.setSsn(po.getSsn());
+				e.setSubject("@@" + year + "年" + month + "月" + type + "批量存入"
+						+ income_year + "元");
+				e.setOpttime(new Date());
+				e.setMemberId(po.getMemberId());
+				e.setMemberType(po.getMemberType());
+				BigDecimal i = jzChronicbillDAO.insertSelective(e);
+				if (i.compareTo(BigDecimal.ZERO) == 1) {
+					r = year + "年" + type + "救助金" + income_year + "元，保存成功！";
+				} else {
+					r = "保存失败！";
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return r;
 	}
 
 	public List<ChronicApproveDTO> findApprovesBySSN(
@@ -486,7 +680,8 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		values.add("10");
 		example.createCriteria().andFamilynoEqualTo(familyno)
 				.andAssistTypeIn(values).andPersonstateEqualTo("正常");
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO
+				.selectByExampleWithoutBLOBs(example);
 		for (MemberBaseinfo s : rs) {
 			PersonDTO e = new PersonDTO();
 			e.setMembername(s.getMembername());
@@ -511,8 +706,9 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		pager.setUrl(url);
 		pager.setPagesize(16);
 		pager.genToolsmenu();
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example,
-				pager.getStart(), pager.getPagesize());
+		List<MemberBaseinfo> rs = memberBaseinfoDAO
+				.selectByExampleWithoutBLOBs(example, pager.getStart(),
+						pager.getPagesize());
 		for (MemberBaseinfo s : rs) {
 			PersonDTO e = new PersonDTO();
 			e.setMembername(s.getMembername());
@@ -581,7 +777,8 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		MemberBaseinfoExample example = new MemberBaseinfoExample();
 		example.createCriteria().andMemberIdEqualTo(e.getMemberId())
 				.andDsEqualTo(e.getMemberType());
-		List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example);
+		List<MemberBaseinfo> rs = memberBaseinfoDAO
+				.selectByExampleWithoutBLOBs(example);
 		for (MemberBaseinfo s : rs) {
 			e.setName(s.getMembername());
 			e.setFamilyId(s.getFamilyno());
@@ -607,7 +804,7 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		JzChronicapprove record = jzChronicapproveDAO
 				.selectByPrimaryKey(chronicApproveDTO.getChronicapproveId());
 		record.setFlag((short) 0);
-		record.setApridea3(record.getApridea3()+"@作废");
+		record.setApridea3(record.getApridea3() + "@作废");
 		record.setAprtime3(new Date());
 		jzChronicapproveDAO.updateByPrimaryKeySelective(record);
 		JzChronicstatusExample example = new JzChronicstatusExample();
@@ -647,7 +844,8 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		try {
 			MemberBaseinfoExample example = new MemberBaseinfoExample();
 			example.createCriteria().andSsnEqualTo(personDTO.getSsn());
-			List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example);
+			List<MemberBaseinfo> rs = memberBaseinfoDAO
+					.selectByExampleWithoutBLOBs(example);
 			for (MemberBaseinfo s : rs) {
 				personDTO.setFamilyno(s.getFamilyno());
 				personDTO.setSsn(s.getSsn());
@@ -1051,7 +1249,8 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 			MemberBaseinfoExample example = new MemberBaseinfoExample();
 			example.createCriteria().andMemberIdEqualTo(memberId)
 					.andDsEqualTo(memberType);
-			List<MemberBaseinfo> rs = memberBaseinfoDAO.selectByExampleWithoutBLOBs(example);
+			List<MemberBaseinfo> rs = memberBaseinfoDAO
+					.selectByExampleWithoutBLOBs(example);
 			for (MemberBaseinfo s : rs) {
 				aspApproveDTO.setFamilyno(s.getFamilyno());
 				aspApproveDTO.setSsn(s.getSsn());
