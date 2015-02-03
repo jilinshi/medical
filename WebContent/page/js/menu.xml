@@ -206,6 +206,12 @@
 			target="mainFrame">
 		</menu>
 	</menu>
+	<menu name="灾后救助审批">
+		<menu name="录入审批"
+			url="/medical/page/contentframe.jsp?url=disaster/disasterappinit.action&amp;nav=灾后救助审批>>录入审批"
+			target="mainFrame">
+		</menu>
+	</menu>
 	<menu name="社会救助卡预览">
 		<menu name="日常救助制卡预览"
 			url="/medical/page/contentframe.jsp?url=business/chronic/querychronicmemberscard.jsp&amp;nav=社会救助卡预览>>日常救助制卡预览"

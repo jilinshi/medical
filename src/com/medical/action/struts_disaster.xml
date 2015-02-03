@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="disaster" extends="json-default" namespace="/page/disaster">
+		<interceptors>
+			<interceptor class="com.medical.interceptor.AuthorityInterceptor"
+				name="authority" />
+			<interceptor-stack name="mydefault">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="authority" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="mydefault"></default-interceptor-ref>
+		<global-results>
+			<result name="login" type="redirect">/logout.jsp</result>
+			<result name="norole" type="redirect">/page/norole.jsp</result>
+		</global-results>
+		
+		<action name="disasterappinit" class="disasterAction"
+			method="disasterappinit">
+			<result name="success">/page/disaster/disasterapp.jsp
+			</result>
+			<result name="result">/page/disaster/error.jsp</result>
+		</action>
+		<action name="disasterapp" class="disasterAction" method="disasterapp">
+			<result name="success">/page/disaster/disasterappview.jsp
+			</result>
+		</action>
+	</package>
+</struts>
+

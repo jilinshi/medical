@@ -67,4 +67,6 @@
 	<include file="com/medical/action/struts_chronic.xml" />
 	<include file="com/medical/action/struts_check.xml" />
 	<include file="com/medical/action/struts_medicalafter.xml"/>
+	<include file="com/medical/action/struts_disaster.xml"/>
+	
 </struts>

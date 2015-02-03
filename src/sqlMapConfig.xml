@@ -27,4 +27,5 @@
 	<sqlMap resource="com/medical/map/TEST_SSN_SqlMap.xml" />
 	<sqlMap resource="com/medical/map/JZ_MEDICALAFTER_SqlMap.xml" />
 	<sqlMap resource="com/medical/map/JZ_MABILLS_SqlMap.xml" />
+	<sqlMap resource="com/medical/map/JZ_DISASTERAFTER_SqlMap.xml" />
 </sqlMapConfig>
