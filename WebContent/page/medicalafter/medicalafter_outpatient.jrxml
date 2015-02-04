@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 5.6.2.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-11-20T13:32:08 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="medicalafter_outpatient" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f666d87a-94ce-4cc9-ab4a-7d1c881d4ad2">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.5"/>
@@ -532,7 +530,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="宋体" size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("SSN")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("SSN") == null ? "":$P{REPORT_PARAMETERS_MAP}.get("SSN")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Opaque" x="88" y="50" width="102" height="18" uuid="678a7fb1-80b9-444e-bdf7-25e428e9d56e"/>
@@ -545,7 +543,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="宋体" size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("FAMILYNO")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("FAMILYNO") == null ? "":$P{REPORT_PARAMETERS_MAP}.get("FAMILYNO")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Opaque" x="66" y="176" width="124" height="20" uuid="63504801-7406-47f5-a77c-7040ec2236c3"/>

@@ -246,12 +246,12 @@
 						onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
 						onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}" /></td>
 				<td width="17%">大病保险金额</td>
-				<td><s:textfield id="capay" name="disasterafterDTO.capay"
+				<td colspan="3"><s:textfield id="capay" name="disasterafterDTO.capay"
 						value="0"
 						onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
 						onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
 						onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}" /></td>
-				<td colspan="2">
+				<td >
 				</td>
 			</tr>
 			<tr>
@@ -261,13 +261,17 @@
 						onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
 						onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value"
 						onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}" /></td>
-				<td colspan="2">
-				</td>
 				<td width="17%">审批意见</td>
-				<td><s:select id="approveresult"
+				<td colspan="3"><s:select id="approveresult"
 						name="disasterafterDTO.approveresult"
 						list="#{'1':'同意救助','0':'不同意救助','-1':'作废'}" listKey="key"
 						listValue="value"></s:select></td>
+			</tr>
+			<tr>
+				<td width="17%">救助原因</td>
+				<td colspan="5">
+					<s:textarea name="disasterafterDTO.approvecontent" rows="2" cols="100%"></s:textarea>
+				</td>
 			</tr>
 			<tr>
 				<td colspan="6">
@@ -281,8 +285,6 @@
 		<div id="hiddiv"></div>
 		<div align="center">
 			<s:submit value="保存" id="sub" disabled="false"/>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button onclick="window.close()">关闭</button>
 		</div>
 	</s:form> 
 </body>
@@ -301,6 +303,39 @@
 		var medicaltype = $("#medicaltype")[0].value;
 		var diagnose = $("#diagnose")[0].value;
 		var filenames = document.getElementsByName("filebase64");
+		//
+		var membername = $("#membername")[0].value;
+		var paperid = $("#paperid")[0].value;
+		var sex =  $("input[name='disasterafterDTO.sex']:checked")
+		.val();
+		var bankaccounts = $("#bankaccounts")[0].value;
+		var famaddr = $("#famaddr")[0].value;
+		if("" == membername){
+			alert("请填写姓名！");
+			flag = false;
+			return flag;
+		}
+		if("" == paperid){
+			alert("请填写身份证号码！");
+			flag = false;
+			return flag;
+		}
+		if("1" == sex || "0" == sex){
+		}else{
+			alert("请填写性别！");
+			flag = false;
+			return flag;
+		}
+		if("" == famaddr){
+			alert("请填写家庭地址！");
+			flag = false;
+			return flag;
+		}
+		if("" == bankaccounts){
+			alert("请填写银行账号！");
+			flag = false;
+			return flag;
+		}
 		if ("1" == insuretype || "2" == insuretype || "3" == insuretype) {
 		} else {
 			alert("请选择保障类别！");
@@ -357,19 +392,19 @@
 			}
 			alert("门诊大病选择："+value);
 		}
-		/* if(filenames.length>0){
+		 /* if(filenames.length>0){
 			alert("有附件");
 		}else{
 			alert("必须上传附件！");
 			flag = false;
 			return flag;
-		} */
+		}  */
 		return flag;
 	}
 
 	function updateload() {
 		var windowprops = "dialogWidth:860px;dialogHeight:700px";
-		window.showModalDialog("index.html", window, windowprops);
+		window.showModalDialog("<%=path%>/page/medicalafter/index.html", window, windowprops);
 	}	
 </script>
 </html>

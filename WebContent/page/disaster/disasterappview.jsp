@@ -57,7 +57,17 @@
 		</tr>
 		<tr>
 			<td width="17%">保险类型</td>
-			<td colspan="5"><s:property value="disasterafterDTO.insuretype" />&nbsp;</td>
+			<td colspan="5">
+			<s:if test="disasterafterDTO.insuretype==1">
+			医保
+			</s:if>
+			<s:elseif test="disasterafterDTO.insuretype==2">
+			农合
+			</s:elseif>
+			<s:elseif test="disasterafterDTO.insuretype==3">
+			其他
+			</s:elseif>
+			&nbsp;</td>
 		</tr>
 		<tr>
 			<td width="17%">医院名称</td>
@@ -153,6 +163,10 @@
 				&nbsp;
 			</td>
 		</tr>
+		<tr>
+			<td width="17%">救助原因</td>
+			<td colspan="5"><s:property value="disasterafterDTO.approvecontent"/>&nbsp;</td>
+		</tr>
 	</table>
 	<div align="center">
 	
@@ -179,6 +193,6 @@
 				href="%{print}" cssStyle="cursor:hand" target="_blank">打印报销凭证</s:a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<s:a
 				href="%{printapp}" cssStyle="cursor:hand" target="_blank">打印申请审批表</s:a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<button onclick="window.close()">关闭</button></div>
+	<button onclick="history.go(-1)">关闭</button></div>
 </body>
 </html>

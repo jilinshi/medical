@@ -83,6 +83,7 @@
 	</bean>
 	<bean id="disasterAfterService" class="com.medical.service.impl.DisasterAfterServiceImpl">
 		<property name="jzDisasterafterDAO" ref="jzDisasterafterDAO"></property>
+		<property name="executSQLDAO" ref="executSQLDAO"></property>
 	</bean>
 	<bean id="authorityInterceptor" class="com.medical.interceptor.AuthorityInterceptor" scope="request">
 		<property name="systemManager" ref="systemManager"></property>

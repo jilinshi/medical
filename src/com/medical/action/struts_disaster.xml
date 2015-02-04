@@ -25,7 +25,51 @@
 			<result name="result">/page/disaster/error.jsp</result>
 		</action>
 		<action name="disasterapp" class="disasterAction" method="disasterapp">
-			<result name="success">/page/disaster/disasterappview.jsp
+			<result name="success">/page/disaster/disasterappview.jsp</result>
+			<result name="result">/page/disaster/error.jsp</result>
+		</action>
+	</package>
+	<package name="printdisaster" extends="jasperreports-default"
+		namespace="/page/disaster">
+		<interceptors>
+			<interceptor class="com.medical.interceptor.AuthorityInterceptor"
+				name="authority" />
+			<interceptor-stack name="mydefault">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="authority" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="mydefault">
+		</default-interceptor-ref>
+		<global-results>
+			<result name="login" type="redirect">
+				/logout.jsp
+			</result>
+		</global-results>
+		<action name="printinhospital" class="disasterAction"
+			method="printinhospital">
+			<result name="success" type="jasper">
+				<param name="location">/page/medicalafter/medicalafter_inhospital.jasper</param>
+				<param name="dataSource">disasterafterDTO</param>
+				<param name="format">PDF</param>
+				<param name="reportParameters">map</param>
+			</result>
+		</action>
+		<action name="printoutpatient" class="disasterAction"
+			method="printoutpatient">
+			<result name="success" type="jasper">
+				<param name="location">/page/medicalafter/medicalafter_outpatient.jasper</param>
+				<param name="dataSource">disasterafterDTO</param>
+				<param name="format">PDF</param>
+				<param name="reportParameters">map</param>
+			</result>
+		</action>
+		<action name="printapp" class="disasterAction" method="printapp">
+			<result name="success" type="jasper">
+				<param name="location">/page/medicalafter/medicalafter_app.jasper</param>
+				<param name="dataSource">disasterafterDTO</param>
+				<param name="format">PDF</param>
+				<param name="reportParameters">map</param>
 			</result>
 		</action>
 	</package>

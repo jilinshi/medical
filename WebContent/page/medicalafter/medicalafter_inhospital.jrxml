@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 5.6.2.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-11-20T13:32:32 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="medicalafter_inhospital" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d379ce1b-37fa-441d-8f5d-8beca76fab30">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="150"/>
+	<property name="ireport.x" value="85"/>
 	<property name="ireport.y" value="0"/>
 	<field name="FAMILYNO" class="java.lang.String"/>
 	<field name="MEMBERNAME" class="java.lang.String"/>
@@ -86,7 +84,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="宋体" size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("FAMILYNO")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("FAMILYNO") == null ? "":$P{REPORT_PARAMETERS_MAP}.get("FAMILYNO")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement mode="Opaque" x="189" y="51" width="42" height="18" uuid="5c24224e-6811-4c38-bca8-52404bf80948"/>
@@ -138,7 +136,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="宋体" size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("SSN")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("SSN") == null ? "":$P{REPORT_PARAMETERS_MAP}.get("SSN")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement mode="Opaque" x="412" y="51" width="56" height="18" uuid="c642da75-5b40-45c9-bba0-26e810d915e3"/>
