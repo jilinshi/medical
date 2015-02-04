@@ -104,6 +104,29 @@
 			div_wsflag.style.display='none';
 		}
 	}
+	
+	function validate(){
+		var paperid = $("#paperid")[0].value;
+		$.ajax({    
+	        type:'post',        
+	        url:'<%=basePath%>page/disaster/getinforbypaperid.action?paperid='+paperid,  
+	        cache:false,    
+	        dataType:'json',    
+	        success:function(data){
+	        	//alert(data);
+	        	var dataObj=eval("("+data+")");
+	        	alert(dataObj.message);
+	        	if(dataObj.flag==1){
+		        	var s = "本年度住院次数："+dataObj.in_num+"次, 本年度住院累计救助金："+dataObj.in_sumpay+"元; " 
+		        			+" 本年度门诊次数："+dataObj.out_num+"次, 本年度门诊累计救助金："+dataObj.out_sumpay+"元;"
+		        	$('#Msg')[0].innerText = s;
+		        	$('#sub')[0].disabled = false;
+	        	}else{
+	        		$('#sub')[0].disabled = true;
+	        	}
+	        }
+	    }); 
+	}
 </script>
 <title>灾后救助录入</title>
 </head>
@@ -113,7 +136,7 @@
 		<table align="center" width="100%" class="t1" border="0"
 			cellpadding="0" cellspacing="0">
 			<tr>
-				<th colspan="6">灾后救助录入审批
+				<th colspan="6">灾后救助录入审批<font color="red" style="font-size:15px"><div id="Msg"></div></font>
 				</th>
 			</tr>
 			<tr>
@@ -122,7 +145,9 @@
 						name="disasterafterDTO.membername"></s:textfield>&nbsp;</td>
 				<td width="17%">身份证号码</td>
 				<td width="16%"><s:textfield id="paperid"
-						name="disasterafterDTO.paperid"></s:textfield>&nbsp;</td>
+						name="disasterafterDTO.paperid"></s:textfield>&nbsp;
+				<button onclick="validate()">验证</button>
+				</td>
 				<td width="17%">性别</td>
 				<td width="17%"><s:radio id="sex"
 						name="disasterafterDTO.sex"
@@ -284,7 +309,7 @@
 		</table>
 		<div id="hiddiv"></div>
 		<div align="center">
-			<s:submit value="保存" id="sub" disabled="false"/>
+			<s:submit value="保存" id="sub" disabled="true"/>
 		</div>
 	</s:form> 
 </body>

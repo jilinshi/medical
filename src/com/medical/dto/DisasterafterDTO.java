@@ -75,6 +75,13 @@ public class DisasterafterDTO {
 
 	private BigDecimal rc;
 	private String batchname;
+	
+	private String mt1;
+	private String mt2;
+	private BigDecimal in_num;
+	private BigDecimal out_num;
+	private BigDecimal in_sumpay;
+	private BigDecimal out_sumpay;
 
 	public BigDecimal getRc() {
 		return rc;
@@ -610,6 +617,54 @@ public class DisasterafterDTO {
 
 	public void setBankaccounts1(String bankaccounts1) {
 		this.bankaccounts1 = bankaccounts1;
+	}
+
+	public String getMt1() {
+		return mt1;
+	}
+
+	public void setMt1(String mt1) {
+		this.mt1 = mt1;
+	}
+
+	public String getMt2() {
+		return mt2;
+	}
+
+	public void setMt2(String mt2) {
+		this.mt2 = mt2;
+	}
+
+	public BigDecimal getIn_num() {
+		return in_num;
+	}
+
+	public void setIn_num(BigDecimal in_num) {
+		this.in_num = in_num;
+	}
+
+	public BigDecimal getOut_num() {
+		return out_num;
+	}
+
+	public void setOut_num(BigDecimal out_num) {
+		this.out_num = out_num;
+	}
+
+	public BigDecimal getIn_sumpay() {
+		return in_sumpay;
+	}
+
+	public void setIn_sumpay(BigDecimal in_sumpay) {
+		this.in_sumpay = in_sumpay;
+	}
+
+	public BigDecimal getOut_sumpay() {
+		return out_sumpay;
+	}
+
+	public void setOut_sumpay(BigDecimal out_sumpay) {
+		this.out_sumpay = out_sumpay;
 	}
 
 }

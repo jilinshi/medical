@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import com.medical.common.Base64Image;
 import com.medical.common.FileUpload;
 import com.medical.common.Idcard;
@@ -26,6 +28,7 @@ public class DisasterAction extends ActionSupport {
 	private DisasterAfterService disasterAfterService;
 	private String[] filebase64;
 	private HashMap<String, String> map;
+	private String paperid;
 	
 	@SuppressWarnings("rawtypes")
 	public String disasterappinit() {
@@ -70,6 +73,32 @@ public class DisasterAction extends ActionSupport {
 			result ="身份证号码错误！,请输入正确的身份证";
 			return "result";
 		}
+		return SUCCESS;
+	}
+	
+	public String getinforbypaperid(){
+		String idcard=paperid;
+		JSONObject json = new JSONObject();
+		if(paperid.length()==15){
+			//15位转18位
+			idcard = Idcard.uptoeighteen(paperid);
+		}
+		boolean flag = Idcard.Verify(idcard);
+		if(flag){
+			disasterafterDTO = this.disasterAfterService.countAllAssitpay(paperid);
+			json.put("in_num", disasterafterDTO.getIn_num());
+			json.put("out_num", disasterafterDTO.getOut_num());
+			json.put("in_sumpay", disasterafterDTO.getIn_sumpay());
+			json.put("out_sumpay", disasterafterDTO.getOut_sumpay());
+			json.put("mt1", disasterafterDTO.getMt1());
+			json.put("mt2", disasterafterDTO.getMt2());
+			json.put("message", "身份证号码正确！");
+			json.put("flag", "1");
+		}else{
+			json.put("message", "身份证号码错误！");
+			json.put("flag", "0");
+		}
+		result = json.toString();
 		return SUCCESS;
 	}
 	
@@ -368,6 +397,14 @@ public class DisasterAction extends ActionSupport {
 
 	public void setMap(HashMap<String, String> map) {
 		this.map = map;
+	}
+
+	public String getPaperid() {
+		return paperid;
+	}
+
+	public void setPaperid(String paperid) {
+		this.paperid = paperid;
 	}
 
 }

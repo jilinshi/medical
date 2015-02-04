@@ -28,6 +28,22 @@
 			<result name="success">/page/disaster/disasterappview.jsp</result>
 			<result name="result">/page/disaster/error.jsp</result>
 		</action>
+		<action name="getinforbypaperid" class="disasterAction" method="getinforbypaperid">
+			<result type="json">
+				<param name="root">
+					result
+				</param>
+				<param name="ignoreHierarchy">
+					false
+				</param>
+				<param name="noCache">
+					true
+				</param>
+				<param name="excludeNullProperties">
+					true
+				</param>
+			</result>
+		</action>
 	</package>
 	<package name="printdisaster" extends="jasperreports-default"
 		namespace="/page/disaster">
