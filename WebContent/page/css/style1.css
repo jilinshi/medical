@@ -1,0 +1,78 @@
+body {
+	background-color: #E0EDFE;
+	margin-left: 4px;
+	margin-top: 0px;
+	margin-right: 4px;
+	margin-bottom: 0px;
+	font-size:9pt;
+}
+p{ 
+    font-size:9pt;
+	font-family: "宋体";
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	text-decoration: none;}
+td{
+	font-size:9pt;
+	font-family: "宋体";
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	text-decoration: none;
+}
+input{
+	font-size:9pt;
+	text-decoration: none;
+	font-family: "宋体";
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #000000;
+}
+.tablecss1 { /*表格边框样式*/
+	border-top-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: solid;
+	border-top-color: #CCCCCC;
+	border-left-color: #CCCCCC;
+	height: 24px;
+	font-size: 9pt;
+}
+
+.tabletitle1 { /* 表格标题背景、文字颜色定义(bs06) */
+	color: #000000;
+	background-image: url(../images/taltitle.gif);
+	text-align: center;
+	height: 24px;
+	font-size: 9pt;
+}
+
+.xxx {
+	width: 96%;
+}
+
+.tablecss2 {
+	background-color: #FFFFFF;
+	border-top-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: solid;
+	border-top-color: #CCCCCC;
+	border-left-color: #CCCCCC;
+	text-align: center;
+	height: 24px;
+	font-size: 9pt;
+	
+}

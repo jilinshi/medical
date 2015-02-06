@@ -22,6 +22,12 @@
 	src="../js/ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
 <title>灾后救助录入</title>
 </head>
+<script language="javascript">
+function back()
+{
+	window.location.href='disasterapp.jsp';
+}
+</script>
 <body style="padding: 10px 10px 10px 10px;">
 	<table align="center" width="100%" class="t1" border="0"
 		cellpadding="0" cellspacing="0">
@@ -193,6 +199,6 @@
 				href="%{print}" cssStyle="cursor:hand" target="_blank">打印报销凭证</s:a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<s:a
 				href="%{printapp}" cssStyle="cursor:hand" target="_blank">打印申请审批表</s:a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<button onclick="history.go(-1)">关闭</button></div>
+	<button onclick="back()">关闭</button></div>
 </body>
 </html>

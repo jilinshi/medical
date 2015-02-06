@@ -11,18 +11,29 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.medical.common.Pager;
 import com.medical.dao.ExecutSQLDAO;
 import com.medical.dao.JzDisasterafterDAO;
+import com.medical.dao.SysTOrganizationDAO;
 import com.medical.dto.DisasterafterDTO;
+import com.medical.dto.OrganDTO;
 import com.medical.model.ExecutSQL;
+import com.medical.model.JzAct;
+import com.medical.model.JzActExample;
 import com.medical.model.JzDisasterafter;
 import com.medical.model.JzDisasterafterExample;
+import com.medical.model.JzMedicalafter;
+import com.medical.model.SysTOrganization;
+import com.medical.model.SysTOrganizationExample;
 import com.medical.service.DisasterAfterService;
 
 public class DisasterAfterServiceImpl implements DisasterAfterService {
 	static Logger log = Logger.getLogger(DisasterAfterServiceImpl.class);
 	private JzDisasterafterDAO jzDisasterafterDAO;
 	private ExecutSQLDAO executSQLDAO;
+	private Pager pager;
+	private String toolsmenu;
+	private SysTOrganizationDAO sysTOrganizationDAO;
 	
 	public List<DisasterafterDTO> findDisasteraftersByPaperId(
 			DisasterafterDTO disasterafterDTO) {
@@ -239,6 +250,92 @@ public class DisasterAfterServiceImpl implements DisasterAfterService {
 		return disasterafterDTO;
 	}
 	
+	public List<DisasterafterDTO> queryDisasterafters(
+			JzDisasterafterExample example, Integer curpage, String url) {
+		List<JzDisasterafter> info = jzDisasterafterDAO.selectByExample(example);
+		List<DisasterafterDTO> dadtos = new ArrayList<DisasterafterDTO>();
+
+		pager.setAll(info.size());
+		pager.setUrl(url);
+		pager.setCurrentpage(curpage.intValue());
+		pager.setPagesize(14);
+		pager.getToolsmenu();
+
+		for (int i = 0; i < pager.getPagesize(); i++) {
+			if (pager.getStart() + i < pager.getAll()) {
+				JzDisasterafter s = info.get(pager.getStart() + i);
+				DisasterafterDTO e = new DisasterafterDTO();
+				e.setDaId(s.getDaId());
+				e.setMembername(s.getMembername());
+				e.setPaperid(s.getPaperid());
+				e.setHospital(s.getHospital());
+				e.setHospitallevel(s.getHospitallevel());
+				e.setSickencontent(s.getSickencontent());
+				e.setBegintime(s.getBegintime());
+				e.setEndtime(s.getEndtime());
+				e.setApproveresult(s.getApproveresult());
+				e.setApprovecontent(s.getApprovecontent());
+				e.setTotalcost(s.getTotalcost());
+				e.setInsurepay(s.getInsurepay());
+				e.setOutpay(s.getOutpay());
+				e.setCapay(s.getCapay());
+				e.setBusinesspay(s.getBusinesspay());
+				e.setAsisstpay(s.getAsisstpay());
+				e.setCreatetime(s.getCreatetime());
+				e.setUpdatetime(s.getUpdatetime());
+				e.setMemberId(s.getMemberId());
+				e.setMemberType(s.getMemberType());
+				e.setImplsts(s.getImplsts());
+				e.setTiketno(s.getTiketno());
+				e.setMedicaltype(s.getMedicaltype());
+				e.setInsuretype(s.getInsuretype());
+				e.setPersontype(s.getPersontype());
+				e.setPayLine(s.getPayLine());
+				e.setHospitalpay(s.getHospitalpay());
+				dadtos.add(e);
+			}
+		}
+		return dadtos;
+	}
+	
+	public List<OrganDTO> getOrganList(String organid) {
+		List<SysTOrganization> rs = new ArrayList<SysTOrganization>();
+		List<OrganDTO> orgs = new ArrayList<OrganDTO>();
+
+		try {
+
+			SysTOrganizationExample example = new SysTOrganizationExample();
+			example.createCriteria().andParentorgidEqualTo(organid);
+			example.setOrderByClause("ORGANIZATION_ID");
+			rs = this.sysTOrganizationDAO.selectByExample(example);
+
+			rs.add(0, this.sysTOrganizationDAO.selectByPrimaryKey(organid));
+
+			for (SysTOrganization sysTOrganization : rs) {
+
+				OrganDTO organDTO = new OrganDTO();
+				organDTO.setFullname(sysTOrganization.getFullname());
+				organDTO.setOrgid(sysTOrganization.getOrganizationId());
+				organDTO.setOrgname(sysTOrganization.getAsorgname());
+				orgs.add(organDTO);
+
+			}
+
+		} catch (RuntimeException re) {
+			re.printStackTrace();
+		}
+		return orgs;
+	}
+	
+	public int deleteDisasterafter(DisasterafterDTO m){
+		JzDisasterafter record = new JzDisasterafter();
+		record.setDaId(m.getDaId());
+		record.setApproveresult("-1");
+		record.setUpdatetime(new Date());
+		int u = jzDisasterafterDAO.updateByPrimaryKeySelective(record);
+		return u;
+	}
+	
 	public JzDisasterafterDAO getJzDisasterafterDAO() {
 		return jzDisasterafterDAO;
 	}
@@ -253,5 +350,29 @@ public class DisasterAfterServiceImpl implements DisasterAfterService {
 
 	public void setExecutSQLDAO(ExecutSQLDAO executSQLDAO) {
 		this.executSQLDAO = executSQLDAO;
+	}
+
+	public Pager getPager() {
+		return pager;
+	}
+
+	public void setPager(Pager pager) {
+		this.pager = pager;
+	}
+
+	public String getToolsmenu() {
+		return toolsmenu;
+	}
+
+	public void setToolsmenu(String toolsmenu) {
+		this.toolsmenu = toolsmenu;
+	}
+
+	public SysTOrganizationDAO getSysTOrganizationDAO() {
+		return sysTOrganizationDAO;
+	}
+
+	public void setSysTOrganizationDAO(SysTOrganizationDAO sysTOrganizationDAO) {
+		this.sysTOrganizationDAO = sysTOrganizationDAO;
 	}
 }

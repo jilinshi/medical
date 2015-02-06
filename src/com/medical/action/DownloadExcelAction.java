@@ -205,6 +205,33 @@ public class DownloadExcelAction extends ActionSupport {
 			title.put("BANK_ACCOUNT", "家庭银行账号");
 			title.put("BANK_ACCOUNT1", "个人银行账号");
 		}
+		
+		if ("9".equals(type)) {
+			String jwhere = (String) session.get("jwhere");
+			sql = " SELECT DA.DA_ID,DA.MEMBERNAME as MEMBERNAME,DA.PAPERID as PAPERID,DA.HOSPITAL as HOSPITAL,DA.HOSPITALLEVEL as HOSPITALEVEL, "
+					+ " DA.SICKENCONTENT as SICKENCONTENT,DA.BEGINTIME as BEGINTIME,DA.ENDTIME as ENDTIME,DA.APPROVERESULT as APPROVERESULT,DA.APPROVECONTENT as APPROVECONTENT,DA.TOTALCOST as TOTALCOST, "
+					+ " DA.INSUREPAY as INSUREPAY,DA.OUTPAY as OUTPAY,DA.CAPAY as CAPAY,DA.BUSINESSPAY as BUSINESSPAY,DA.ASISSTPAY as ASISSTPAY,DA.CREATETIME as CREATETIME,DA.UPDATETIME as UPDATETIME, "
+					+ " DA.MEMBER_ID as MEMBER_ID,DA.MEMBER_TYPE as MEMBER_TYPE,DA.IMPLSTS as IMPLSTS,DA.TIKETNO as TIKETNO,DA.MEDICALTYPE as MEDICALTYPE,DA.INSURETYPE as INSURETYPE,DA.PERSONTYPE as PERSONTYPE, "
+					+ " DA.ON_NO as ON_NO,DA.PAY_LINE as PAY_LINE,DA.HOSPITALPAY as HOSPITALPAY,DA.DIAGNOSE as DIAGNOSE,DA.FAMCOUNT as FAMCOUNT,DA.FAMADDR as FAMADDR,DA.TELEPHONE as TELEPHONE, "
+					+ " (CASE DA.SEX WHEN '1' THEN '男' WHEN '0' THEN 'nv' END) AS SEX,"
+					+ " DA.BIRTHDAY  as BIRTHDAY FROM JZ_DISASTERAFTER DA WHERE 1=1"
+					+ jwhere + " ORDER BY DA.UPDATETIME DESC ";
+			title.put("MEMBERNAME", "姓名");
+			title.put("SEX", "性别");
+			title.put("PAPERID", "身份证号码");
+			title.put("HOSPITAL", "医院名称");
+			title.put("HOSPITALEVEL", "医院级别");
+			title.put("BEGINTIME", "入院世间");
+			title.put("ENDTIME", "出院时间");
+			title.put("TOTALCOST", "总费用");
+			title.put("INSUREPAY", "统筹支付");
+			title.put("OUTPAY", "目录外费用");
+			title.put("CAPAY", "大病保险");
+			title.put("ASISSTPAY", "救助金额");
+			title.put("PAY_LINE", "起助线");
+			title.put("HOSPITALPAY", "医院补助");
+			title.put("FAMADDR", "家庭住址");
+		}
 		String f = new String("生成excel".getBytes("gb2312"), "ISO8859-1");
 		fileName = "attachment; filename=" + f + ".xls";
 		return super.execute();

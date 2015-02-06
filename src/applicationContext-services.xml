@@ -84,6 +84,8 @@
 	<bean id="disasterAfterService" class="com.medical.service.impl.DisasterAfterServiceImpl">
 		<property name="jzDisasterafterDAO" ref="jzDisasterafterDAO"></property>
 		<property name="executSQLDAO" ref="executSQLDAO"></property>
+		<property name="pager" ref="pager"></property>
+		<property name="sysTOrganizationDAO" ref="sysTOrganizationDAO"></property>
 	</bean>
 	<bean id="authorityInterceptor" class="com.medical.interceptor.AuthorityInterceptor" scope="request">
 		<property name="systemManager" ref="systemManager"></property>
@@ -142,6 +144,7 @@
 	<bean id="disasterAction" class="com.medical.action.DisasterAction"
 		scope="request">
 		<property name="disasterAfterService" ref="disasterAfterService"></property>
+		<property name="businessService" ref="businessService"></property>
 	</bean>
 
 	<!-- Transaction manager for a single JDBC DataSource -->

@@ -127,17 +127,35 @@
 	        }
 	    }); 
 	}
+	function readid(){
+		var windowprops = "dialogWidth:760px;dialogHeight:400px";
+		var URL = "readid.jsp";
+		var arrs= window.showModalDialog(URL,window,windowprops);
+		disasterappform.membername.value=arrs[0];
+		disasterappform.paperid.value=arrs[1];
+		var sex=-1;
+		if(arrs[5]=='女'){
+			sex=1;
+		}else if(arrs[5]=='男'){
+			sex=0;
+		}
+		$("input[name=disasterafterDTO.sex]:eq("+sex+")").attr("checked",'checked'); 
+		disasterappform.famaddr.value=arrs[3];
+	}
 </script>
 <title>灾后救助录入</title>
 </head>
 <body style="padding: 10px 10px 10px 10px;">
-	<s:form id="aaaaa" enctype="multipart/form-data" action="disasterapp" method="post"
+	<s:form id="disasterappform" enctype="multipart/form-data" action="disasterapp" method="post"
 		theme="simple" onsubmit="return check();"> 
 		<table align="center" width="100%" class="t1" border="0"
 			cellpadding="0" cellspacing="0">
 			<tr>
 				<th colspan="6">灾后救助录入审批<font color="red" style="font-size:15px"><div id="Msg"></div></font>
 				</th>
+			</tr>
+			<tr>
+				<td colspan="6"><button onclick="readid()">身份证扫描</button></td>
 			</tr>
 			<tr>
 				<td width="17%">姓名</td>

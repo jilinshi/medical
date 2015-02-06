@@ -14,7 +14,10 @@ import com.medical.common.Base64Image;
 import com.medical.common.FileUpload;
 import com.medical.common.Idcard;
 import com.medical.dto.DisasterafterDTO;
+import com.medical.dto.OrganDTO;
 import com.medical.dto.UserInfoDTO;
+import com.medical.model.JzDisasterafterExample;
+import com.medical.service.BusinessService;
 import com.medical.service.DisasterAfterService;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -29,7 +32,16 @@ public class DisasterAction extends ActionSupport {
 	private String[] filebase64;
 	private HashMap<String, String> map;
 	private String paperid;
-	
+	private BusinessService businessService;
+	private List<OrganDTO> orgs;
+	private String cur_page;
+	private String term;
+	private String oid;
+	private String value;
+	private String opertime1;
+	private String opertime2;
+	private String approveresult;
+	private String toolsmenu;
 	@SuppressWarnings("rawtypes")
 	public String disasterappinit() {
 		Map session = ActionContext.getContext().getSession();
@@ -350,7 +362,99 @@ public class DisasterAction extends ActionSupport {
 		System.out.println(u);*/
 		return SUCCESS;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	public String querydisasterinit() {
+		Map session = ActionContext.getContext().getSession();
+		UserInfoDTO userinfo = (UserInfoDTO) session.get("user");
+		String orgid = userinfo.getOrganizationId();
+		if (4 == orgid.length()) {
+			this.setOrgs(this.businessService.getOrganList(userinfo
+					.getOrganizationId()));
+		} else {
+			this.result = "您所在的机构，没有查询权限！";
+			return "result";
+		}
+		return SUCCESS;
+	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String querydisaster() {
+		Map session = ActionContext.getContext().getSession();
+		UserInfoDTO userinfo = (UserInfoDTO) session.get("user");
+		String orgid = userinfo.getOrganizationId();
+		JzDisasterafterExample example = new JzDisasterafterExample();
+		String jwhere = "";
+		if (null == cur_page || "".equals(cur_page)) {
+			com.medical.model.JzDisasterafterExample.Criteria criteria = example
+					.createCriteria();
+			if ("MEMBERNAME".equals(term)) {
+				criteria.andMembernameLike(value + "%");
+				jwhere = jwhere + "and da.membername like '" + value + "%'";
+			} else if ("PAPERID".equals(term)) {
+				criteria.andPaperidLike(value + "%");
+				jwhere = jwhere + "and da.paperid like '" + value + "%'";
+			} else {
+			}
+			if (!"".equals(approveresult)) {
+				criteria.andApproveresultEqualTo(approveresult);
+				jwhere = jwhere + " and da.approveresult='" + approveresult
+						+ "'";
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date opertimefrom = new Date();
+			Date opertimeto = new Date();
+			try {
+				if (!opertime1.equals("")) {
+					opertimefrom = sdf.parse(opertime1.substring(0, 10));
+				}
+				if (!opertime2.equals("")) {
+					opertimeto = sdf.parse(opertime2.substring(0, 10));
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			if ((opertime1.equals("") || null == opertime1)
+					&& (opertime2.equals("") || null == opertime2)) {
+			} else if (opertime1.equals("") || null == opertime1) {
+				criteria.andUpdatetimeGreaterThan(opertimeto);
+				jwhere = jwhere
+						+ "and to_char(da.updatetime,'yyyy-MM-dd') >= '"
+						+ opertime2 + "'";
+			} else if (opertime2.equals("") || null == opertime2) {
+				criteria.andUpdatetimeLessThan(opertimefrom);
+				jwhere = jwhere + "and to_char(da.updatetime,'yyyy-MM-dd') < '"
+						+ opertime1 + "'";
+			} else {
+				criteria.andUpdatetimeBetween(opertimefrom, opertimeto);
+				jwhere = jwhere + "and to_char(da.updatetime,'yyyy-MM-dd') >='"
+						+ opertime1
+						+ "' and to_char(da.updatetime,'yyyy-MM-dd') < '"
+						+ opertime2 + "'";
+			}
+			session.put("sql", example);
+			session.put("jwhere", jwhere);
+			cur_page = "1";
+		} else {
+			example = (JzDisasterafterExample) session.get("sql");
+			jwhere = (String) session.get("jwhere");
+		}
+
+		this.setDisasterafterDTOs(disasterAfterService.queryDisasterafters(example,
+				new Integer(cur_page), "querydisaster.action"));
+		this.setToolsmenu(disasterAfterService.getPager().getToolsmenu());
+		//this.setOrgs(this.disasterAfterService.getOrganList(orgid));
+		return SUCCESS;
+	}
+	
+	public String cancel() {
+		JSONObject json = new JSONObject();
+		int u = this.disasterAfterService.deleteDisasterafter(disasterafterDTO);
+		json.put("u", u);
+		result = json.toString();
+		return SUCCESS;
+	}
+	
 	public String getResult() {
 		return result;
 	}
@@ -405,6 +509,86 @@ public class DisasterAction extends ActionSupport {
 
 	public void setPaperid(String paperid) {
 		this.paperid = paperid;
+	}
+
+	public BusinessService getBusinessService() {
+		return businessService;
+	}
+
+	public void setBusinessService(BusinessService businessService) {
+		this.businessService = businessService;
+	}
+
+	public List<OrganDTO> getOrgs() {
+		return orgs;
+	}
+
+	public void setOrgs(List<OrganDTO> orgs) {
+		this.orgs = orgs;
+	}
+
+	public String getCur_page() {
+		return cur_page;
+	}
+
+	public void setCur_page(String cur_page) {
+		this.cur_page = cur_page;
+	}
+
+	public String getTerm() {
+		return term;
+	}
+
+	public void setTerm(String term) {
+		this.term = term;
+	}
+
+	public String getOid() {
+		return oid;
+	}
+
+	public void setOid(String oid) {
+		this.oid = oid;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getOpertime1() {
+		return opertime1;
+	}
+
+	public void setOpertime1(String opertime1) {
+		this.opertime1 = opertime1;
+	}
+
+	public String getOpertime2() {
+		return opertime2;
+	}
+
+	public void setOpertime2(String opertime2) {
+		this.opertime2 = opertime2;
+	}
+
+	public String getApproveresult() {
+		return approveresult;
+	}
+
+	public void setApproveresult(String approveresult) {
+		this.approveresult = approveresult;
+	}
+
+	public String getToolsmenu() {
+		return toolsmenu;
+	}
+
+	public void setToolsmenu(String toolsmenu) {
+		this.toolsmenu = toolsmenu;
 	}
 
 }

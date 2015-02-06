@@ -44,6 +44,31 @@
 				</param>
 			</result>
 		</action>
+		<action name="querydisasterinit" class="disasterAction" method="querydisasterinit">
+			<result name="success">/page/disaster/querydisasterafter.jsp</result>
+			<result name="result">/page/disaster/error.jsp</result>
+		</action>
+		<action name="querydisaster" class="disasterAction" method="querydisaster">
+			<result name="success">
+				/page/disaster/querydisasterafter.jsp
+			</result>
+		</action>
+		<action name="cancel" class="disasterAction" method="cancel">
+			<result type="json">
+				<param name="root">
+					result
+				</param>
+				<param name="ignoreHierarchy">
+					false
+				</param>
+				<param name="noCache">
+					true
+				</param>
+				<param name="excludeNullProperties">
+					true
+				</param>
+			</result>
+		</action>
 	</package>
 	<package name="printdisaster" extends="jasperreports-default"
 		namespace="/page/disaster">

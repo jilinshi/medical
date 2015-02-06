@@ -1,0 +1,50 @@
+body         {
+	background-color: #e7efff;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+body, p, td, input { font-size: 9pt; color: #000000 }
+a.toolbar:link   { padding:0; color: #ffffff; text-decoration: none }
+a.toolbar:active { text-decoration: none; font-size: 9pt; color: #ff0000 }
+a.toolbar:visited { color: #ffffff; text-decoration: none}
+a.toolbar:hover  { text-decoration: underline; font-size: 9pt; color: #ff0000 }
+.inputnormal { border:1px solid #C0C0C0; text-align:center; background-color:#F1F1F1}
+.inputedit   { border:1px solid #6699CC; background-color:#CDDEED }
+.areanormal { border-style: solid; border-width: 0; background-color:#ffffff}
+.select {
+	height: 100%;
+	width: 100%;
+}
+.alink {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+}
+textarea {
+	width: 95%;
+}
+.wwwww {
+	width: 95%;
+}
+.reds {
+	color: #FF0000;
+}
+.talbg {
+	background-color: #FFFFFF;
+}
+.xxx {
+	width: 96%;
+}
