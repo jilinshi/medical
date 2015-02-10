@@ -1,5 +1,6 @@
 package com.medical.action;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -71,14 +72,28 @@ public class DisasterAction extends ActionSupport {
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}  
-			disasterafterDTO = this.disasterAfterService.saveDisasterApp(disasterafterDTO);
-			FileUpload fu = new FileUpload("/file/disasterafter");
-			String dir = fu.filepath + "\\" + disasterafterDTO.getDaId() + "\\";
-			fu.MakeDir(dir);
-			if (null != filebase64) {
-				for (int i = 0; i < filebase64.length; i++) {
-					Base64Image.GenerateImage(filebase64[i], dir + (i + 1) + ".jpg");
+			}
+			DisasterafterDTO dDTO = new DisasterafterDTO();
+			dDTO = this.disasterAfterService.countAllAssitpay(idcard);
+			//累计总救助金额
+			BigDecimal allsumpay = dDTO.getAll_sumpay();
+			//本次救助金额
+			BigDecimal assistpay  =  disasterafterDTO.getAsisstpay();
+			//封顶线
+			BigDecimal topline = new BigDecimal("10000");
+			if(allsumpay.add(assistpay).compareTo(topline)==1){
+				BigDecimal yu = topline.subtract(allsumpay); 
+				result = "封顶线："+topline+"元,本年度累计救助"+allsumpay+"元,应救助金额："+yu+"元;";
+				return "result";
+			}else{
+				disasterafterDTO = this.disasterAfterService.saveDisasterApp(disasterafterDTO);
+				FileUpload fu = new FileUpload("/file/disasterafter");
+				String dir = fu.filepath + "\\" + disasterafterDTO.getDaId() + "\\";
+				fu.MakeDir(dir);
+				if (null != filebase64) {
+					for (int i = 0; i < filebase64.length; i++) {
+						Base64Image.GenerateImage(filebase64[i], dir + (i + 1) + ".jpg");
+					}
 				}
 			}
 		}else{
@@ -102,6 +117,7 @@ public class DisasterAction extends ActionSupport {
 			json.put("out_num", disasterafterDTO.getOut_num());
 			json.put("in_sumpay", disasterafterDTO.getIn_sumpay());
 			json.put("out_sumpay", disasterafterDTO.getOut_sumpay());
+			json.put("all_sumpay", disasterafterDTO.getAll_sumpay());
 			json.put("mt1", disasterafterDTO.getMt1());
 			json.put("mt2", disasterafterDTO.getMt2());
 			json.put("message", "身份证号码正确！");

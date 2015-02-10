@@ -82,6 +82,7 @@ public class DisasterafterDTO {
 	private BigDecimal out_num;
 	private BigDecimal in_sumpay;
 	private BigDecimal out_sumpay;
+	private BigDecimal all_sumpay;
 
 	public BigDecimal getRc() {
 		return rc;
@@ -665,6 +666,14 @@ public class DisasterafterDTO {
 
 	public void setOut_sumpay(BigDecimal out_sumpay) {
 		this.out_sumpay = out_sumpay;
+	}
+
+	public BigDecimal getAll_sumpay() {
+		return all_sumpay;
+	}
+
+	public void setAll_sumpay(BigDecimal all_sumpay) {
+		this.all_sumpay = all_sumpay;
 	}
 
 }

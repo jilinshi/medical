@@ -132,20 +132,20 @@ public class DisasterAfterServiceImpl implements DisasterAfterService {
 		DisasterafterDTO disasterafterDTO = new DisasterafterDTO();
 		try {
 			String sql =" select * from "
-						+ " (select rr.paperid, rr.medicaltype as mt1, count(1) as in_num, sum(rr.asisstpay) as in_sumpay "
+						+ " (select rr.paperid as apaperid, rr.medicaltype as mt1, count(1) as in_num, sum(rr.asisstpay) as in_sumpay "
 						+ " from jz_disasterafter rr "
 						+ " where rr.approveresult = '1' "
 						+ " and to_char(rr.updatetime, 'yyyy') = '"+year+"' "
 						+ " and rr.paperid='"+paperid+"' "
 						+ " and rr.medicaltype='1' "
-						+ " group by rr.paperid,rr.medicaltype)a, "
-						+ " (select rr.medicaltype as mt2, count(1) as out_num, sum(rr.asisstpay) as out_sumpay "
+						+ " group by rr.paperid,rr.medicaltype)a full join"
+						+ " (select rr.paperid as bpaperid, rr.medicaltype as mt2, count(1) as out_num, sum(rr.asisstpay) as out_sumpay "
 						+ " from jz_disasterafter rr "
 						+ " where rr.approveresult = '1' "
 						+ " and to_char(rr.updatetime, 'yyyy') = '"+year+"' "
 						+ " and rr.paperid='"+paperid+"' "
 						+ " and rr.medicaltype='2' "
-						+ " group by rr.paperid,rr.medicaltype)b ";
+						+ " group by rr.paperid,rr.medicaltype)b on a.apaperid = b.bpaperid";
 			ExecutSQL executSQL = new ExecutSQL();
 			executSQL.setExecutsql(sql);
 			List<HashMap> maps = executSQLDAO.queryAll(executSQL);
@@ -153,10 +153,27 @@ public class DisasterAfterServiceImpl implements DisasterAfterService {
 				HashMap map = maps.get(0);
 				disasterafterDTO.setMt1((String) map.get("MT1"));
 				disasterafterDTO.setMt2((String) map.get("MT2"));
-				disasterafterDTO.setIn_num((BigDecimal) map.get("IN_NUM"));
-				disasterafterDTO.setIn_sumpay((BigDecimal) map.get("IN_SUMPAY"));
-				disasterafterDTO.setOut_num((BigDecimal) map.get("OUT_NUM"));
-				disasterafterDTO.setOut_sumpay((BigDecimal) map.get("OUT_SUMPAY"));
+				if((BigDecimal) map.get("IN_NUM") == null){
+					disasterafterDTO.setIn_num(BigDecimal.ZERO);
+				}else{
+					disasterafterDTO.setIn_num((BigDecimal) map.get("IN_NUM"));
+				}
+				if((BigDecimal) map.get("IN_SUMPAY") == null){
+					disasterafterDTO.setIn_sumpay(BigDecimal.ZERO);
+				}else{
+					disasterafterDTO.setIn_sumpay((BigDecimal) map.get("IN_SUMPAY"));
+				}
+				if((BigDecimal) map.get("OUT_NUM") == null){
+					disasterafterDTO.setOut_num(BigDecimal.ZERO);
+				}else{
+					disasterafterDTO.setOut_num((BigDecimal) map.get("OUT_NUM"));
+				}
+				if((BigDecimal) map.get("OUT_SUMPAY") == null){
+					disasterafterDTO.setOut_sumpay(BigDecimal.ZERO);
+				}else{
+					disasterafterDTO.setOut_sumpay((BigDecimal) map.get("OUT_SUMPAY"));
+				}
+				disasterafterDTO.setAll_sumpay(disasterafterDTO.getIn_sumpay().add(disasterafterDTO.getOut_sumpay()));
 			}else{
 				disasterafterDTO.setMt1("");
 				disasterafterDTO.setMt2("");
@@ -164,6 +181,7 @@ public class DisasterAfterServiceImpl implements DisasterAfterService {
 				disasterafterDTO.setIn_sumpay(BigDecimal.ZERO);
 				disasterafterDTO.setOut_num(BigDecimal.ZERO);
 				disasterafterDTO.setOut_sumpay(BigDecimal.ZERO);
+				disasterafterDTO.setAll_sumpay(BigDecimal.ZERO);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -117,7 +117,8 @@
 	        	var dataObj=eval("("+data+")");
 	        	alert(dataObj.message);
 	        	if(dataObj.flag==1){
-		        	var s = "本年度住院次数："+dataObj.in_num+"次, 本年度住院累计救助金："+dataObj.in_sumpay+"元; " 
+		        	var s = "本年度总救助金额："+dataObj.all_sumpay+ "元；"
+		        			+"本年度住院次数："+dataObj.in_num+"次, 本年度住院累计救助金："+dataObj.in_sumpay+"元; " 
 		        			+" 本年度门诊次数："+dataObj.out_num+"次, 本年度门诊累计救助金："+dataObj.out_sumpay+"元;"
 		        	$('#Msg')[0].innerText = s;
 		        	$('#sub')[0].disabled = false;
