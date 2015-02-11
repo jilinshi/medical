@@ -127,7 +127,10 @@ function ctrlbutton(obj){
 				<s:property value="chronicApproveDTO.entityval" />
 			</s:else></td>
 		</tr>
-
+		<tr>
+			<th>拟救助金额</th>
+			<td colspan="3"><s:property value="chronicApproveDTO.p_salmoney" />&nbsp;元</td>
+		</tr>
 		<tr>
 			<th>审批结果</th>
 			<td colspan="3"><s:if

@@ -223,4 +223,6 @@ public interface ChronicApproveService {
 
 	public List<CurrectChronicDTO> findApprove3(String string,
 			Integer cur_page, String sql);
+	
+	public BigDecimal queryChronicBill(ChronicApproveDTO chronicApproveDTO);
 }

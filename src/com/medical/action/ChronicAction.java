@@ -174,6 +174,8 @@ public class ChronicAction extends ActionSupport {
 				chronicApproveDTO.getMemberId(), (short) 1);
 		DictionaryHandle dictionaryHandle = new DictionaryHandleImpl();
 		chronics = dictionaryHandle.getDsMap("007");
+		BigDecimal p_salmoney = chronicApproveService.queryChronicBill(chronicApproveDTO);
+		chronicApproveDTO.setP_salmoney(p_salmoney);
 		return SUCCESS;
 	}
 
@@ -203,6 +205,8 @@ public class ChronicAction extends ActionSupport {
 		hrs = chronicApproveService.findHrsBySsn(
 				chronicApproveDTO.getMemberId(), (short) 1);
 		result = "±£´æ³É¹¦";
+		BigDecimal p_salmoney = chronicApproveService.queryChronicBill(chronicApproveDTO);
+		chronicApproveDTO.setP_salmoney(p_salmoney);
 		return SUCCESS;
 	}
 

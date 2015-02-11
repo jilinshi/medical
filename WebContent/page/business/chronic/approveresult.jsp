@@ -66,6 +66,10 @@
 		</td>
 	</tr>
 	<tr>
+		<th>拟救助金额</th>
+		<td colspan="3"><s:property value="chronicApproveDTO.p_salmoney" />&nbsp;元</td>
+	</tr>
+	<tr>
 		<th colspan="4">审批详细信息</th>
 	</tr>
 	<s:if test="#session.user.organizationId.length()<=8">

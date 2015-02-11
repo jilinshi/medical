@@ -646,6 +646,123 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		}
 		return r;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	public BigDecimal queryChronicBill(ChronicApproveDTO chronicApproveDTO) {
+		String r = "";
+		Calendar c = Calendar.getInstance();// 可以对每个时间域单独修改
+		int year = c.get(Calendar.YEAR);
+		int month = c.get(Calendar.MONTH) + 1;
+		BigDecimal income_year = BigDecimal.ZERO;
+		try {
+			String sql_member = "select oo.asort "
+					+ " from member_baseinfo oo " + " where oo.member_id='"
+					+ chronicApproveDTO.getMemberId() + "' " + " and oo.ds='"
+					+ chronicApproveDTO.getMemberType() + "'";
+			ExecutSQL executSQL_member = new ExecutSQL();
+			executSQL_member.setExecutsql(sql_member);
+			HashMap rs_member = executSQLDAO.queryAll(executSQL_member).get(0);
+			BigDecimal asort_member = (BigDecimal) rs_member.get("ASORT");
+			BigDecimal income_type = BigDecimal.ZERO;
+			String type = "";
+			// 普通低保户
+			if (asort_member.compareTo(BigDecimal.ZERO) == 0) {
+				income_type = new BigDecimal("500");
+				type = "慢性病";
+				// 再保障
+			} else if (asort_member.compareTo(BigDecimal.ONE) == 0) {
+				income_type = new BigDecimal("1000");
+				type = "再保障";
+			}
+			income_year = income_type;
+			String sql = " select * "
+					+ " from (select sum(bill.income) - sum(bill.payout) as end_balance "
+					+ " from jz_chronicbill bill "
+					+ " where bill.member_id = '"
+					+ chronicApproveDTO.getMemberId()
+					+ "' "
+					+ " and bill.member_type = '"
+					+ chronicApproveDTO.getMemberType()
+					+ "') a, "
+					+ " (select decode(sum(bill.income),null,0,sum(bill.income)) as sum_income "
+					+ " from jz_chronicbill bill  "
+					+ " where bill.subject like '%存入%' "
+					+ " and to_char(bill.opttime, 'yyyy') = '"
+					+ year
+					+ "' "
+					+ " and bill.income > 0 "
+					+ " and instr(bill.subject, '退费') = 0 "
+					+ " and bill.member_id = '"
+					+ chronicApproveDTO.getMemberId()
+					+ "' "
+					+ " and bill.member_type = '"
+					+ chronicApproveDTO.getMemberType()
+					+ "') b, "
+					+ " (select * "
+					+ " from jz_chronicbill "
+					+ " where chronicbill_id in "
+					+ " (select max(bill.chronicbill_id) "
+					+ " from jz_chronicbill bill "
+					+ " where bill.member_id = '"
+					+ chronicApproveDTO.getMemberId()
+					+ "' "
+					+ " and bill.member_type = '"
+					+ chronicApproveDTO.getMemberType()
+					+ "' "
+					+ " group by bill.member_id, bill.member_type)) c, "
+					+ " (select oo.asort "
+					+ " from member_baseinfo oo "
+					+ " where oo.member_id='"
+					+ chronicApproveDTO.getMemberId()
+					+ "' "
+					+ " and oo.ds='" + chronicApproveDTO.getMemberType() + "') d";
+			ExecutSQL executSQL = new ExecutSQL();
+			executSQL.setExecutsql(sql);
+			List<HashMap> rs = executSQLDAO.queryAll(executSQL);
+			if (rs.size() > 0) {
+				HashMap s = rs.get(0);
+				BigDecimal sumIncome = (BigDecimal) s.get("SUM_INCOME");
+				BigDecimal endBalance = (BigDecimal) s.get("END_BALANCE");
+				BigDecimal income = (BigDecimal) s.get("INCOME");
+				BigDecimal balance = (BigDecimal) s.get("BALANCE");
+				String subject = (String) s.get("SUBJECT");
+				if (subject.indexOf("年末清零") != -1
+						|| sumIncome.compareTo(BigDecimal.ZERO) == 0) {
+					if (income_type.compareTo(sumIncome) == 1
+							|| income_type.compareTo(sumIncome) == 0) {
+						income_year = income_type.subtract(sumIncome);
+					} else {
+						income_year = income_type;
+					}
+					r = year + "年" + type + "救助金" + income_year + "元";
+				} else if (subject.indexOf("清零") != -1
+						&& subject.indexOf("年末清零") == -1) {
+					if (income.compareTo(BigDecimal.ZERO) == -1) {
+						income = income.multiply(new BigDecimal(-1));
+					} else if (income.compareTo(BigDecimal.ZERO) == 0) {
+						income = income_type;
+					}
+					if (income_type.compareTo(sumIncome) == 1
+							|| income_type.compareTo(sumIncome) == 0) {
+						income_year = income_type.subtract(sumIncome).add(
+								income);
+					} else {
+						income_year = income;
+					}
+					r = "清零后恢复" + income_year + "元";
+				} else if (sumIncome.compareTo(income_type) == -1) {
+					income_year = income_type.subtract(sumIncome);
+					r = year + "年" + type + "救助金" + income_year + "元";
+				}
+			}else{
+				r = year + "年" + type + "救助金" + income_year + "元";
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return income_year;
+	}
 
 	public List<ChronicApproveDTO> findApprovesBySSN(
 			ChronicApproveDTO chronicApproveDTO) {

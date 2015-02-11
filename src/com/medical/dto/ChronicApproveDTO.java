@@ -55,6 +55,7 @@ public class ChronicApproveDTO {
 	private String anFilename;
 	private String ps;
 	private String yw;
+	private BigDecimal p_salmoney; // Äâ¾ÈÖú½ð¶î
 	
 
 	public String getPs() {
@@ -470,6 +471,14 @@ public class ChronicApproveDTO {
 	 */
 	public void setEntitys(String[] entitys) {
 		this.entitys = entitys;
+	}
+
+	public BigDecimal getP_salmoney() {
+		return p_salmoney;
+	}
+
+	public void setP_salmoney(BigDecimal p_salmoney) {
+		this.p_salmoney = p_salmoney;
 	}
 
 }
