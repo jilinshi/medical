@@ -73,4 +73,6 @@ public interface BaseinfoService {
 	public void saveCancelMaBatch(String m);
 
 	public void updateMedicalafterAcc(String sql);
+	
+	public List<MedicalafterDTO> findstatus(String sql);
 }

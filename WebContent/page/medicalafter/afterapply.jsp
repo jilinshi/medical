@@ -110,10 +110,10 @@
 		theme="simple" onsubmit="return check();">
 		<s:hidden name="medicalafterDTO.familyno"></s:hidden>
 		<s:hidden name="medicalafterDTO.membername"></s:hidden>
-		<s:hidden name="medicalafterDTO.paperid"></s:hidden>
+		<s:hidden name="medicalafterDTO.paperid" id="paperid"></s:hidden>
 		<s:hidden name="medicalafterDTO.ssn"></s:hidden>
-		<s:hidden name="medicalafterDTO.memberId"></s:hidden>
-		<s:hidden name="medicalafterDTO.memberType"></s:hidden>
+		<s:hidden name="medicalafterDTO.memberId" id="memberId"></s:hidden>
+		<s:hidden name="medicalafterDTO.memberType" id="memberType"></s:hidden>
 		<s:hidden name="medicalafterDTO.personstate"></s:hidden>
 		<s:hidden name="medicalafterDTO.assistType"></s:hidden>
 		<s:hidden name="medicalafterDTO.asort"></s:hidden>
@@ -160,6 +160,8 @@
 				<td ><s:property value="actDTO.actBizMoney2" />&nbsp;</td>
 			</tr>
 		</table>
+		<br/>
+		<div id="message" style="color:red;font-weight: bold;"></div>
 		<br/>
 		<table align="center" width="100%" class="t1" border="0"
 			cellpadding="0" cellspacing="0">
@@ -240,8 +242,10 @@
 					value="<s:date name="medicalafterDTO.begintime" format="yyyy-MM-dd"/>" /></td>
 				<td width="17%">出院时间</td>
 				<td colspan="3"><input type="text" readonly="readonly"
-					id="endtime" name="medicalafterDTO.endtime"
-					value="<s:date name="medicalafterDTO.endtime" format="yyyy-MM-dd"/>" /></td>
+					id="endtime" name="medicalafterDTO.endtime" 
+					value="<s:date name="medicalafterDTO.endtime" format="yyyy-MM-dd"/>" />
+					&nbsp;&nbsp;&nbsp;<button type="button" style="width: 250px;" onclick="querystatus()">查看住院期间人员状态</button>
+				</td>
 			</tr>
 			<tr>
 				<td width="17%">救助类型</td>
@@ -516,6 +520,28 @@
 		        }
 		    }); 
 		}
+	}
+	
+	function querystatus(){
+		var endtime = $("#endtime")[0].value;
+		var formParam = $("#aaaaa").serialize();//序列化表格内容为字符串
+		if(endtime==""){
+			alert("请输入出院时间！");
+			return ;
+		}
+		$.ajax({    
+	        type:'post',        
+	        url:'<%=basePath%>page/medicalafter/querystatus.action',    
+	        data:formParam,    
+	        cache:false,    
+	        dataType:'json',    
+	        success:function(data){
+	        	var dataObj=eval("("+data+")");
+				var m_s = "住院期间人员状态：<< ";
+				var m_e = " >> ";
+				document.getElementById("message").innerHTML=m_s+dataObj.message+m_e;
+	        }
+	    }); 
 	}
 </script>
 </html>

@@ -164,6 +164,22 @@
 				/page/medicalafter/medicalusebatch.jsp
 			</result>
 		</action>
+		<action name="querystatus" class="medicalafterAction" method="querystatus">
+			<result type="json">
+				<param name="root">
+					result
+				</param>
+				<param name="ignoreHierarchy">
+					false
+				</param>
+				<param name="noCache">
+					true
+				</param>
+				<param name="excludeNullProperties">
+					true
+				</param>
+			</result>
+		</action>
 	</package>
 	<package name="printmedicalafter" extends="jasperreports-default"
 		namespace="/page/medicalafter">

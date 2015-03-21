@@ -1314,5 +1314,27 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			e.printStackTrace();
 		}
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<MedicalafterDTO> findstatus(String sql) {
+		List<MedicalafterDTO> list = new ArrayList<MedicalafterDTO>();
+		ExecutSQL executSQL = new ExecutSQL();
+		executSQL.setExecutsql(sql);
+		List<HashMap> maps;
+		try {
+			maps = executSQLDAO.queryAll(executSQL);
+			for (HashMap s : maps) {
+				MedicalafterDTO e = new MedicalafterDTO();
+				e.setMaxdate((String) s.get("MAXDATE"));
+				e.setStname((String)s.get("STNAME"));
+				list.add(e);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 
 }

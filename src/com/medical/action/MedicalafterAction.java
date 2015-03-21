@@ -841,6 +841,59 @@ public class MedicalafterAction extends ActionSupport {
 		return SUCCESS;
 	}
 
+	public String querystatus(){
+		JSONObject json = new JSONObject();
+		String ds = medicalafterDTO.getMemberType();
+		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
+		String enddate = sdf.format(medicalafterDTO.getEndtime());
+		String strs[]=enddate.split("-");
+		String year = strs[0];
+		String month = strs[1];
+		String endtime = year + "年" + month + "月";
+		String datatype = "";
+		if("1".equals(ds)){
+			datatype = "@CS.REGRESS.RDBMS.DEV.US.ORACLE.COM";
+		}else if("2".equals(ds)){
+			datatype = "@NC.REGRESS.RDBMS.DEV.US.ORACLE.COM";
+			if("01".equals(month)||"02".equals(month)||"03".equals(month)){
+				month = "03";
+			}else if("04".equals(month)||"05".equals(month)||"06".equals(month)){
+				month = "06";
+			}else if("07".equals(month)||"08".equals(month)||"09".equals(month)){
+				month = "09";
+			}else if("10".equals(month)||"11".equals(month)||"12".equals(month)){
+				month = "12";
+			}
+			endtime = year + "年" + month + "月";
+		}
+		String sql = " select ba.st_id,substr(ba.bar_subject,0,8) as maxdate ,ty.st_name as stname"
+				   + " from familymember"+datatype+" fa , "
+				   + " batch_almsreckoning"+datatype+" ba ," 
+				   + " salvationtype"+datatype+" ty "
+		           + " where fa.f_familyid = ba.bar_familyid "
+		           + " and ba.st_id = ty.st_id "
+		           + " and fa.fm_paperid = '"+medicalafterDTO.getPaperid()+"' "
+		           + " and ba.st_id in ('1','31') "
+		           + " and substr(ba.bar_subject,0,8) = '" +endtime+ "' ";
+		medicalafters = baseinfoService.findstatus(sql);
+		String message="";
+		String flag = "";
+		if(medicalafters.size()>0){
+			for (int i=0; i<medicalafters.size(); i++){
+				String stname = medicalafters.get(i).getStname();
+				//String maxdate = medicalafters.get(i).getMaxdate();
+				flag = "在保";
+				message = message + stname +":"+ flag + "; ";
+			}
+		}else{
+			flag = "不在保";
+			message = message + flag + ";";
+		}
+		json.put("message", message);
+		result = json.toString();
+		return SUCCESS;
+	}
+	
 	public BaseinfoService getBaseinfoService() {
 		return baseinfoService;
 	}

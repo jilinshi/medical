@@ -73,6 +73,9 @@ public class MedicalafterDTO {
 	private BigDecimal suminsurepay;
 	private BigDecimal sumoutpay;
 	private BigDecimal sumasisstpay;
+	
+	private String maxdate;
+	private String stname;
 
 	private BigDecimal rc;
 	private String batchname;
@@ -619,6 +622,22 @@ public class MedicalafterDTO {
 
 	public void setBankaccounts1(String bankaccounts1) {
 		this.bankaccounts1 = bankaccounts1;
+	}
+
+	public String getMaxdate() {
+		return maxdate;
+	}
+
+	public void setMaxdate(String maxdate) {
+		this.maxdate = maxdate;
+	}
+
+	public String getStname() {
+		return stname;
+	}
+
+	public void setStname(String stname) {
+		this.stname = stname;
 	}
 
 }
