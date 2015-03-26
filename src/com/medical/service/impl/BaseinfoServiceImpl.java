@@ -633,7 +633,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 	public MedicalafterDTO findCountAssist(MedicalafterDTO medicalafterDTO) {
 		try {
 			Calendar cal = Calendar.getInstance();
-			int year = cal.get(Calendar.YEAR);
+			cal.setTime(medicalafterDTO.getEndtime());
+			int year = cal.get(cal.YEAR);
 			JzActExample example = new JzActExample();
 			example.createCriteria()
 					.andMemberIdEqualTo(medicalafterDTO.getMemberId())
@@ -964,8 +965,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 	@SuppressWarnings("rawtypes")
 	public MedicalafterDTO findSumPayDbbx(MedicalafterDTO m) {
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-		int year = calendar.get(Calendar.YEAR);
+		calendar.setTime(m.getEndtime());
+		int year = calendar.get(calendar.YEAR);
 		try {
 			String sql = "select x.idcard, sum(x.pay_total) as total, sum(x.pay_medicare) as medicare, sum(x.pay_outmedicare) as outmedicare,"
 					+ " sum(x.pay_assist) as assist, sum(x.pay_ciassist) as ciassist, sum(x.pay_business) as business "
