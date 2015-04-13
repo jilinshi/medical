@@ -599,6 +599,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			record.setFamcount(medicalafterDTO.getFamcount());
 			record.setBirthday(medicalafterDTO.getBirthday());
 			record.setWsflag(medicalafterDTO.getWsflag());
+			record.setWzzflag(medicalafterDTO.getWzzflag());
 			record.setPzPrinum(Long.valueOf("0"));
 			record.setAppPrinum(Long.valueOf("0"));
 			BigDecimal id = jzMedicalafterDAO.insertSelective(record);
@@ -617,10 +618,10 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 				jzAct.setActBizTimes((short) (jzAct.getActBizTimes() + 1));
 			} else {
 			}
-			Calendar calendar = Calendar.getInstance();
+/*			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			int year = calendar.get(Calendar.YEAR);
-			jzAct.setActYear((short) year);
+			jzAct.setActYear((short) year);*/
 			jzActDAO.updateByPrimaryKeySelective(jzAct);
 		} else {
 		}
@@ -647,7 +648,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			} else {
 				currentact.setMemberId(medicalafterDTO.getMemberId());
 				currentact.setMemberType(medicalafterDTO.getMemberType());
-				currentact.setActYear((short) Calendar.YEAR);
+				currentact.setActYear((short) year);
 				currentact.setActBizInhospitalTimes((short) 0);
 				currentact.setActBizMoney(new BigDecimal(0));
 				currentact.setActBizMoney2(new BigDecimal(0));
@@ -676,7 +677,9 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 					+ medicalafterDTO.getHospitalpay().doubleValue() + ","
 					+ medicalafterDTO.getOutpay().doubleValue() + ","
 					+ medicalafterDTO.getCapay().doubleValue() + ","
-					+ medicalafterDTO.getBusinesspay().doubleValue()
+					+ medicalafterDTO.getBusinesspay().doubleValue() + ","
+					+ medicalafterDTO.getWsflag() + ","
+					+ medicalafterDTO.getWzzflag()
 					+ ") as r from dual";
 
 			/*
@@ -721,7 +724,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 	@SuppressWarnings("rawtypes")
 	public MedicalafterDTO findMemberInfoPrint(MedicalafterDTO m) {
 		Calendar cal = Calendar.getInstance();
-		int year = cal.get(Calendar.YEAR);
+		cal.setTime(m.getEndtime());
+		int year = cal.get(cal.YEAR);
 		MedicalafterDTO medicalafterDTO = new MedicalafterDTO();
 		try {
 			String sql = " select ma_id, jma.familyno, jma.membername, jma.paperid, jma.ssn, jma.hospital, "
@@ -763,7 +767,12 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String begintime = sdf.format((Date) map.get("BEGINTIME"));
 			String endtime = sdf.format((Date) map.get("ENDTIME"));
-			String birthday = sdf.format((Date) map.get("BIRTHDAY"));
+			Date birth = (Date) map.get("BIRTHDAY");
+			String birthday = "";
+			if(birth==null||"".equals(birth)){
+			}else{
+				birthday = sdf.format((Date) map.get("BIRTHDAY"));
+			}
 			medicalafterDTO.setBegintimeval(begintime);
 			medicalafterDTO.setEndtimeval(endtime);
 			medicalafterDTO.setBirthdayval(birthday);
@@ -781,8 +790,13 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			medicalafterDTO.setSumpay((BigDecimal) map.get("SUMPAY"));
 			medicalafterDTO.setTelephone((String) map.get("TELEPHONE"));
 			BigDecimal famcount = (BigDecimal) map.get("FAMCOUNT");
-			medicalafterDTO.setFamcountval(famcount.toString());
-			medicalafterDTO.setFamcount(famcount.shortValue());
+			if(famcount==null){
+				
+			}else{
+				medicalafterDTO.setFamcountval(famcount.toString());
+				medicalafterDTO.setFamcount(famcount.shortValue());
+			}
+			
 			BigDecimal pz = (BigDecimal) map.get("PZ_PRINUM");
 			medicalafterDTO.setPzPrinum(pz.toString());
 			BigDecimal app = (BigDecimal) map.get("APP_PRINUM");

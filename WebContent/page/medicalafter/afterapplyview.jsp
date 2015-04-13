@@ -183,6 +183,9 @@
 				<s:param name="medicalafterDTO.maId">
 					<s:property value="medicalafterDTO.maId" />
 				</s:param>
+				<s:param name="medicalafterDTO.endtime">
+					<s:property value="medicalafterDTO.endtime" />
+				</s:param>
 			</s:url>
 	</s:if>
 	<s:elseif test="medicalafterDTO.medicaltype==2">
@@ -190,11 +193,17 @@
 				<s:param name="medicalafterDTO.maId">
 					<s:property value="medicalafterDTO.maId" />
 				</s:param>
+				<s:param name="medicalafterDTO.endtime">
+					<s:property value="medicalafterDTO.endtime" />
+				</s:param>
 			</s:url>
 	</s:elseif>
 	<s:url action="printapp" id="printapp">
 		<s:param name="medicalafterDTO.maId">
 			<s:property value="medicalafterDTO.maId" />
+		</s:param>
+		<s:param name="medicalafterDTO.endtime">
+			<s:property value="medicalafterDTO.endtime" />
 		</s:param>
 	</s:url>
 				<s:a

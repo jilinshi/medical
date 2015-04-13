@@ -79,6 +79,8 @@ public class MedicalafterDTO {
 
 	private BigDecimal rc;
 	private String batchname;
+	
+	private String wzzflag; //×ªÕïÀà±ð
 
 	public BigDecimal getRc() {
 		return rc;
@@ -638,6 +640,14 @@ public class MedicalafterDTO {
 
 	public void setStname(String stname) {
 		this.stname = stname;
+	}
+
+	public String getWzzflag() {
+		return wzzflag;
+	}
+
+	public void setWzzflag(String wzzflag) {
+		this.wzzflag = wzzflag;
 	}
 
 }
