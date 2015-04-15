@@ -861,6 +861,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		return e;
 	}
 
+	@SuppressWarnings("static-access")
 	public int updateMedicalafter(MedicalafterDTO m) {
 		int u = 0;
 		JzMedicalafter record = new JzMedicalafter();
@@ -871,7 +872,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		// ¥¶¿Ìjz_act
 		// (1)≤È—Øjz_act
 		Calendar cal = Calendar.getInstance();
-		int year = cal.get(Calendar.YEAR);
+		cal.setTime(m.getEndtime());
+		int year = cal.get(cal.YEAR);
 		JzActExample example = new JzActExample();
 		example.createCriteria().andMemberIdEqualTo(m.getMemberId())
 				.andMemberTypeEqualTo(m.getMemberType())

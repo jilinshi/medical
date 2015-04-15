@@ -26,13 +26,14 @@
 		var f="dialogWidth=950px;dialogHeight=460px;status=no;help=no;scroll=auto";		
 		window.showModalDialog(url,window,f);
 	}
-	function cancel(id,memberid,membertype,assistpay,medicaltype){
+	function cancel(id,memberid,membertype,assistpay,medicaltype,endtime){
 		 var arr = {
 			"medicalafterDTO.maId" : id,
 			"medicalafterDTO.memberId" : memberid,
 			"medicalafterDTO.memberType" : membertype,
 			"medicalafterDTO.asisstpay" : assistpay,
-			"medicalafterDTO.medicaltype" : medicaltype
+			"medicalafterDTO.medicaltype" : medicaltype,
+			"medicalafterDTO.endtime" : endtime
 		}; 
 		$.ajax( {
 			type : "post",
@@ -136,7 +137,7 @@
 			<div align="center">
 			<a href="javascript:void(0)" onclick="view('<s:property value="maId" />','<s:property value="memberId" />','<s:property value="memberType" />')">查看</a>
 			&nbsp;&nbsp;
-			<a href="javascript:void(0)" onclick="cancel('<s:property value="maId" />','<s:property value="memberId" />','<s:property value="memberType" />','<s:property value="asisstpay"/>','<s:property value="medicaltype"/>')">作废</a>
+			<a href="javascript:void(0)" onclick="cancel('<s:property value="maId" />','<s:property value="memberId" />','<s:property value="memberType" />','<s:property value="asisstpay"/>','<s:property value="medicaltype"/>','<s:property value="endtime" />')">作废</a>
 			&nbsp;&nbsp;
 			<a href="javascript:void(0)" onclick="viewpic('<s:property value="maId"/>')">查看附件</a>
 			</div>
