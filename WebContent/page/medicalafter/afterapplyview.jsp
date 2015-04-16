@@ -140,6 +140,20 @@
 			</td>
 		</tr>
 		<tr>
+			<td width="17%">转诊类别</td>
+			<td colspan="5">
+				<s:if test="medicalafterDTO.wzzflag==0">
+				非外转诊
+				</s:if>
+				<s:elseif test="medicalafterDTO.wzzflag==1">
+				外转诊
+				</s:elseif>
+				<s:elseif test="medicalafterDTO.wzzflag==2">
+				医保无手续
+				</s:elseif>
+			</td>
+		</tr>
+		<tr>
 			<td width="17%">总费用</td>
 			<td><s:property value="medicalafterDTO.totalcost"/>&nbsp;</td>
 			<td width="17%">报销金额（医保/农合）</td>
