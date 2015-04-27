@@ -149,7 +149,7 @@
 				外转诊
 				</s:elseif>
 				<s:elseif test="medicalafterDTO.wzzflag==2">
-				医保无手续
+				降低比例救助
 				</s:elseif>
 			</td>
 		</tr>

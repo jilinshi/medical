@@ -2,8 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="medicalafter_outpatient" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f666d87a-94ce-4cc9-ab4a-7d1c881d4ad2">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="63"/>
-	<property name="ireport.y" value="1"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -66,7 +66,7 @@
 				<text><![CDATA[经手人：]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="25" y="140" width="63" height="17" uuid="733bbe3a-bf9a-4556-bcfb-59600ff29283"/>
+				<reportElement mode="Opaque" x="25" y="140" width="63" height="18" uuid="733bbe3a-bf9a-4556-bcfb-59600ff29283"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -199,6 +199,19 @@
 				<text><![CDATA[救助方式：]]></text>
 			</staticText>
 			<textField>
+				<reportElement mode="Opaque" x="426" y="157" width="107" height="18" uuid="d3c085af-5549-4983-9093-412fc92f1631"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="宋体" size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("SUMPAY")]]></textFieldExpression>
+			</textField>
+			<textField>
 				<reportElement mode="Opaque" x="88" y="86" width="102" height="18" uuid="48b04807-b230-4450-8781-c4a547f4f295"/>
 				<box>
 					<topPen lineWidth="1.0"/>
@@ -271,7 +284,7 @@
 				<text><![CDATA[单位：]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Opaque" x="426" y="157" width="107" height="18" uuid="b1e1daa0-78ed-4fb1-b466-fe5ae382f2b6"/>
+				<reportElement mode="Opaque" x="232" y="157" width="54" height="18" uuid="b1e1daa0-78ed-4fb1-b466-fe5ae382f2b6"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -317,7 +330,7 @@
 				<text><![CDATA[家庭编号]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="286" y="157" width="140" height="18" uuid="b8fdf828-3448-4c60-b894-fd6cd0c523fe"/>
+				<reportElement mode="Opaque" x="190" y="157" width="42" height="18" uuid="b8fdf828-3448-4c60-b894-fd6cd0c523fe"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -409,7 +422,7 @@
 				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("TIKETNO")]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="286" y="139" width="140" height="18" uuid="aa48e942-5354-4558-8247-7e67ce26070b"/>
+				<reportElement mode="Opaque" x="286" y="140" width="140" height="18" uuid="aa48e942-5354-4558-8247-7e67ce26070b"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -448,7 +461,7 @@
 				<text><![CDATA[医疗救助金额（大写）：]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Opaque" x="88" y="157" width="198" height="18" uuid="14470f78-2d7a-427a-8725-c4978dcfd4ba"/>
+				<reportElement mode="Opaque" x="88" y="157" width="102" height="18" uuid="14470f78-2d7a-427a-8725-c4978dcfd4ba"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -460,6 +473,19 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("OUTPAY")]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="286" y="157" width="140" height="18" uuid="40108832-c5f6-4286-b0ce-7016d1fbe754"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+					<font fontName="宋体" size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[累计救助金额]]></text>
+			</staticText>
 			<textField>
 				<reportElement mode="Opaque" x="232" y="86" width="95" height="18" uuid="4b98b330-fa7a-4bab-8452-62689fcb8ab5"/>
 				<box>

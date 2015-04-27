@@ -3,7 +3,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="85"/>
-	<property name="ireport.y" value="99"/>
+	<property name="ireport.y" value="0"/>
 	<field name="FAMILYNO" class="java.lang.String"/>
 	<field name="MEMBERNAME" class="java.lang.String"/>
 	<field name="HOSPITAL" class="java.lang.String"/>
@@ -451,7 +451,7 @@
 				<text><![CDATA[个人自理]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Opaque" x="87" y="194" width="198" height="18" uuid="d1ced773-50e8-4030-9e16-4770216a8f87"/>
+				<reportElement mode="Opaque" x="87" y="194" width="102" height="18" uuid="d1ced773-50e8-4030-9e16-4770216a8f87"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -464,7 +464,7 @@
 				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("OUTPAY")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="425" y="194" width="107" height="18" uuid="bc9889fc-dc76-4a24-876f-1fd4dd5fc8c1"/>
+				<reportElement mode="Opaque" x="231" y="194" width="54" height="18" uuid="bc9889fc-dc76-4a24-876f-1fd4dd5fc8c1"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -477,7 +477,7 @@
 				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("ASISSTPAY")]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="285" y="194" width="140" height="18" uuid="b68cbabd-1994-4188-a036-ea8b0066a126"/>
+				<reportElement mode="Opaque" x="189" y="194" width="42" height="18" uuid="b68cbabd-1994-4188-a036-ea8b0066a126"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
@@ -489,6 +489,32 @@
 				</textElement>
 				<text><![CDATA[救助金额]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="285" y="194" width="140" height="18" uuid="37a3178e-7871-4f0b-8bb5-debb3d13b23d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+					<font fontName="宋体" size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[累计救助金额]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="425" y="194" width="107" height="18" uuid="ce77df26-dffb-4617-b376-8fc088705941"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="宋体" size="10" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("SUMPAY")]]></textFieldExpression>
+			</textField>
 			<textField>
 				<reportElement mode="Opaque" x="65" y="213" width="124" height="20" uuid="3329c787-e913-44e5-82ac-3e4fbc05d06d"/>
 				<textElement>
