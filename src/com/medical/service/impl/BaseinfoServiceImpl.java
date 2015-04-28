@@ -1353,5 +1353,77 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		}
 		return list;
 	}
+	
+	public void saveccc(String xml1, String datatype, String memberid){
+		try {
+			ExecutSQL executSQL = new ExecutSQL();
+			String sql_s = " select a.idc, a.n, a.fn, a.s1, a.s2, a.ttt, a.stst, a.t1, a.t2, a.f, cc.nextval@cs as ccc_id, a.familyid, "
+					+ "'"+ xml1 +"' as context01 "
+					+" from (select idcard15to18(fmi.fm_paperid) as idc, "
+					+" fmi.fm_name as n, "
+					+" fmi.f_familyno as fn, "
+					+" s1.ss_state as s1, "
+					+" s2.ss_state as s2, "
+					+" (case "
+					+" WHEN fmi.fm_personstate = '正常' and "
+					+" s1.ss_state = '在保户' and s2.ss_state = '在保户' THEN "
+					+" '2' "
+					+" WHEN fmi.fm_personstate = '正常' and "
+					+" s1.ss_state = '在保户' THEN "
+					+" '1' "
+					+" ELSE "
+					+" '0' "
+					+" END) as ttt, "
+					+" to_char(sysdate, 'yyyyMMdd') as stst, "
+					+" sysdate as t1, "
+					+" sysdate as t2, "
+					+" 1 as f, "
+					+" fmi.f_familyid as familyid "
+					+" from familymemberinfoall"+ datatype +" fmi "
+					+" left join salvationstatus"+ datatype +" s1 "
+					+" on fmi.f_familyid = s1.ss_ot_id "
+					+" and fn_checkidcard(fmi.fm_paperid) = 1 "
+					+" and fn_checkidcard(idcard15to18(fmi.fm_paperid)) = 1 "
+					+" and s1.st_id = '1' "
+					+" left join salvationstatus"+ datatype +" s2 "
+					+" on fmi.f_familyid = s2.ss_ot_id "
+					+" and fn_checkidcard(fmi.fm_paperid) = 1 "
+					+" and fn_checkidcard(idcard15to18(fmi.fm_paperid)) = 1 "
+					+" and s2.st_id = '31' "
+					+" where fmi.fm_id ='"+memberid+"') a ";
+			executSQL.setExecutsql(sql_s);
+			List<HashMap> m = executSQLDAO.queryAll(executSQL);
+			String idc = (String) m.get(0).get("IDC");
+			String n = (String) m.get(0).get("N");
+			String fn = (String) m.get(0).get("FN");
+			String s1 = (String) m.get(0).get("S1");
+			String s2 = (String) m.get(0).get("S2");
+			String ttt = (String) m.get(0).get("TTT");
+			String stst = (String) m.get(0).get("STST");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date ctime = (Date) m.get(0).get("T1");
+			Date utime = (Date) m.get(0).get("T2");
+			String ct = format.format(ctime);
+			String ut = format.format(utime);
+			BigDecimal f = (BigDecimal) m.get(0).get("F");
+			BigDecimal cccId = (BigDecimal) m.get(0).get("CCC_ID");
+			String fid = (String) m.get(0).get("FAMILYID");
+			String context01 = (String) m.get(0).get("CONTEXT01");
+			String sql_i=" insert into ccc"+datatype
+					+" (idc, n, fn, s1, s2, ttt, stst, ctime, utime, f, ccc_id, fid, context01) " 
+					+" values ('"+ idc +"','"+ n + "','"+ fn +"','"+ s1 
+					+"','"+ s2 +"','"+ ttt +"','"+ stst 
+					+"',to_date('"+ ct + "','yyyy-mm-dd hh24:mi:ss')" 
+					+",to_date('"+ ut  + "','yyyy-mm-dd hh24:mi:ss')" 
+					+",'"+ f +"','"+ cccId +"','"+ fid 
+					+"','"+ context01 +"')";
+			executSQL.setExecutsql(sql_i);
+			System.out.println(sql_i);
+			executSQLDAO.updateSQL(executSQL);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

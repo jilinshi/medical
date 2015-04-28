@@ -75,4 +75,6 @@ public interface BaseinfoService {
 	public void updateMedicalafterAcc(String sql);
 	
 	public List<MedicalafterDTO> findstatus(String sql);
+	
+	public void saveccc(String xml1,String datatype,String memberid);
 }

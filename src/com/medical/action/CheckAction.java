@@ -258,6 +258,15 @@ public class CheckAction extends ActionSupport {
 			System.out.println("---民政to医保同步_start---");
 			System.out.println(xml1);
 			System.out.println("---民政to医保同步_end---");
+			//保存日志
+			String datatype = "";
+			if("1".equals(checkDTO.getDs())){
+				datatype = "@cs";
+			}else if("2".equals(checkDTO.getDs())){
+				datatype = "@nc";
+			}
+			this.baseinfoService.saveccc(xml1, datatype, checkDTO.getMemberId());
+			
 		}catch (RemoteException e) {
 				e.printStackTrace();
 		}
