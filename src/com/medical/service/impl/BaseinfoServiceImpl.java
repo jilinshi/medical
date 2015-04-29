@@ -1418,7 +1418,13 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 					+",'"+ f +"','"+ cccId +"','"+ fid 
 					+"','"+ context01 +"')";
 			executSQL.setExecutsql(sql_i);
-			System.out.println(sql_i);
+			executSQLDAO.updateSQL(executSQL);
+			String sql_ii = " insert into sync_logs "
+					+ "(logid, col1, col2, col3, col4, col5, col6, opertime) "
+					+ " values   (ax.nextval, '" + idc + "', '" + n
+					+ "', '" + fn + "', '" + ttt + "', '" + stst
+					+ "','" + context01 + "', sysdate)";
+			executSQL.setExecutsql(sql_ii);
 			executSQLDAO.updateSQL(executSQL);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
