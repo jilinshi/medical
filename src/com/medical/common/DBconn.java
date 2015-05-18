@@ -9,7 +9,7 @@ public class DBconn {
 		Connection con = null;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String url = "jdbc:oracle:thin:@10.10.10.2:1521:orcl";
+			String url = "jdbc:oracle:thin:@10.10.10.222:1521:orcl";
 			String userName = "yljzn";
 			String password = "yljzn";
 			con = DriverManager.getConnection(url, userName, password);

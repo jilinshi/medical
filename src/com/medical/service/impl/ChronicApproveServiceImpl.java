@@ -655,14 +655,15 @@ public class ChronicApproveServiceImpl implements ChronicApproveService {
 		int month = c.get(Calendar.MONTH) + 1;
 		BigDecimal income_year = BigDecimal.ZERO;
 		try {
-			String sql_member = "select oo.asort "
+			String sql_member = "select oo.o_asort "
 					+ " from member_baseinfo oo " + " where oo.member_id='"
 					+ chronicApproveDTO.getMemberId() + "' " + " and oo.ds='"
 					+ chronicApproveDTO.getMemberType() + "'";
 			ExecutSQL executSQL_member = new ExecutSQL();
 			executSQL_member.setExecutsql(sql_member);
 			HashMap rs_member = executSQLDAO.queryAll(executSQL_member).get(0);
-			BigDecimal asort_member = (BigDecimal) rs_member.get("ASORT");
+			String asort = (String)rs_member.get("O_ASORT");
+			BigDecimal asort_member = new BigDecimal(asort);
 			BigDecimal income_type = BigDecimal.ZERO;
 			String type = "";
 			// ∆’Õ®µÕ±£ªß
