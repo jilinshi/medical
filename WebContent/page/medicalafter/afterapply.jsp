@@ -107,7 +107,7 @@
 </head>
 <body style="padding: 10px 10px 10px 10px;">
 	<s:form id="aaaaa" enctype="multipart/form-data" action="afterapply" method="post"
-		theme="simple" onsubmit="return check();">
+		theme="simple" onsubmit="return check();" target="_self">
 		<s:hidden name="medicalafterDTO.familyno"></s:hidden>
 		<s:hidden name="medicalafterDTO.membername"></s:hidden>
 		<s:hidden name="medicalafterDTO.paperid" id="paperid"></s:hidden>
