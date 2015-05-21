@@ -299,7 +299,7 @@
 				转诊类别
 				</td>
 				<td colspan="5">
-				<s:radio list="#{'0':'非外转诊','1':'外转诊','2':'降低比例救助'}" name="medicalafterDTO.wzzflag"
+				<s:radio list="#{'0':'非外转诊','1':'外转诊','2':'降低比例救助','3':'职工外转诊'}" name="medicalafterDTO.wzzflag"
 						listKey="key" listValue="value" value="0"></s:radio>
 				</td>
 			</tr>

@@ -151,6 +151,9 @@
 				<s:elseif test="medicalafterDTO.wzzflag==2">
 				降低比例救助
 				</s:elseif>
+				<s:elseif test="medicalafterDTO.wzzflag==3">
+				职工外转诊
+				</s:elseif>
 			</td>
 		</tr>
 		<tr>
