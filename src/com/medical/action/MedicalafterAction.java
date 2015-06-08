@@ -33,8 +33,9 @@ import com.medical.service.SearchService;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-import dbbx.ServiceMainSoap;
-import dbbx.ServiceMainSoapProxy;
+import dbbx.IServiceYljzJlc;
+import dbbx.IServiceYljzJlcProxy;
+
 
 public class MedicalafterAction extends ActionSupport {
 	private static final long serialVersionUID = -5126976226423666862L;
@@ -80,7 +81,7 @@ public class MedicalafterAction extends ActionSupport {
 
 	public String countdbbx() {
 		JSONObject json = new JSONObject();
-		ServiceMainSoap sms = new ServiceMainSoapProxy();
+		IServiceYljzJlc sms = new IServiceYljzJlcProxy();
 		BigDecimal sumPreScope = BigDecimal.ZERO;
 		medicalafterDTO = baseinfoService.findSumPayDbbx(medicalafterDTO);
 		if (medicalafterDTO.getSumtotalcost() == null) {

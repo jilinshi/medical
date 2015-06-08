@@ -602,6 +602,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			record.setWzzflag(medicalafterDTO.getWzzflag());
 			record.setPzPrinum(Long.valueOf("0"));
 			record.setAppPrinum(Long.valueOf("0"));
+			record.setSelfpay(medicalafterDTO.getSelfpay());
 			BigDecimal id = jzMedicalafterDAO.insertSelective(record);
 			medicalafterDTO.setMaId(id);
 			JzAct jzAct = jzActDAO.selectByPrimaryKey(medicalafterDTO
@@ -662,7 +663,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			} else {
 				ZBZ_FLAG = "1";
 			}
-			String sql = "select func_calcassist("
+			String sql = "select func_calcassist01("
 					+ medicalafterDTO.getMemberType() + ","
 					+ medicalafterDTO.getInsuretype() + "," + ZBZ_FLAG + ","
 					+ medicalafterDTO.getHospitallevel() + ","
@@ -679,7 +680,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 					+ medicalafterDTO.getCapay().doubleValue() + ","
 					+ medicalafterDTO.getBusinesspay().doubleValue() + ","
 					+ medicalafterDTO.getWsflag() + ","
-					+ medicalafterDTO.getWzzflag()
+					+ medicalafterDTO.getWzzflag() + ","
+					+ medicalafterDTO.getSelfpay()
 					+ ") as r from dual";
 
 			/*

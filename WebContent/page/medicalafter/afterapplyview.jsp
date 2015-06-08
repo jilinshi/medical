@@ -167,8 +167,10 @@
 		<tr>
 			<td width="17%">起付线</td>
 			<td><s:property value="medicalafterDTO.payLine"/>&nbsp;</td>
+			<td width="17%">个人自理</td>
+			<td ><s:property value="medicalafterDTO.selfpay"/>&nbsp;</td>
 			<td width="17%">医院补助</td>
-			<td colspan="3"><s:property value="medicalafterDTO.hospitalpay"/>&nbsp;</td>
+			<td ><s:property value="medicalafterDTO.hospitalpay"/>&nbsp;</td>
 		<tr>
 			<td width="17%">大病保险金额</td>
 			<td><s:property value="medicalafterDTO.capay"/>&nbsp;</td>

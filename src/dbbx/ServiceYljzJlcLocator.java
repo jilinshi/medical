@@ -1,5 +1,5 @@
 /**
- * ServiceMainLocator.java
+ * ServiceYljzJlcLocator.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
@@ -7,64 +7,62 @@
 
 package dbbx;
 
-import java.rmi.Remote;
+public class ServiceYljzJlcLocator extends org.apache.axis.client.Service implements ServiceYljzJlc {
 
-public class ServiceMainLocator extends org.apache.axis.client.Service implements ServiceMain {
-
-    public ServiceMainLocator() {
+    public ServiceYljzJlcLocator() {
     }
 
 
-    public ServiceMainLocator(org.apache.axis.EngineConfiguration config) {
+    public ServiceYljzJlcLocator(org.apache.axis.EngineConfiguration config) {
         super(config);
     }
 
-    public ServiceMainLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
+    public ServiceYljzJlcLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
         super(wsdlLoc, sName);
     }
 
-    // Use to get a proxy class for ServiceMainSoap
-    private java.lang.String ServiceMainSoap_address = "http://10.10.10.2/Servicemin.asmx";
+    // Use to get a proxy class for BasicHttpBinding_IServiceYljzJlc
+    private java.lang.String BasicHttpBinding_IServiceYljzJlc_address = "http://10.10.10.2/yljzjlc/ServiceYljzJlc.svc";
 
-    public java.lang.String getServiceMainSoapAddress() {
-        return ServiceMainSoap_address;
+    public java.lang.String getBasicHttpBinding_IServiceYljzJlcAddress() {
+        return BasicHttpBinding_IServiceYljzJlc_address;
     }
 
     // The WSDD service name defaults to the port name.
-    private java.lang.String ServiceMainSoapWSDDServiceName = "ServiceMainSoap";
+    private java.lang.String BasicHttpBinding_IServiceYljzJlcWSDDServiceName = "BasicHttpBinding_IServiceYljzJlc";
 
-    public java.lang.String getServiceMainSoapWSDDServiceName() {
-        return ServiceMainSoapWSDDServiceName;
+    public java.lang.String getBasicHttpBinding_IServiceYljzJlcWSDDServiceName() {
+        return BasicHttpBinding_IServiceYljzJlcWSDDServiceName;
     }
 
-    public void setServiceMainSoapWSDDServiceName(java.lang.String name) {
-        ServiceMainSoapWSDDServiceName = name;
+    public void setBasicHttpBinding_IServiceYljzJlcWSDDServiceName(java.lang.String name) {
+        BasicHttpBinding_IServiceYljzJlcWSDDServiceName = name;
     }
 
-    public ServiceMainSoap getServiceMainSoap() throws javax.xml.rpc.ServiceException {
+    public IServiceYljzJlc getBasicHttpBinding_IServiceYljzJlc() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
-            endpoint = new java.net.URL(ServiceMainSoap_address);
+            endpoint = new java.net.URL(BasicHttpBinding_IServiceYljzJlc_address);
         }
         catch (java.net.MalformedURLException e) {
             throw new javax.xml.rpc.ServiceException(e);
         }
-        return getServiceMainSoap(endpoint);
+        return getBasicHttpBinding_IServiceYljzJlc(endpoint);
     }
 
-    public ServiceMainSoap getServiceMainSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    public IServiceYljzJlc getBasicHttpBinding_IServiceYljzJlc(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
-            ServiceMainSoapStub _stub = new ServiceMainSoapStub(portAddress, this);
-            _stub.setPortName(getServiceMainSoapWSDDServiceName());
-            return (ServiceMainSoap) _stub;
+            BasicHttpBinding_IServiceYljzJlcStub _stub = new BasicHttpBinding_IServiceYljzJlcStub(portAddress, this);
+            _stub.setPortName(getBasicHttpBinding_IServiceYljzJlcWSDDServiceName());
+            return _stub;
         }
         catch (org.apache.axis.AxisFault e) {
             return null;
         }
     }
 
-    public void setServiceMainSoapEndpointAddress(java.lang.String address) {
-        ServiceMainSoap_address = address;
+    public void setBasicHttpBinding_IServiceYljzJlcEndpointAddress(java.lang.String address) {
+        BasicHttpBinding_IServiceYljzJlc_address = address;
     }
 
     /**
@@ -74,10 +72,10 @@ public class ServiceMainLocator extends org.apache.axis.client.Service implement
      */
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
-            if (ServiceMainSoap.class.isAssignableFrom(serviceEndpointInterface)) {
-                ServiceMainSoapStub _stub = new ServiceMainSoapStub(new java.net.URL(ServiceMainSoap_address), this);
-                _stub.setPortName(getServiceMainSoapWSDDServiceName());
-                return (Remote) _stub;
+            if (IServiceYljzJlc.class.isAssignableFrom(serviceEndpointInterface)) {
+                BasicHttpBinding_IServiceYljzJlcStub _stub = new BasicHttpBinding_IServiceYljzJlcStub(new java.net.URL(BasicHttpBinding_IServiceYljzJlc_address), this);
+                _stub.setPortName(getBasicHttpBinding_IServiceYljzJlcWSDDServiceName());
+                return _stub;
             }
         }
         catch (java.lang.Throwable t) {
@@ -96,8 +94,8 @@ public class ServiceMainLocator extends org.apache.axis.client.Service implement
             return getPort(serviceEndpointInterface);
         }
         java.lang.String inputPortName = portName.getLocalPart();
-        if ("ServiceMainSoap".equals(inputPortName)) {
-            return getServiceMainSoap();
+        if ("BasicHttpBinding_IServiceYljzJlc".equals(inputPortName)) {
+            return getBasicHttpBinding_IServiceYljzJlc();
         }
         else  {
             java.rmi.Remote _stub = getPort(serviceEndpointInterface);
@@ -107,7 +105,7 @@ public class ServiceMainLocator extends org.apache.axis.client.Service implement
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://MingdaSoft.com/", "ServiceMain");
+        return new javax.xml.namespace.QName("http://tempuri.org/", "ServiceYljzJlc");
     }
 
     private java.util.HashSet ports = null;
@@ -115,7 +113,7 @@ public class ServiceMainLocator extends org.apache.axis.client.Service implement
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://MingdaSoft.com/", "ServiceMainSoap"));
+            ports.add(new javax.xml.namespace.QName("http://tempuri.org/", "BasicHttpBinding_IServiceYljzJlc"));
         }
         return ports.iterator();
     }
@@ -125,8 +123,8 @@ public class ServiceMainLocator extends org.apache.axis.client.Service implement
     */
     public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
         
-if ("ServiceMainSoap".equals(portName)) {
-            setServiceMainSoapEndpointAddress(address);
+if ("BasicHttpBinding_IServiceYljzJlc".equals(portName)) {
+            setBasicHttpBinding_IServiceYljzJlcEndpointAddress(address);
         }
         else 
 { // Unknown Port Name

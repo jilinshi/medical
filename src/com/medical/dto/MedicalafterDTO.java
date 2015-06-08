@@ -81,6 +81,7 @@ public class MedicalafterDTO {
 	private String batchname;
 	
 	private String wzzflag; //×ªÕïÀà±ð
+	private BigDecimal selfpay;
 
 	public BigDecimal getRc() {
 		return rc;
@@ -648,6 +649,14 @@ public class MedicalafterDTO {
 
 	public void setWzzflag(String wzzflag) {
 		this.wzzflag = wzzflag;
+	}
+
+	public BigDecimal getSelfpay() {
+		return selfpay;
+	}
+
+	public void setSelfpay(BigDecimal selfpay) {
+		this.selfpay = selfpay;
 	}
 
 }
