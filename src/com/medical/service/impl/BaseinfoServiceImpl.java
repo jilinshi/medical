@@ -1,5 +1,7 @@
 package com.medical.service.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -10,7 +12,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.medical.common.Pager;
 import com.medical.dao.ExecutSQLDAO;
@@ -26,6 +35,7 @@ import com.medical.dto.BizDTO;
 import com.medical.dto.CheckDTO;
 import com.medical.dto.HealthDTO;
 import com.medical.dto.MedicalafterDTO;
+import com.medical.dto.YBCheckDTO;
 import com.medical.model.ExecutSQL;
 import com.medical.model.JzAct;
 import com.medical.model.JzActExample;
@@ -331,19 +341,19 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 				.createCriteria();
 		criteria.andMemberIdEqualTo(checkDTO.getMemberId());
 		criteria.andDsEqualTo(checkDTO.getDs());
-		if(null == checkDTO.getSsn1()|| "".equals(checkDTO.getSsn1())){
-			
-		}else{
+		if (null == checkDTO.getSsn1() || "".equals(checkDTO.getSsn1())) {
+
+		} else {
 			record.setSsn1(checkDTO.getSsn1());
 		}
-		if(null == checkDTO.getSsn2()|| "".equals(checkDTO.getSsn2())){
-			
-		}else{
+		if (null == checkDTO.getSsn2() || "".equals(checkDTO.getSsn2())) {
+
+		} else {
 			record.setSsn2(checkDTO.getSsn2());
 		}
-		if(null == checkDTO.getSsn3()|| "".equals(checkDTO.getSsn3())){
-			
-		}else{
+		if (null == checkDTO.getSsn3() || "".equals(checkDTO.getSsn3())) {
+
+		} else {
 			record.setSsn3(checkDTO.getSsn3());
 		}
 		record.setUtime(new Date());
@@ -619,10 +629,11 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 				jzAct.setActBizTimes((short) (jzAct.getActBizTimes() + 1));
 			} else {
 			}
-/*			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(new Date());
-			int year = calendar.get(Calendar.YEAR);
-			jzAct.setActYear((short) year);*/
+			/*
+			 * Calendar calendar = Calendar.getInstance(); calendar.setTime(new
+			 * Date()); int year = calendar.get(Calendar.YEAR);
+			 * jzAct.setActYear((short) year);
+			 */
 			jzActDAO.updateByPrimaryKeySelective(jzAct);
 		} else {
 		}
@@ -681,8 +692,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 					+ medicalafterDTO.getBusinesspay().doubleValue() + ","
 					+ medicalafterDTO.getWsflag() + ","
 					+ medicalafterDTO.getWzzflag() + ","
-					+ medicalafterDTO.getSelfpay()
-					+ ") as r from dual";
+					+ medicalafterDTO.getSelfpay() + ") as r from dual";
 
 			/*
 			 * sql="select func_calcassist(ds => v_ds, medicare_type =>
@@ -771,8 +781,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			String endtime = sdf.format((Date) map.get("ENDTIME"));
 			Date birth = (Date) map.get("BIRTHDAY");
 			String birthday = "";
-			if(birth==null||"".equals(birth)){
-			}else{
+			if (birth == null || "".equals(birth)) {
+			} else {
 				birthday = sdf.format((Date) map.get("BIRTHDAY"));
 			}
 			medicalafterDTO.setBegintimeval(begintime);
@@ -792,13 +802,13 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			medicalafterDTO.setSumpay((BigDecimal) map.get("SUMPAY"));
 			medicalafterDTO.setTelephone((String) map.get("TELEPHONE"));
 			BigDecimal famcount = (BigDecimal) map.get("FAMCOUNT");
-			if(famcount==null){
-				
-			}else{
+			if (famcount == null) {
+
+			} else {
 				medicalafterDTO.setFamcountval(famcount.toString());
 				medicalafterDTO.setFamcount(famcount.shortValue());
 			}
-			
+
 			BigDecimal pz = (BigDecimal) map.get("PZ_PRINUM");
 			medicalafterDTO.setPzPrinum(pz.toString());
 			BigDecimal app = (BigDecimal) map.get("APP_PRINUM");
@@ -1333,7 +1343,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<MedicalafterDTO> findstatus(String sql) {
@@ -1346,7 +1356,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			for (HashMap s : maps) {
 				MedicalafterDTO e = new MedicalafterDTO();
 				e.setMaxdate((String) s.get("MAXDATE"));
-				e.setStname((String)s.get("STNAME"));
+				e.setStname((String) s.get("STNAME"));
 				list.add(e);
 			}
 
@@ -1355,44 +1365,53 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		}
 		return list;
 	}
-	
-	public void saveccc(String xml1, String datatype, String memberid){
+
+	public void saveccc(String xml1, String datatype, String memberid) {
 		try {
 			ExecutSQL executSQL = new ExecutSQL();
 			String sql_s = " select a.idc, a.n, a.fn, a.s1, a.s2, a.ttt, a.stst, a.t1, a.t2, a.f, cc.nextval@cs as ccc_id, a.familyid, "
-					+ "'"+ xml1 +"' as context01 "
-					+" from (select idcard15to18(fmi.fm_paperid) as idc, "
-					+" fmi.fm_name as n, "
-					+" fmi.f_familyno as fn, "
-					+" s1.ss_state as s1, "
-					+" s2.ss_state as s2, "
-					+" (case "
-					+" WHEN fmi.fm_personstate = '正常' and "
-					+" s1.ss_state = '在保户' and s2.ss_state = '在保户' THEN "
-					+" '2' "
-					+" WHEN fmi.fm_personstate = '正常' and "
-					+" s1.ss_state = '在保户' THEN "
-					+" '1' "
-					+" ELSE "
-					+" '0' "
-					+" END) as ttt, "
-					+" to_char(sysdate, 'yyyyMMdd') as stst, "
-					+" sysdate as t1, "
-					+" sysdate as t2, "
-					+" 1 as f, "
-					+" fmi.f_familyid as familyid "
-					+" from familymemberinfoall"+ datatype +" fmi "
-					+" left join salvationstatus"+ datatype +" s1 "
-					+" on fmi.f_familyid = s1.ss_ot_id "
-					+" and fn_checkidcard(fmi.fm_paperid) = 1 "
-					+" and fn_checkidcard(idcard15to18(fmi.fm_paperid)) = 1 "
-					+" and s1.st_id = '1' "
-					+" left join salvationstatus"+ datatype +" s2 "
-					+" on fmi.f_familyid = s2.ss_ot_id "
-					+" and fn_checkidcard(fmi.fm_paperid) = 1 "
-					+" and fn_checkidcard(idcard15to18(fmi.fm_paperid)) = 1 "
-					+" and s2.st_id = '31' "
-					+" where fmi.fm_id ='"+memberid+"') a ";
+					+ "'"
+					+ xml1
+					+ "' as context01 "
+					+ " from (select idcard15to18(fmi.fm_paperid) as idc, "
+					+ " fmi.fm_name as n, "
+					+ " fmi.f_familyno as fn, "
+					+ " s1.ss_state as s1, "
+					+ " s2.ss_state as s2, "
+					+ " (case "
+					+ " WHEN fmi.fm_personstate = '正常' and "
+					+ " s1.ss_state = '在保户' and s2.ss_state = '在保户' THEN "
+					+ " '2' "
+					+ " WHEN fmi.fm_personstate = '正常' and "
+					+ " s1.ss_state = '在保户' THEN "
+					+ " '1' "
+					+ " ELSE "
+					+ " '0' "
+					+ " END) as ttt, "
+					+ " to_char(sysdate, 'yyyyMMdd') as stst, "
+					+ " sysdate as t1, "
+					+ " sysdate as t2, "
+					+ " 1 as f, "
+					+ " fmi.f_familyid as familyid "
+					+ " from familymemberinfoall"
+					+ datatype
+					+ " fmi "
+					+ " left join salvationstatus"
+					+ datatype
+					+ " s1 "
+					+ " on fmi.f_familyid = s1.ss_ot_id "
+					+ " and fn_checkidcard(fmi.fm_paperid) = 1 "
+					+ " and fn_checkidcard(idcard15to18(fmi.fm_paperid)) = 1 "
+					+ " and s1.st_id = '1' "
+					+ " left join salvationstatus"
+					+ datatype
+					+ " s2 "
+					+ " on fmi.f_familyid = s2.ss_ot_id "
+					+ " and fn_checkidcard(fmi.fm_paperid) = 1 "
+					+ " and fn_checkidcard(idcard15to18(fmi.fm_paperid)) = 1 "
+					+ " and s2.st_id = '31' "
+					+ " where fmi.fm_id ='"
+					+ memberid + "') a ";
 			executSQL.setExecutsql(sql_s);
 			List<HashMap> m = executSQLDAO.queryAll(executSQL);
 			String idc = (String) m.get(0).get("IDC");
@@ -1402,7 +1421,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			String s2 = (String) m.get(0).get("S2");
 			String ttt = (String) m.get(0).get("TTT");
 			String stst = (String) m.get(0).get("STST");
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat format = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
 			Date ctime = (Date) m.get(0).get("T1");
 			Date utime = (Date) m.get(0).get("T2");
 			String ct = format.format(ctime);
@@ -1411,27 +1431,69 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			BigDecimal cccId = (BigDecimal) m.get(0).get("CCC_ID");
 			String fid = (String) m.get(0).get("FAMILYID");
 			String context01 = (String) m.get(0).get("CONTEXT01");
-			String sql_i=" insert into ccc"+datatype
-					+" (idc, n, fn, s1, s2, ttt, stst, ctime, utime, f, ccc_id, fid, context01) " 
-					+" values ('"+ idc +"','"+ n + "','"+ fn +"','"+ s1 
-					+"','"+ s2 +"','"+ ttt +"','"+ stst 
-					+"',to_date('"+ ct + "','yyyy-mm-dd hh24:mi:ss')" 
-					+",to_date('"+ ut  + "','yyyy-mm-dd hh24:mi:ss')" 
-					+",'"+ f +"','"+ cccId +"','"+ fid 
-					+"','"+ context01 +"')";
+			String sql_i = " insert into ccc"
+					+ datatype
+					+ " (idc, n, fn, s1, s2, ttt, stst, ctime, utime, f, ccc_id, fid, context01) "
+					+ " values ('" + idc + "','" + n + "','" + fn + "','" + s1
+					+ "','" + s2 + "','" + ttt + "','" + stst + "',to_date('"
+					+ ct + "','yyyy-mm-dd hh24:mi:ss')" + ",to_date('" + ut
+					+ "','yyyy-mm-dd hh24:mi:ss')" + ",'" + f + "','" + cccId
+					+ "','" + fid + "','" + context01 + "')";
 			executSQL.setExecutsql(sql_i);
 			executSQLDAO.updateSQL(executSQL);
 			String sql_ii = " insert into sync_logs "
 					+ "(logid, col1, col2, col3, col4, col5, col6, opertime) "
-					+ " values   (ax.nextval, '" + idc + "', '" + n
-					+ "', '" + fn + "', '" + ttt + "', '" + stst
-					+ "','" + context01 + "', sysdate)";
+					+ " values   (ax.nextval, '" + idc + "', '" + n + "', '"
+					+ fn + "', '" + ttt + "', '" + stst + "','" + context01
+					+ "', sysdate)";
 			executSQL.setExecutsql(sql_ii);
 			executSQLDAO.updateSQL(executSQL);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<YBCheckDTO> findcheckhistory(String pid) {
+		List<YBCheckDTO> list = new ArrayList<YBCheckDTO>();
+		try {
+			ExecutSQL executSQL = new ExecutSQL();
+			String sql = "select to_char(t.ctime,'yyyy-mm-dd hh24:mi:ss') as a ,to_char(t.utime,'yyyy-mm-dd hh24:mi:ss') as b, t.context01 as c from mv_sync_logs t where t.idc=FUNC_AAC00215_18('"
+					+ pid + "')";
+			executSQL.setExecutsql(sql);
+
+			List<HashMap> maps = executSQLDAO.queryAll(executSQL);
+
+			for (HashMap s : maps) {
+				YBCheckDTO e = new YBCheckDTO();
+				e.setSsn1((String) s.get("A"));
+				e.setSsn2((String) s.get("B"));
+				e.setMessage((String) s.get("C"));
+				String a = "<?xml version=\"1.0\" encoding=\"GB2312\"?>"
+						+ e.getMessage() + "";
+				DocumentBuilderFactory factory = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder builder = factory.newDocumentBuilder();
+				ByteArrayInputStream in = new ByteArrayInputStream(a.getBytes());
+				Document doc = builder.parse(in);
+
+				NodeList nls = doc.getElementsByTagName("医保编号");
+
+				String b = "";
+				for (int i = 0; i < nls.getLength(); i++) {
+					b = b + "医保编号:" + nls.item(i).getTextContent() + ""
+							+ System.lineSeparator();
+				}
+				e.setMessage(b);
+				list.add(e);
+			}
+
+		} catch (SQLException | ParserConfigurationException | SAXException
+				| IOException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }

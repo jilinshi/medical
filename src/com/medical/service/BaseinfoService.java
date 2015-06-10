@@ -8,6 +8,7 @@ import com.medical.dto.BaseInfoDTO;
 import com.medical.dto.CheckDTO;
 import com.medical.dto.HealthDTO;
 import com.medical.dto.MedicalafterDTO;
+import com.medical.dto.YBCheckDTO;
 import com.medical.model.JzMabills;
 import com.medical.model.JzMabillsExample;
 import com.medical.model.JzMedicalafterExample;
@@ -77,5 +78,7 @@ public interface BaseinfoService {
 	public List<MedicalafterDTO> findstatus(String sql);
 	
 	public void saveccc(String xml1,String datatype,String memberid);
+
+	public List<YBCheckDTO> findcheckhistory(String paperid);
 	
 }

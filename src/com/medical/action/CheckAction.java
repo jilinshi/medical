@@ -272,7 +272,10 @@ public class CheckAction extends ActionSupport {
 		}
 		return SUCCESS;
 	}
-
+	public String viewcheckhistory() {
+		this.setYbcds(baseinfoService.findcheckhistory(paperid));
+		return SUCCESS;
+	}
 	public Integer getCur_page() {
 		return cur_page;
 	}

@@ -53,5 +53,9 @@
                 </param>
 			</result>
 		</action>
+		<action name="viewcheckhistory" method="viewcheckhistory" class="checkAction"> 
+			<result name="success">/page/check/viewcheckhistory.jsp
+			</result>
+		</action>
 	</package>
 </struts>
