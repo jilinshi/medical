@@ -200,12 +200,33 @@ public class CheckAction extends ActionSupport {
 		        	String ssn = ele.element("医保编号").getText();
 		        	membername = ele.element("姓名").getText();
 		        	paperid = ele.element("身份证号码").getText();
+		        	String yblb=ele.element("医保人员类别").getText();
+		        	if("1".equals(yblb)){
+		        		yblb="居民";
+		        	}
+		        	if("2".equals(yblb)){
+		        		yblb="职工";
+		        	}
+		        	String bzlb=ele.element("保障类别").getText();
+		        	if("0".equals(bzlb)){
+		        		bzlb="普通居民";
+		        	}
+		        	if("1".equals(bzlb)){
+		        		bzlb="普通低保";
+		        	}
+		        	if("2".equals(bzlb)){
+		        		bzlb="再保障户";
+		        	}
+		        	String dw=ele.element("医保社区或单位名称").getText();
 		        	if(i==0){
 		        		ybcheckDTO.setSsn1(ssn);
+		        		ybcheckDTO.setAssn1(ssn+" | "+yblb+" | "+bzlb +" | "+dw);
 		        	}else if(i==1){
 		        		ybcheckDTO.setSsn2(ssn);
+		        		ybcheckDTO.setAssn2(ssn+" | "+yblb+" | "+bzlb +" | "+dw);
 		        	}else if(i==2){
 		        		ybcheckDTO.setSsn3(ssn);
+		        		ybcheckDTO.setAssn3(ssn+" | "+yblb+" | "+bzlb +" | "+dw);
 		        	}
 		            i++;
 		        }

@@ -62,7 +62,7 @@ String basePath = request.getScheme() + "://"
 		<th scope="col">医保端：</th>
 	</tr>
 	<tr>
-		<td width="50%">
+		<td width="40%">
 			<table align="center" width="99%" class="t1" border="0" cellpadding="10"
 				cellspacing="1" >
 				<tr>
@@ -107,7 +107,7 @@ String basePath = request.getScheme() + "://"
 				</tr>
 			</table>
 		</td>
-		<td width="50%">
+		<td>
 			<table align="center" width="99%" class="t1" border="0" cellpadding="10"
 				cellspacing="1" >
 				<tr>
@@ -127,7 +127,7 @@ String basePath = request.getScheme() + "://"
 						<s:if test="ybcheckDTO.ssn1!=null">
 							<input type="radio" name="ssncheck" value="<s:property value='ybcheckDTO.ssn1'/>" />&nbsp;
 						</s:if>
-						<s:property value="ybcheckDTO.ssn1"/>&nbsp;
+						<s:property value="ybcheckDTO.assn1"/>&nbsp;
 					</td>
 				</tr>
 				<tr>
@@ -136,7 +136,7 @@ String basePath = request.getScheme() + "://"
 						<s:if test="ybcheckDTO.ssn2!=null">
 						<input type="radio" name="ssncheck" value="<s:property value='ybcheckDTO.ssn2'/>" />&nbsp;
 						</s:if>
-						<s:property value="ybcheckDTO.ssn2"/>&nbsp;
+						<s:property value="ybcheckDTO.assn2"/>&nbsp;
 					</td>
 				</tr>
 				<tr>
@@ -145,7 +145,7 @@ String basePath = request.getScheme() + "://"
 						<s:if test="ybcheckDTO.ssn3!=null">
 						<input type="radio" name="ssncheck" value="<s:property value='ybcheckDTO.ssn3'/>" />&nbsp;
 						</s:if>
-						<s:property value="ybcheckDTO.ssn3"/>&nbsp;
+						<s:property value="ybcheckDTO.assn3"/>&nbsp;
 					</td>
 				</tr>
 				<s:hidden id="ssn1" name="ybcheckDTO.ssn1"></s:hidden>

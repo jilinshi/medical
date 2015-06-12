@@ -7,6 +7,11 @@ public class YBCheckDTO {
 	private String ssn1;
 	private String ssn2;
 	private String ssn3;
+	
+	private String assn1;
+	private String assn2;
+	private String assn3;
+	
 	private String message;
 	
 	public String getYbmembername() {
@@ -44,6 +49,24 @@ public class YBCheckDTO {
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	public String getAssn1() {
+		return assn1;
+	}
+	public void setAssn1(String assn1) {
+		this.assn1 = assn1;
+	}
+	public String getAssn2() {
+		return assn2;
+	}
+	public void setAssn2(String assn2) {
+		this.assn2 = assn2;
+	}
+	public String getAssn3() {
+		return assn3;
+	}
+	public void setAssn3(String assn3) {
+		this.assn3 = assn3;
 	}
 	
 }
