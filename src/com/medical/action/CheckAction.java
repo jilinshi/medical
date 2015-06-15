@@ -240,11 +240,11 @@ public class CheckAction extends ActionSupport {
 					if (i == 0) {
 						ybcheckDTO.setSsn1(ssn);
 						ybcheckDTO.setAssn1(ssn + " | " + yblb + " | " + bzlb
-								+ " | " + dw + " " + cbzt);
+								+ " | " + dw + " | " + cbzt);
 					} else if (i == 1) {
 						ybcheckDTO.setSsn2(ssn);
 						ybcheckDTO.setAssn2(ssn + " | " + yblb + " | " + bzlb
-								+ " | " + dw + " " + cbzt);
+								+ " | " + dw + " | " + cbzt);
 					} else if (i == 2) {
 						ybcheckDTO.setSsn3(ssn);
 						ybcheckDTO.setAssn3(ssn + " | " + yblb + " | " + bzlb
@@ -260,7 +260,6 @@ public class CheckAction extends ActionSupport {
 			}
 
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
