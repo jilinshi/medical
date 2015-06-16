@@ -139,14 +139,25 @@ public class MedicalafterAction extends ActionSupport {
 	public String afterapplyinit() {
 		// 查询人员基本信息
 		medicalafterDTO = this.baseinfoService.findMemberByID(baseInfoDTO);
-		// 查询本年救助信息：jz_act
-		actDTO = this.baseinfoService.findActByID(baseInfoDTO);
 		// 查询人员的低保救助时间、再保障救助时间
 		baseInfoDTO = this.baseinfoService.findSalvationStatus(baseInfoDTO);
 		return SUCCESS;
 	}
 
 	public String afterapply() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		int year = calendar.get(Calendar.YEAR);
+		Calendar calendar_end = Calendar.getInstance();
+		calendar_end.setTime(medicalafterDTO.getEndtime());
+		int business_year = calendar_end.get(Calendar.YEAR);
+		if(year-business_year>1){
+			result = "超出报销年限，不予报销！";
+			return "result";
+		}
+		// 查询本年救助信息：jz_act
+		actDTO = this.baseinfoService.findActByID(medicalafterDTO);
+		medicalafterDTO.setActId(actDTO.getActId());
 		medicalafterDTO = this.baseinfoService.saveAfterApply(medicalafterDTO);
 		FileUpload fu = new FileUpload("/file/medicalafter");
 		String dir = fu.filepath + "\\" + medicalafterDTO.getMaId() + "\\";

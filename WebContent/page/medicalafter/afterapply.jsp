@@ -129,7 +129,7 @@
 		<s:hidden name="medicalafterDTO.bankaccounts"></s:hidden>
 		<s:hidden name="medicalafterDTO.persontype"
 			value="%{medicalafterDTO.assistType}%{medicalafterDTO.asort}"></s:hidden>
-		<s:hidden name="medicalafterDTO.actId" id="actid"></s:hidden>
+		<%-- <s:hidden name="medicalafterDTO.actId" id="actid"></s:hidden> --%>
 		<table align="center" width="100%" class="t1" border="0"
 			cellpadding="0" cellspacing="0">
 			<tr>
@@ -491,7 +491,7 @@
 	        	var dataObj=eval("("+data+")");
 	        	 alert(dataObj.r);
 	        	 $("#asisstpay")[0].value=dataObj.assitpay;
-	        	 $("#actid")[0].value=dataObj.actId;
+	        	 //$("#actid")[0].value=dataObj.actId;
 	        	 if(dataObj.assitpay>=0){
 	        	 	$("#sub")[0].disabled = false;
 	        	 }else{

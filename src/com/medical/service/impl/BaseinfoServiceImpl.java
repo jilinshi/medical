@@ -911,17 +911,17 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		return u;
 	}
 
-	public ActDTO findActByID(BaseInfoDTO baseInfoDTO) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-		int year = calendar.get(Calendar.YEAR);
+	public ActDTO findActByID(MedicalafterDTO medicalafterDTO) {
+		Calendar calendar_end = Calendar.getInstance();
+		calendar_end.setTime(medicalafterDTO.getEndtime());
+		int business_year = calendar_end.get(Calendar.YEAR);
 		ActDTO actDTO = new ActDTO();
 		JzActExample example = new JzActExample();
 		com.medical.model.JzActExample.Criteria criteria = example
 				.createCriteria();
-		criteria.andMemberIdEqualTo(baseInfoDTO.getMemberId())
-				.andMemberTypeEqualTo(baseInfoDTO.getDs())
-				.andActYearEqualTo((short) year);
+		criteria.andMemberIdEqualTo(medicalafterDTO.getMemberId())
+				.andMemberTypeEqualTo(medicalafterDTO.getMemberType())
+				.andActYearEqualTo((short) business_year);
 		List<JzAct> acts = jzActDAO.selectByExample(example);
 		if (acts.size() > 0) {
 			JzAct act = acts.get(0);

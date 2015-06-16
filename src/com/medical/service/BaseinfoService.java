@@ -1,5 +1,6 @@
 package com.medical.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.medical.common.Pager;
@@ -50,7 +51,7 @@ public interface BaseinfoService {
 	
 	public int updateMedicalafter(MedicalafterDTO medicalafterDTO);
 	
-	public ActDTO findActByID(BaseInfoDTO baseInfoDTO);
+	public ActDTO findActByID(MedicalafterDTO medicalafterDTO);
 	
 	public BaseInfoDTO findSalvationStatus(BaseInfoDTO baseInfoDTO);
 	

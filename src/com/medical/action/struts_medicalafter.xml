@@ -34,10 +34,13 @@
 			method="afterapplyinit">
 			<result name="success">/page/medicalafter/afterapply.jsp
 			</result>
+			<result name="result">/page/medicalafter/error.jsp
+			</result>
 		</action>
 		<action name="afterapply" class="medicalafterAction" method="afterapply">
 			<result name="success">/page/medicalafter/afterapplyview.jsp
 			</result>
+			<result name="result">/page/medicalafter/error.jsp</result>
 		</action>
 		<action name="queryafterinit" class="medicalafterAction"
 			method="queryafterinit">
