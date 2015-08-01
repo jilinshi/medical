@@ -183,6 +183,42 @@
 				</param>
 			</result>
 		</action>
+		<action name="queryyibaoinit" class="medicalafterAction" method="queryyibaoinit">
+			<result name="success">/page/medicalafter/yibaoinit.jsp</result>
+			<result name="result">/page/medicalafter/error.jsp</result>
+		</action>
+		<action name="queryyibao" class="medicalafterAction" method="queryyibao">
+			<result type="json">
+				<param name="root">
+					result
+				</param>
+				<param name="ignoreHierarchy">
+					false
+				</param>
+				<param name="noCache">
+					true
+				</param>
+				<param name="excludeNullProperties">
+					true
+				</param>
+			</result>
+		</action>
+		<action name="queryjiesuan" class="medicalafterAction" method="queryjiesuan">
+			<result type="json">
+				<param name="root">
+					result
+				</param>
+				<param name="ignoreHierarchy">
+					false
+				</param>
+				<param name="noCache">
+					true
+				</param>
+				<param name="excludeNullProperties">
+					true
+				</param>
+			</result>
+		</action>
 	</package>
 	<package name="printmedicalafter" extends="jasperreports-default"
 		namespace="/page/medicalafter">

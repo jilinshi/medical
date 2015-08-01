@@ -171,6 +171,7 @@
 						test="medicalafterDTO.assistType==11||medicalafterDTO.assistType==10">在保户</s:if>
 					<s:else>停保户</s:else> <s:if test="medicalafterDTO.asort==1">; 再保障</s:if>]
 				</th>
+
 			</tr>
 			<tr>
 				<td width="17%">家庭编号</td>
@@ -303,6 +304,7 @@
 						listKey="key" listValue="value" value="0"></s:radio>
 				</td>
 			</tr>
+			<tr><td colspan="6"><div align="center"><button type="button" style="width: 250px;" onclick="queryYB('<s:property value="medicalafterDTO.memberId"/>','<s:property value="medicalafterDTO.memberType"/>')">查看医保报销信息</button></div></td></tr>
 			<tr>
 				<td width="17%">总费用</td>
 				<td><s:textfield id="totalcost"
@@ -556,6 +558,27 @@
 				document.getElementById("message").innerHTML=m_s+dataObj.message+m_e;
 	        }
 	    }); 
+	}
+	
+	function queryYB(m1,m2){
+		var bt = $("#begintime")[0].value;
+		var et = $("#endtime")[0].value;
+		var medicaltype = $("#medicaltype")[0].value;
+		if(bt==''){
+			alert("请输入入院时间！");
+			return;
+		}
+		if(et==''){
+			alert("请输入出院时间！");
+			return;
+		}
+		var url="queryyibaoinit.action?medicalafterDTO.memberId="+m1
+				+"&medicalafterDTO.memberType="+m2
+				+"&opertime1="+bt
+				+"&opertime2="+et
+				+"&mtype="+medicaltype;
+		var f="dialogWidth=800px;dialogHeight=630px;status=yes;help=no;scroll=auto;resizable=yes";
+		window.showModelessDialog(url,window,f);
 	}
 </script>
 </html>

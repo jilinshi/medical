@@ -104,6 +104,12 @@ public class IService1Proxy implements org.tempuri.IService1 {
     return iService1.getHospitalList();
   }
   
+  public java.lang.String getHosList() throws java.rmi.RemoteException{
+    if (iService1 == null)
+      _initIService1Proxy();
+    return iService1.getHosList();
+  }
+  
   public java.lang.String getChronicDisePersonAll() throws java.rmi.RemoteException{
     if (iService1 == null)
       _initIService1Proxy();
@@ -134,10 +140,22 @@ public class IService1Proxy implements org.tempuri.IService1 {
     return iService1.getOutpatientBill(ybNumber, beginTime, endTime, hospitalID);
   }
   
+  public java.lang.String getOutpatientBillStr(java.lang.String ybNumber, java.lang.String beginTime, java.lang.String endTime, java.lang.String hospitalID) throws java.rmi.RemoteException{
+    if (iService1 == null)
+      _initIService1Proxy();
+    return iService1.getOutpatientBillStr(ybNumber, beginTime, endTime, hospitalID);
+  }
+  
   public org.tempuri.GetInpatientRegResponseGetInpatientRegResult getInpatientReg(java.lang.String ybNumber, java.lang.String beginTime, java.lang.String endTime, java.lang.String hospitalID) throws java.rmi.RemoteException{
     if (iService1 == null)
       _initIService1Proxy();
     return iService1.getInpatientReg(ybNumber, beginTime, endTime, hospitalID);
+  }
+  
+  public java.lang.String getInpatientRegStr(java.lang.String ybNumber, java.lang.String beginTime, java.lang.String endTime, java.lang.String hospitalID) throws java.rmi.RemoteException{
+    if (iService1 == null)
+      _initIService1Proxy();
+    return iService1.getInpatientRegStr(ybNumber, beginTime, endTime, hospitalID);
   }
   
   public org.tempuri.GetInpatientBillResponseGetInpatientBillResult getInpatientBill(java.lang.String ybNumber, java.lang.String hospitalID, java.lang.String serialNo) throws java.rmi.RemoteException{
@@ -146,10 +164,22 @@ public class IService1Proxy implements org.tempuri.IService1 {
     return iService1.getInpatientBill(ybNumber, hospitalID, serialNo);
   }
   
+  public java.lang.String getInpatientBillStr(java.lang.String ybNumber, java.lang.String hospitalID, java.lang.String serialNo) throws java.rmi.RemoteException{
+    if (iService1 == null)
+      _initIService1Proxy();
+    return iService1.getInpatientBillStr(ybNumber, hospitalID, serialNo);
+  }
+  
   public org.tempuri.GetInpatientBillListResponseGetInpatientBillListResult getInpatientBillList(java.lang.String ybNumber, java.lang.String hospitalID, java.lang.String serialNo) throws java.rmi.RemoteException{
     if (iService1 == null)
       _initIService1Proxy();
     return iService1.getInpatientBillList(ybNumber, hospitalID, serialNo);
+  }
+  
+  public java.lang.String getPersonPay(java.lang.String ybNumber, java.lang.String hospitalID, java.lang.String serialNo, java.lang.String endTime, java.lang.Integer bizType) throws java.rmi.RemoteException{
+    if (iService1 == null)
+      _initIService1Proxy();
+    return iService1.getPersonPay(ybNumber, hospitalID, serialNo, endTime, bizType);
   }
   
   

@@ -11,10 +11,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.tempuri.IService1;
+import org.tempuri.IService1Proxy;
 
 import com.medical.common.Base64Image;
 import com.medical.common.FileUpload;
@@ -24,6 +32,7 @@ import com.medical.dto.CheckDTO;
 import com.medical.dto.MedicalafterDTO;
 import com.medical.dto.OrganDTO;
 import com.medical.dto.UserInfoDTO;
+import com.medical.dto.YBHospitalDTO;
 import com.medical.model.JzMabills;
 import com.medical.model.JzMabillsExample;
 import com.medical.model.JzMedicalafterExample;
@@ -68,6 +77,12 @@ public class MedicalafterAction extends ActionSupport {
 	private String type;
 	private HashMap<String, String> map;
 	private String approveresult;
+	private List<YBHospitalDTO> ybhospitals;
+	private YBHospitalDTO yBHospitalDTO;
+	private String mtype;
+	private String ssn;
+	private String hid;
+	private String serialno;
 
 	public String countassist() {
 		medicalafterDTO = baseinfoService.findCountAssist(medicalafterDTO);
@@ -906,6 +921,199 @@ public class MedicalafterAction extends ActionSupport {
 		return SUCCESS;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public String queryyibaoinit(){
+		BaseInfoDTO baseInfoDTO = new BaseInfoDTO();
+		baseInfoDTO.setMemberId(medicalafterDTO.getMemberId());
+		baseInfoDTO.setDs(medicalafterDTO.getMemberType());
+		medicalafterDTO = baseinfoService.findMemberByID(baseInfoDTO);
+		medicalafterDTO.setBegintimeval(opertime1);
+		medicalafterDTO.setEndtimeval(opertime2);
+		medicalafterDTO.setMedicaltype(mtype);
+		IService1 iService1 = new IService1Proxy();
+		try {
+			String  xml= iService1.getHospitalList();
+			//System.out.println(xml);
+			Document document = DocumentHelper.parseText(xml);
+			String resultFlag = document.selectSingleNode(
+					"//GetHospitalList/Result/ResultFlag").getText();
+			String message = document.selectSingleNode(
+					"//GetHospitalList/Result/Message").getText();
+			if ("1".equals(resultFlag)) {
+				List list = document
+						.selectNodes("//GetHospitalList/NewDataSet/jljzj");
+				Iterator iter = list.iterator();
+				ybhospitals = new ArrayList<YBHospitalDTO>();
+				while (iter.hasNext()) {
+					YBHospitalDTO ybhdto= new YBHospitalDTO();
+					Element ele = (Element) iter.next();
+					String hid = ele.element("定点编号").getText();
+					String hname= ele.element("定点名称").getText();
+					String hlevel= ele.element("医院等级").getText();
+					ybhdto.setHospitalid(hid);
+					ybhdto.setHospitalname(hname);
+					ybhdto.setHospitallevel(hlevel);
+					ybhospitals.add(ybhdto);
+				}
+			}else{
+				result=message;
+			}
+		} catch (RemoteException | DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return SUCCESS;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public String queryyibao(){
+		System.out.println(medicalafterDTO);
+		String medicaltype =medicalafterDTO.getMedicaltype();
+		String ybNumber = medicalafterDTO.getSsn();
+		String beginTime = medicalafterDTO.getBegintimeval().replace("-", "");
+		String endTime = medicalafterDTO.getEndtimeval().replace("-", "");
+		String hospitalID = medicalafterDTO.getHospitalid();
+		JSONObject json = new JSONObject();
+		IService1 iService1 = new IService1Proxy();
+		//住院
+		if("1".equals(medicaltype)){
+			try {
+				String  xml= iService1.getInpatientRegStr(ybNumber, beginTime, endTime, hospitalID);
+				//System.out.println(xml);
+				Document document = DocumentHelper.parseText(xml);
+				List list = document
+						.selectNodes("//NewDataSet/jljzj");
+				if(list.size()>0){
+					Iterator iter = list.iterator();
+					while (iter.hasNext()) {
+						Element ele = (Element) iter.next();
+						String ybnumber = ele.element("医保编号").getText();
+						String hospitalid = ele.element("医院编号").getText();
+						String serialno = ele.element("住院流水号").getText();
+						String medtype = ele.element("医疗类别").getText();
+						String diagnoseno_i = ele.element("入院诊断疾病编码").getText();
+						String diagnosename_i = ele.element("入院诊断疾病名称").getText();
+						String indeptname = ele.element("科室名称").getText();
+						String begintime = ele.element("入院时间").getText();
+						String outflag = ele.element("在院状态").getText();
+						String status = ele.element("有效标志").getText();
+						json.put("ybnumber", ybnumber);
+						json.put("hospitalid", hospitalid);
+						json.put("serialno", serialno);
+						json.put("medtype", medtype);
+						json.put("diagnoseno_i", diagnoseno_i);
+						json.put("diagnosename_i", diagnosename_i);
+						json.put("indeptname", indeptname);
+						json.put("begintime", begintime);
+						json.put("outflag", outflag);
+						json.put("status", status);
+						json.put("msg","1");
+					}
+				}else{
+					json.put("msg","0");
+				}
+				
+			} catch (RemoteException | DocumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		//门诊
+		}else if("2".equals(medicaltype)){
+		}
+		result = json.toString();
+		return SUCCESS;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public String queryjiesuan(){
+		//System.out.println(ssn+"::"+hid+"::"+serialno);
+		JSONObject json = new JSONObject();
+		IService1 iService1 = new IService1Proxy();
+		try {
+			String  xml= iService1.getInpatientBillStr(ssn, hid, serialno);
+			System.out.println(xml);
+			Document document = DocumentHelper.parseText(xml);
+			List list = document
+					.selectNodes("//NewDataSet/jljzj");
+			if(list.size()>0){
+				Iterator iter = list.iterator();
+				while (iter.hasNext()) {
+					Element ele = (Element) iter.next();
+					String ybnumber_js = ele.element("医保编号").getText();
+					String hospitalid_js = ele.element("医院编号").getText();
+					String serialno_js = ele.element("门诊流水号").getText();
+					String shoujuno_js = ele.element("收据号").getText();
+					String medtype_js = ele.element("医疗类别").getText();
+					String businesstype_js = ele.element("交易类型").getText();
+					String opertime_js = ele.element("结算日期").getText();
+					String diagnoseno_o = ele.element("出院诊断疾病编码").getText();
+					String diagnosename_o = ele.element("出院诊断疾病名称").getText();
+					String indeptname_js = ele.element("科室名称").getText();
+					String begintime_js = ele.element("入院时间").getText();
+					String endtime_js = ele.element("出院时间").getText();
+					String pay_total = ele.element("费用合计").getText();
+					String pay_account = ele.element("帐户支付").getText();
+					String pay_insurance = ele.element("统筹支付").getText();
+					String pay_person = ele.element("个人支付").getText();
+					String pay_gwy = ele.element("公务员统筹支付").getText();
+					String pay_lx = ele.element("离休统筹支付").getText();
+					String pay_gs = ele.element("工伤统筹支付").getText();
+					String pay_sy = ele.element("生育统筹支付").getText();
+					String pay_sygs = ele.element("本次事业工伤统筹支付").getText();
+					String pay_zgf = ele.element("本次照顾费统筹支付").getText();
+					String pay_out = ele.element("目录内费用合计").getText();
+					String pay_self = ele.element("个人自理").getText();
+					String pay_line = ele.element("起付线").getText();
+					String pay_fengding = ele.element("基本医疗是否封项").getText();
+					String pay_dbz = ele.element("单病种标志").getText();
+					String pay_jsrc = ele.element("结算人次").getText();
+					String pay_ddyljzfd = ele.element("本次定点医疗机构分担").getText();
+					String pay_sybxzfje = ele.element("本次商业保险支付金额").getText();
+					String status = ele.element("有效标志").getText();
+					json.put("ybnumber_js", ybnumber_js);
+					json.put("hospitalid_js", hospitalid_js);
+					json.put("serialno_js", serialno_js);
+					json.put("shoujuno_js", shoujuno_js);
+					json.put("medtype_js", medtype_js);
+					json.put("businesstype_js", businesstype_js);
+					json.put("opertime_js", opertime_js);
+					json.put("diagnoseno_o", diagnoseno_o);
+					json.put("diagnosename_o", diagnosename_o);
+					json.put("indeptname_js", indeptname_js);
+					json.put("begintime_js", begintime_js);
+					json.put("endtime_js", endtime_js);
+					json.put("pay_total", pay_total);
+					json.put("pay_account", pay_account);
+					json.put("pay_insurance", pay_insurance);
+					json.put("pay_person", pay_person);
+					json.put("pay_gwy", pay_gwy);
+					json.put("pay_lx", pay_lx);
+					json.put("pay_gs", pay_gs);
+					json.put("pay_sy", pay_sy);
+					json.put("pay_sygs", pay_sygs);
+					json.put("pay_zgf", pay_zgf);
+					json.put("pay_out", pay_out);
+					json.put("pay_self", pay_self);
+					json.put("pay_line", pay_line);
+					json.put("pay_fengding", pay_fengding);
+					json.put("pay_dbz", pay_dbz);
+					json.put("pay_jsrc", pay_jsrc);
+					json.put("pay_ddyljzfd", pay_ddyljzfd);
+					json.put("pay_sybxzfje", pay_sybxzfje);
+					json.put("status", status);
+					json.put("msg","1");
+				}
+			}else{
+				json.put("msg","0");
+			}
+		} catch (RemoteException | DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		result = json.toString();
+		return SUCCESS;
+	}
+	
 	public BaseinfoService getBaseinfoService() {
 		return baseinfoService;
 	}
@@ -1136,6 +1344,54 @@ public class MedicalafterAction extends ActionSupport {
 
 	public void setApproveresult(String approveresult) {
 		this.approveresult = approveresult;
+	}
+
+	public List<YBHospitalDTO> getYbhospitals() {
+		return ybhospitals;
+	}
+
+	public void setYbhospitals(List<YBHospitalDTO> ybhospitals) {
+		this.ybhospitals = ybhospitals;
+	}
+
+	public YBHospitalDTO getyBHospitalDTO() {
+		return yBHospitalDTO;
+	}
+
+	public void setyBHospitalDTO(YBHospitalDTO yBHospitalDTO) {
+		this.yBHospitalDTO = yBHospitalDTO;
+	}
+
+	public String getMtype() {
+		return mtype;
+	}
+
+	public void setMtype(String mtype) {
+		this.mtype = mtype;
+	}
+
+	public String getSsn() {
+		return ssn;
+	}
+
+	public void setSsn(String ssn) {
+		this.ssn = ssn;
+	}
+
+	public String getHid() {
+		return hid;
+	}
+
+	public void setHid(String hid) {
+		this.hid = hid;
+	}
+
+	public String getSerialno() {
+		return serialno;
+	}
+
+	public void setSerialno(String serialno) {
+		this.serialno = serialno;
 	}
 
 }
