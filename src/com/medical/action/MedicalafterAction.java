@@ -971,7 +971,7 @@ public class MedicalafterAction extends ActionSupport {
 	
 	@SuppressWarnings("rawtypes")
 	public String queryyibao(){
-		System.out.println(medicalafterDTO);
+		//System.out.println(medicalafterDTO);
 		String medicaltype =medicalafterDTO.getMedicaltype();
 		String ybNumber = medicalafterDTO.getSsn();
 		String beginTime = "";
@@ -1076,7 +1076,7 @@ public class MedicalafterAction extends ActionSupport {
 		IService1 iService1 = new IService1Proxy();
 		try {
 			String  xml= iService1.getInpatientBillStr(ssn, hid, serialno);
-			System.out.println(xml);
+			//System.out.println(xml);
 			Document document = DocumentHelper.parseText(xml);
 			List list = document
 					.selectNodes("//NewDataSet/jljzj");
