@@ -18,6 +18,7 @@ public class ActDTO {
 	private BigDecimal addMz;
 	private BigDecimal addZy;
 	private String memberType;
+	private Short actBizDDInhospitalTimes;
 	
 	public Integer getActId() {
 		return actId;
@@ -102,6 +103,12 @@ public class ActDTO {
 	}
 	public void setMemberType(String memberType) {
 		this.memberType = memberType;
+	}
+	public Short getActBizDDInhospitalTimes() {
+		return actBizDDInhospitalTimes;
+	}
+	public void setActBizDDInhospitalTimes(Short actBizDDInhospitalTimes) {
+		this.actBizDDInhospitalTimes = actBizDDInhospitalTimes;
 	}
 	
 }

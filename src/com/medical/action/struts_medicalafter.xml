@@ -219,6 +219,10 @@
 				</param>
 			</result>
 		</action>
+		<action name="queryybbxinit" class="medicalafterAction" method="queryybbxinit">
+			<result name="success">/page/medicalafter/queryybbx.jsp</result>
+			<result name="result">/page/medicalafter/error.jsp</result>
+		</action>
 	</package>
 	<package name="printmedicalafter" extends="jasperreports-default"
 		namespace="/page/medicalafter">

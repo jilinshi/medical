@@ -613,6 +613,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			record.setPzPrinum(Long.valueOf("0"));
 			record.setAppPrinum(Long.valueOf("0"));
 			record.setSelfpay(medicalafterDTO.getSelfpay());
+			record.setHospitalid(medicalafterDTO.getHospitalid());
+			record.setHospitaltype(medicalafterDTO.getHospitaltype());
 			BigDecimal id = jzMedicalafterDAO.insertSelective(record);
 			medicalafterDTO.setMaId(id);
 			JzAct jzAct = jzActDAO.selectByPrimaryKey(medicalafterDTO
@@ -641,7 +643,7 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		return medicalafterDTO;
 	}
 
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "static-access" })
 	@Override
 	public MedicalafterDTO findCountAssist(MedicalafterDTO medicalafterDTO) {
 		try {
@@ -666,6 +668,9 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 				currentact.setActBizMoney2(new BigDecimal(0));
 				currentact.setActId(jzActDAO.insertSelective(currentact));
 			}
+			String idcard = medicalafterDTO.getPaperid();
+			//定点医院住院次数 1:住院 2:门诊
+			ActDTO actDTO_DDZY = this.getdingdiancount(year,idcard,"1");
 			String ZBZ_FLAG = "";
 			if ("111".equals(medicalafterDTO.getPersontype())) {
 				ZBZ_FLAG = "2";
@@ -674,13 +679,13 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			} else {
 				ZBZ_FLAG = "1";
 			}
-			String sql = "select func_calcassist01("
+			String sql = "select func_calcassist("
 					+ medicalafterDTO.getMemberType() + ","
 					+ medicalafterDTO.getInsuretype() + "," + ZBZ_FLAG + ","
 					+ medicalafterDTO.getHospitallevel() + ","
 					+ medicalafterDTO.getMedicaltype() + ",to_char('"
 					+ medicalafterDTO.getDiagnose() + "'),"
-					+ currentact.getActBizInhospitalTimes().intValue()
+					+ currentact.getActBizInhospitalTimes()
 					+ ",0,0," + currentact.getActBizMoney2().doubleValue()
 					+ "," + currentact.getActBizMoney().doubleValue() + ","
 					+ medicalafterDTO.getTotalcost().doubleValue() + ","
@@ -692,7 +697,10 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 					+ medicalafterDTO.getBusinesspay().doubleValue() + ","
 					+ medicalafterDTO.getWsflag() + ","
 					+ medicalafterDTO.getWzzflag() + ","
-					+ medicalafterDTO.getSelfpay() + ") as r from dual";
+					+ medicalafterDTO.getSelfpay() + ","
+					+ medicalafterDTO.getHospitaltype() + ","
+					+ actDTO_DDZY.getActBizDDInhospitalTimes()
+					+ ") as r from dual";
 
 			/*
 			 * sql="select func_calcassist(ds => v_ds, medicare_type =>
@@ -731,6 +739,26 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 			e.printStackTrace();
 		}
 		return medicalafterDTO;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private ActDTO getdingdiancount(int year, String idcard, String medicaltype){
+		ActDTO actDTO = new ActDTO();
+		try {
+			String sql = " select nvl(sum(tt.pay_assist),0) as sumpay,count(1) as cishu from v_pay_act tt " 
+					+ " where tt.idcard='"+idcard+"' " 
+					+ " and to_char(tt.end_date,'yyyy') = '"+year+"' " 
+					+ " and tt.medicaltype='"+medicaltype+"' ";
+			ExecutSQL executSQL = new ExecutSQL();
+			executSQL.setExecutsql(sql);
+			HashMap map = executSQLDAO.queryAll(executSQL).get(0);
+			BigDecimal s = (BigDecimal) map.get("CISHU");
+			actDTO.setActBizDDInhospitalTimes(s.shortValue());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return actDTO;
 	}
 
 	@SuppressWarnings("rawtypes")

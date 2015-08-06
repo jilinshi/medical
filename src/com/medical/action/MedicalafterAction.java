@@ -29,6 +29,7 @@ import com.medical.common.FileUpload;
 import com.medical.dto.ActDTO;
 import com.medical.dto.BaseInfoDTO;
 import com.medical.dto.CheckDTO;
+import com.medical.dto.DeptDTO;
 import com.medical.dto.MedicalafterDTO;
 import com.medical.dto.OrganDTO;
 import com.medical.dto.UserInfoDTO;
@@ -83,6 +84,7 @@ public class MedicalafterAction extends ActionSupport {
 	private String ssn;
 	private String hid;
 	private String serialno;
+	private List<DeptDTO> hs;
 
 	public String countassist() {
 		medicalafterDTO = baseinfoService.findCountAssist(medicalafterDTO);
@@ -156,6 +158,8 @@ public class MedicalafterAction extends ActionSupport {
 		medicalafterDTO = this.baseinfoService.findMemberByID(baseInfoDTO);
 		// 查询人员的低保救助时间、再保障救助时间
 		baseInfoDTO = this.baseinfoService.findSalvationStatus(baseInfoDTO);
+		// 查询定点医院
+		this.setHs(this.searchService.getHospitals());
 		return SUCCESS;
 	}
 
@@ -970,8 +974,19 @@ public class MedicalafterAction extends ActionSupport {
 		System.out.println(medicalafterDTO);
 		String medicaltype =medicalafterDTO.getMedicaltype();
 		String ybNumber = medicalafterDTO.getSsn();
-		String beginTime = medicalafterDTO.getBegintimeval().replace("-", "");
-		String endTime = medicalafterDTO.getEndtimeval().replace("-", "");
+		String beginTime = "";
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		if(medicalafterDTO.getBegintime()!=null || !"".equals(medicalafterDTO.getBegintime())){
+			beginTime = sdf.format(medicalafterDTO.getBegintime()).replace("-", "");
+		}else{
+			beginTime = medicalafterDTO.getBegintimeval().replace("-", "");
+		}
+		String endTime = "";
+		if(medicalafterDTO.getEndtime()!=null || !"".equals(medicalafterDTO.getEndtime())){
+			endTime = sdf.format(medicalafterDTO.getEndtime()).replace("-", "");
+		}else{
+			endTime = medicalafterDTO.getEndtimeval().replace("-", "");
+		}
 		String hospitalID = medicalafterDTO.getHospitalid();
 		JSONObject json = new JSONObject();
 		IService1 iService1 = new IService1Proxy();
@@ -987,16 +1002,46 @@ public class MedicalafterAction extends ActionSupport {
 					Iterator iter = list.iterator();
 					while (iter.hasNext()) {
 						Element ele = (Element) iter.next();
-						String ybnumber = ele.element("医保编号").getText();
-						String hospitalid = ele.element("医院编号").getText();
-						String serialno = ele.element("住院流水号").getText();
-						String medtype = ele.element("医疗类别").getText();
-						String diagnoseno_i = ele.element("入院诊断疾病编码").getText();
-						String diagnosename_i = ele.element("入院诊断疾病名称").getText();
-						String indeptname = ele.element("科室名称").getText();
-						String begintime = ele.element("入院时间").getText();
-						String outflag = ele.element("在院状态").getText();
-						String status = ele.element("有效标志").getText();
+						String ybnumber = "";
+						if(ele.element("医保编号") != null){
+							ybnumber = ele.element("医保编号").getText();
+						}
+						String hospitalid = "";
+						if(ele.element("医院编号") != null){
+							hospitalid = ele.element("医院编号").getText();
+						}
+						String serialno = "";
+						if(ele.element("住院流水号") != null){
+							serialno = ele.element("住院流水号").getText();
+						}
+						String medtype = ""; 
+						if(ele.element("医疗类别") != null){
+							medtype = ele.element("医疗类别").getText();
+						}
+						String diagnoseno_i = "";
+						if(ele.element("入院诊断疾病编码") != null){
+							diagnoseno_i = ele.element("入院诊断疾病编码").getText();
+						}
+						String diagnosename_i = "";
+						if(ele.element("入院诊断疾病名称") != null){
+							diagnosename_i = ele.element("入院诊断疾病名称").getText();
+						}
+						String indeptname = "";
+						if(ele.element("科室名称") != null){
+							indeptname = ele.element("科室名称").getText();
+						}
+						String begintime = "";
+						if(ele.element("入院时间") != null){
+							begintime = ele.element("入院时间").getText();
+						}
+						String outflag = "";
+						if(ele.element("在院状态") != null){
+							outflag = ele.element("在院状态").getText();
+						}
+						String status = "";
+						if(ele.element("有效标志") != null){
+							status = ele.element("有效标志").getText();
+						}
 						json.put("ybnumber", ybnumber);
 						json.put("hospitalid", hospitalid);
 						json.put("serialno", serialno);
@@ -1004,7 +1049,7 @@ public class MedicalafterAction extends ActionSupport {
 						json.put("diagnoseno_i", diagnoseno_i);
 						json.put("diagnosename_i", diagnosename_i);
 						json.put("indeptname", indeptname);
-						json.put("begintime", begintime);
+						json.put("begintime", yibaoformattime(begintime));
 						json.put("outflag", outflag);
 						json.put("status", status);
 						json.put("msg","1");
@@ -1039,49 +1084,142 @@ public class MedicalafterAction extends ActionSupport {
 				Iterator iter = list.iterator();
 				while (iter.hasNext()) {
 					Element ele = (Element) iter.next();
-					String ybnumber_js = ele.element("医保编号").getText();
-					String hospitalid_js = ele.element("医院编号").getText();
-					String serialno_js = ele.element("门诊流水号").getText();
-					String shoujuno_js = ele.element("收据号").getText();
-					String medtype_js = ele.element("医疗类别").getText();
-					String businesstype_js = ele.element("交易类型").getText();
-					String opertime_js = ele.element("结算日期").getText();
-					String diagnoseno_o = ele.element("出院诊断疾病编码").getText();
-					String diagnosename_o = ele.element("出院诊断疾病名称").getText();
-					String indeptname_js = ele.element("科室名称").getText();
-					String begintime_js = ele.element("入院时间").getText();
-					String endtime_js = ele.element("出院时间").getText();
-					String pay_total = ele.element("费用合计").getText();
-					String pay_account = ele.element("帐户支付").getText();
-					String pay_insurance = ele.element("统筹支付").getText();
-					String pay_person = ele.element("个人支付").getText();
-					String pay_gwy = ele.element("公务员统筹支付").getText();
-					String pay_lx = ele.element("离休统筹支付").getText();
-					String pay_gs = ele.element("工伤统筹支付").getText();
-					String pay_sy = ele.element("生育统筹支付").getText();
-					String pay_sygs = ele.element("本次事业工伤统筹支付").getText();
-					String pay_zgf = ele.element("本次照顾费统筹支付").getText();
-					String pay_out = ele.element("目录内费用合计").getText();
-					String pay_self = ele.element("个人自理").getText();
-					String pay_line = ele.element("起付线").getText();
-					String pay_fengding = ele.element("基本医疗是否封项").getText();
-					String pay_dbz = ele.element("单病种标志").getText();
-					String pay_jsrc = ele.element("结算人次").getText();
-					String pay_ddyljzfd = ele.element("本次定点医疗机构分担").getText();
-					String pay_sybxzfje = ele.element("本次商业保险支付金额").getText();
-					String status = ele.element("有效标志").getText();
+					String ybnumber_js = "";
+					if(ele.element("医保编号") != null){
+						ybnumber_js = ele.element("医保编号").getText();
+					}
+					String hospitalid_js = "";
+					if(ele.element("医院编号") != null){
+						hospitalid_js = ele.element("医院编号").getText();
+					}
+					String serialno_js = "";
+					if(ele.element("门诊流水号") != null){
+						serialno_js = ele.element("门诊流水号").getText();
+					}
+					String shoujuno_js = "";
+					if(ele.element("收据号") != null){
+						shoujuno_js = ele.element("收据号").getText();
+					}
+					String medtype_js = "";
+					if(ele.element("医疗类别") != null){
+						medtype_js = ele.element("医疗类别").getText();
+					}
+					String businesstype_js = "";
+					if(ele.element("交易类型") != null){
+						businesstype_js = ele.element("交易类型").getText();
+					}
+					String opertime_js = "";
+					if(ele.element("结算日期") != null){
+						opertime_js = ele.element("结算日期").getText();
+					}
+					String diagnoseno_o = "";
+					if(ele.element("出院诊断疾病编码") != null){
+						diagnoseno_o = ele.element("出院诊断疾病编码").getText();
+					}
+					String diagnosename_o = "";
+					if(ele.element("出院诊断疾病名称") != null){
+						diagnosename_o = ele.element("出院诊断疾病名称").getText();
+					}
+					String indeptname_js = "";
+					if(ele.element("科室名称") != null){
+						indeptname_js = ele.element("科室名称").getText();
+					}
+					String begintime_js = "";
+					if(ele.element("入院时间") != null){
+						begintime_js = ele.element("入院时间").getText();
+					}
+					String endtime_js = "";
+					if(ele.element("出院时间") != null){
+						endtime_js = ele.element("出院时间").getText();
+					}
+					String pay_total = "";
+					if(ele.element("费用合计") != null){
+						pay_total = ele.element("费用合计").getText();
+					}
+					String pay_account = "";
+					if(ele.element("帐户支付") != null){
+						pay_account = ele.element("帐户支付").getText();
+					}
+					String pay_insurance = "";
+					if(ele.element("统筹支付") != null){
+						pay_insurance = ele.element("统筹支付").getText();
+					}
+					String pay_person = "";
+					if(ele.element("个人支付") != null){
+						pay_person = ele.element("个人支付").getText();
+					}
+					String pay_gwy = "";
+					if(ele.element("公务员统筹支付") != null){
+						pay_gwy = ele.element("公务员统筹支付").getText();
+					}
+					String pay_lx = "";
+					if(ele.element("离休统筹支付") != null){
+						pay_lx = ele.element("离休统筹支付").getText();
+					}
+					String pay_gs = "";
+					if(ele.element("工伤统筹支付") != null){
+						pay_gs = ele.element("工伤统筹支付").getText();
+					}
+					String pay_sy = "";
+					if(ele.element("生育统筹支付") != null){
+						pay_sy = ele.element("生育统筹支付").getText();
+					}
+					String pay_sygs = "";
+					if(ele.element("本次事业工伤统筹支付") != null){
+						pay_sygs = ele.element("本次事业工伤统筹支付").getText();
+					}
+					String pay_zgf = "";
+					if(ele.element("本次照顾费统筹支付") != null){
+						pay_zgf = ele.element("本次照顾费统筹支付").getText();
+					}
+					String pay_out = "";
+					if(ele.element("目录内费用合计") != null){
+						pay_out = ele.element("目录内费用合计").getText();
+					}
+					String pay_self = "";
+					if(ele.element("个人自理") != null){
+						pay_self = ele.element("个人自理").getText();
+					}
+					String pay_line = "";
+					if(ele.element("起付线") != null){
+						pay_line = ele.element("起付线").getText();
+					}
+					String pay_fengding = "";
+					if(ele.element("基本医疗是否封项") != null){
+						pay_fengding = ele.element("基本医疗是否封项").getText();
+					}
+					String pay_dbz = "";
+					if(ele.element("单病种标志") != null){
+						pay_dbz = ele.element("单病种标志").getText();
+					}
+					String pay_jsrc = "";
+					if(ele.element("结算人次") != null){
+						pay_jsrc = ele.element("结算人次").getText();
+					}
+					String pay_ddyljzfd = "";
+					if(ele.element("本次定点医疗机构分担") != null){
+						pay_ddyljzfd = ele.element("本次定点医疗机构分担").getText();
+					}
+					String pay_sybxzfje = "";
+					if(ele.element("本次商业保险支付金额") != null){
+						pay_sybxzfje = ele.element("本次商业保险支付金额").getText();
+					}
+					String status = "";
+					if(ele.element("有效标志") != null){
+						status = ele.element("有效标志").getText();
+					}
 					json.put("ybnumber_js", ybnumber_js);
 					json.put("hospitalid_js", hospitalid_js);
 					json.put("serialno_js", serialno_js);
 					json.put("shoujuno_js", shoujuno_js);
 					json.put("medtype_js", medtype_js);
 					json.put("businesstype_js", businesstype_js);
-					json.put("opertime_js", opertime_js);
+					json.put("opertime_js", yibaoformattime(opertime_js));
 					json.put("diagnoseno_o", diagnoseno_o);
 					json.put("diagnosename_o", diagnosename_o);
 					json.put("indeptname_js", indeptname_js);
-					json.put("begintime_js", begintime_js);
-					json.put("endtime_js", endtime_js);
+					json.put("begintime_js", yibaoformattime(begintime_js));
+					json.put("endtime_js", yibaoformattime(endtime_js));
 					json.put("pay_total", pay_total);
 					json.put("pay_account", pay_account);
 					json.put("pay_insurance", pay_insurance);
@@ -1111,6 +1249,57 @@ public class MedicalafterAction extends ActionSupport {
 			e.printStackTrace();
 		}
 		result = json.toString();
+		return SUCCESS;
+	}
+	
+	private String yibaoformattime(String time){
+		String newtime = "";
+		if(time.length()>=14){
+			String year = time.substring(0, 4);
+			String month = time.substring(4, 6);
+			String date = time.substring(6, 8);
+			String hour = time.substring(8, 10);
+			String minute = time.substring(10, 12);
+			String second = time.substring(12, 14);
+			newtime = year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+		}
+		return newtime;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public String queryybbxinit(){
+		IService1 iService1 = new IService1Proxy();
+		try {
+			String  xml= iService1.getHospitalList();
+			//System.out.println(xml);
+			Document document = DocumentHelper.parseText(xml);
+			String resultFlag = document.selectSingleNode(
+					"//GetHospitalList/Result/ResultFlag").getText();
+			String message = document.selectSingleNode(
+					"//GetHospitalList/Result/Message").getText();
+			if ("1".equals(resultFlag)) {
+				List list = document
+						.selectNodes("//GetHospitalList/NewDataSet/jljzj");
+				Iterator iter = list.iterator();
+				ybhospitals = new ArrayList<YBHospitalDTO>();
+				while (iter.hasNext()) {
+					YBHospitalDTO ybhdto= new YBHospitalDTO();
+					Element ele = (Element) iter.next();
+					String hid = ele.element("定点编号").getText();
+					String hname= ele.element("定点名称").getText();
+					String hlevel= ele.element("医院等级").getText();
+					ybhdto.setHospitalid(hid);
+					ybhdto.setHospitalname(hname);
+					ybhdto.setHospitallevel(hlevel);
+					ybhospitals.add(ybhdto);
+				}
+			}else{
+				result=message;
+			}
+		} catch (RemoteException | DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return SUCCESS;
 	}
 	
@@ -1392,6 +1581,14 @@ public class MedicalafterAction extends ActionSupport {
 
 	public void setSerialno(String serialno) {
 		this.serialno = serialno;
+	}
+
+	public List<DeptDTO> getHs() {
+		return hs;
+	}
+
+	public void setHs(List<DeptDTO> hs) {
+		this.hs = hs;
 	}
 
 }

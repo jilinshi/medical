@@ -205,6 +205,10 @@
 			url="/medical/page/contentframe.jsp?url=medicalafter/queryafterffdoneinit.action&amp;nav=农合医后报销审批>>发放查询"
 			target="mainFrame">
 		</menu>
+		<menu name="医保报销信息查询"
+			url="/medical/page/contentframe.jsp?url=medicalafter/queryybbxinit.action&amp;nav=农合医后报销审批>>医保报销信息查询"
+			target="mainFrame">
+		</menu>
 	</menu>
 	<menu name="灾难性医疗支出救助审批">
 		<menu name="录入审批"

@@ -63,6 +63,7 @@
 		num=num+1;
 	}
 	function medicaltypechange(b){
+		var insuretype = $("input[name='medicalafterDTO.insuretype']:checked").val();
 		var diagnose = document.getElementById("diagnose");
 		var sickencontent = document.getElementById("sickencontent");
 		var div_wsflag_title = document.getElementById("div_wsflag_title");
@@ -70,14 +71,20 @@
 		var div_sickencontent_title = document.getElementById("div_sickencontent_title");
 		var div_sickencontent = document.getElementById("div_sickencontent");
 		 if(b.value==1){
+			if(insuretype == "2"){
+				div_wsflag_title.style.display="block";
+				div_wsflag.style.display="block";
+			}else{
+				div_wsflag_title.style.display="none";
+				div_wsflag.style.display="none";
+			}
 			diagnose.value = "-1";
 			diagnose.disabled = true;
 			sickencontent.value = "";
 			sickencontent.disabled = false;
 			div_sickencontent.style.display="block";
 			div_sickencontent_title.style.display="block";
-			div_wsflag_title.style.display="block";
-			div_wsflag.style.display="block";
+			
 		}else if (b.value==2){
 			diagnose.value = "-1";
 			diagnose.disabled = false;
@@ -101,6 +108,33 @@
 			div_wsflag_title.style.display='none';
 			div_wsflag.style.display='none';
 		}
+	}
+	
+	function hospitaltypechange(v){
+		var hospitalid = document.getElementById("hospitalid");
+		var hospital = document.getElementById("hospital");
+		if(v.value=="1"){
+			hospitalid.value = "";
+			hospitalid.disabled = false;
+			hospital.value = "";
+			hospital.readOnly = true;
+		}else{
+			hospitalid.value = "";
+			hospitalid.disabled = true;
+			hospital.value="";
+			hospital.readOnly = false;
+		}
+	}
+	
+	function gethosname(c){
+		var hospitalnametext = document.getElementById(c.id).options[window.document.getElementById(c.id).selectedIndex].text;
+		//var hospitalname = document.getElementById("hospitalname");
+		if(hospitalnametext =='其他'){
+			$("#hospital")[0].value = '';
+		}else{
+			$("#hospital")[0].value = hospitalnametext;
+		}
+		
 	}
 </script>
 <title>医后报销录入</title>
@@ -228,11 +262,31 @@
 						name="medicalafterDTO.tiketno"></s:textfield>&nbsp;</td>
 			</tr>
 			<tr>
-				<td width="17%">医院名称</td>
-				<td colspan="2"><s:textfield id="hospital"
-						name="medicalafterDTO.hospital" cssStyle="width:320"></s:textfield>&nbsp;</td>
+				<td width="17%">医院类型</td>
+				<td colspan="5"><s:radio id="hospitaltype"
+						name="medicalafterDTO.hospitaltype"
+						list="%{#{'1':'定点医院','0':'其他'}}" value="1" onclick="hospitaltypechange(this);"></s:radio>&nbsp;</td>
+			</tr>
+			<tr>
+				<td width="17%">定点医院名称</td>
+				<td colspan="2"><s:select disabled="false" id="hospitalid"
+					name="medicalafterDTO.hospitalid" list="hs" listKey="hid" listValue="hname" headerKey="" 
+					headerValue="请选择..." cssStyle="width:320" onchange="gethosname(this)"></s:select>
+				</td>
+				<td width="17%">
+					<div id="div_hospital_title" style="display:black">
+						医院名称
+					</div>
+				</td>
+				<td colspan="2">
+					<div id="div_hospital" style="display:black">
+						<s:textfield id="hospital" name="medicalafterDTO.hospital" cssStyle="width:90%" readonly="true"></s:textfield>&nbsp;
+					</div>
+				</td>
+			</tr>
+			<tr>
 				<td width="17%">医院级别</td>
-				<td colspan="2"><s:radio id="hospitallevel"
+				<td colspan="5"><s:radio id="hospitallevel"
 						name="medicalafterDTO.hospitallevel"
 						list="%{#{'3':'省级','2':'市级','1':'区级'}}"></s:radio>&nbsp;</td>
 			</tr>

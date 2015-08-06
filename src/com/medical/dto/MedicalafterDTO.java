@@ -84,6 +84,7 @@ public class MedicalafterDTO {
 	private BigDecimal selfpay;
 	
 	private String hospitalid;
+	private String hospitaltype;
 
 	public BigDecimal getRc() {
 		return rc;
@@ -667,6 +668,14 @@ public class MedicalafterDTO {
 
 	public void setHospitalid(String hospitalid) {
 		this.hospitalid = hospitalid;
+	}
+
+	public String getHospitaltype() {
+		return hospitaltype;
+	}
+
+	public void setHospitaltype(String hospitaltype) {
+		this.hospitaltype = hospitaltype;
 	}
 
 }
