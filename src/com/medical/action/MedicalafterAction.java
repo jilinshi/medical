@@ -976,14 +976,20 @@ public class MedicalafterAction extends ActionSupport {
 		String ybNumber = medicalafterDTO.getSsn();
 		String beginTime = "";
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-		if(medicalafterDTO.getBegintime()!=null || !"".equals(medicalafterDTO.getBegintime())){
+		if(medicalafterDTO.getBegintime()==null){
+		}else{
 			beginTime = sdf.format(medicalafterDTO.getBegintime()).replace("-", "");
+		}
+		if(medicalafterDTO.getBegintimeval()==null || "".equals(medicalafterDTO.getBegintimeval())){
 		}else{
 			beginTime = medicalafterDTO.getBegintimeval().replace("-", "");
 		}
 		String endTime = "";
-		if(medicalafterDTO.getEndtime()!=null || !"".equals(medicalafterDTO.getEndtime())){
+		if(medicalafterDTO.getEndtime()==null){
+		}else{
 			endTime = sdf.format(medicalafterDTO.getEndtime()).replace("-", "");
+		}
+		if(medicalafterDTO.getEndtimeval()==null || "".equals(medicalafterDTO.getEndtimeval())){
 		}else{
 			endTime = medicalafterDTO.getEndtimeval().replace("-", "");
 		}
