@@ -898,6 +898,8 @@ public class BaseinfoServiceImpl implements BaseinfoService {
 		e.setWsflag(s.getWsflag());
 		e.setPzPrinum(s.getPzPrinum().toString());
 		e.setAppPrinum(s.getAppPrinum().toString());
+		e.setWzzflag(s.getWzzflag());
+		e.setSelfpay(s.getSelfpay());
 		return e;
 	}
 
